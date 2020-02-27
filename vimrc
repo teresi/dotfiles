@@ -4,6 +4,10 @@ set encoding=utf-8
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" fix colors for vim inside tmux
+" add to .tmux.conf:    set -g default-terminal 'screen-256color'
+set term=screen-256color
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -24,8 +28,8 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'tpope/vim-fugitive'
 Plugin 'xolox/vim-colorscheme-switcher'
 Plugin 'xolox/vim-misc'
-" colors
-Plugin 'artanikin/vim-synthwave84'
+" navigate between vim pages & tmux splits easily
+Plugin 'christoomey/vim-tmux-navigator'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -70,10 +74,8 @@ augroup myvimrc
 augroup END
 
 " highlight column limit
-"highlight ColorColumn ctermbg=magenta
-"call matchadd('ColorColumn', '\%81v', 88)
-set colorcolumn=88
-highlight ColorColumn ctermbg=0 guibg=lightgrey
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 88)
 
 " make airline faster
 let g:airline_highlighting_cache = 0
@@ -84,31 +86,34 @@ if !exists('g:airline_symbols')
 	let g:airline_symbols = {}
 endif
 
-" unicode symbols
+"let g:airline_theme='wombat'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+
+" base config for airline unicode
 " make sure to install:  # apt-get install fonts-powerline
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
 let g:airline_symbols.linenr = '¶'
 let g:airline_symbols.branch = '⎇'
 let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.paste = 'Þ'
+"let g:airline_symbols.paste = '∥'
 let g:airline_symbols.whitespace = 'Ξ'
-
-" airline symbols
-let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-" airline symbols, remove specific characters
-let g:airline_left_sep = ''  " ''
-let g:airline_right_sep = ''  " ''
-let g:airline_symbols.linenr = ''  " ''
+" remove specific airline symbols to improve spacing / speed
+let g:airline_symbols.linenr = ''  " ¶
+let g:airline_symbols.maxlinenr = ''  " '
+let g:airline_left_sep = ''  " 
+let g:airline_right_sep = ''  " 
+
+" airline formatting
+let g:airline#extensions#whitespace#enabled = 0  " remove section on right
