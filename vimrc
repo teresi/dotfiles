@@ -31,6 +31,7 @@ Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
 Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 
+Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
 " install synastic?
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
@@ -129,4 +130,4 @@ let g:airline_right_sep = ''  " 
 
 " airline formatting
 let g:airline#extensions#whitespace#enabled = 0  " remove section on right
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utf-8
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utr-8
