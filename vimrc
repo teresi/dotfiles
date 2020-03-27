@@ -129,3 +129,4 @@ let g:airline_right_sep = ''  " 
 
 " airline formatting
 let g:airline#extensions#whitespace#enabled = 0  " remove section on right
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utf-8
