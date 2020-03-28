@@ -30,6 +30,7 @@ Plugin 'tpope/vim-fugitive'                     " git tools
 Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
 Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
+Plugin 'scrooloose/syntastic'                   " syntax checking
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
@@ -91,8 +92,33 @@ augroup END
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" AIRLINE
+" SYNTASTIC
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0              " 0: close quickfix window on startup
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_auto_jump = 0
+
+function! ToggleSyntastic()
+    let g:syntastic_auto_loc_list = 1          " 1: re-enable quickfix window
+    for i in range(1, winnr('$'))
+        let bnum = winbufnr(i)
+        if getbufvar(bnum, '&buftype') == 'quickfix'
+            lclose
+            return
+        endif
+    endfor
+    SyntasticCheck
+endfunction
+nnoremap <F9> :call ToggleSyntastic()<CR>
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" AIRLINE
 set laststatus=2                      " show airline
 let g:airline_highlighting_cache = 0  " make airline faster
 let g:airline_powerline_fonts = 1     " enable symbols
@@ -127,6 +153,7 @@ let g:airline_symbols.linenr = ''  " ¶
 let g:airline_symbols.maxlinenr = ''  " '
 let g:airline_left_sep = ''  " 
 let g:airline_right_sep = ''  " 
+let g:airline_symbols.branch = ''  " ''
 
 " airline formatting
 let g:airline#extensions#whitespace#enabled = 0  " remove section on right
