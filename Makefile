@@ -8,7 +8,7 @@ VIMRC := $(USER_HOME)/.vimrc
 BASHRC := $(USER_HOME)/.bashrc
 
 
-.PHONY:
+.PHONY: help
 help:                 ## show this help
 	@echo Usage:  make [RECIPE]
 	@echo Helper phony recipes to customize your environment
@@ -17,29 +17,29 @@ help:                 ## show this help
 	@echo
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
-.PHONY:
+.PHONY: all
 all:                  ## overwrite vimrc / bashrc, download plugins (requires Vundle)
 	$(MAKE) --no-print-directory vimrc
 	$(MAKE) --no-print-directory -ik plugins
 	$(MAKE) --no-print-directory -ik bashrc
 
-.PHONY:
+.PHONY: vimrc
 vimrc:                ## overwrite /home/$USER/.vimrc
 	cp $(ROOT_DIR)/vimrc $(VIMRC)
 
-.PHONY:
+.PHONY: plugins
 plugins:              ## install vim plugins
 	$(ROOT_DIR)/install_vim_pkgs.sh
 
-.PHONY:
+.PHONY: vundle
 vundle:               ## install vundle
 	git clone https://github.com/VundleVim/Vundle.vim.git $(USER_HOME)/.vim/bundle/Vundle.vim
 
-.PHONY:
+.PHONY: backup
 backup:               ## backup your vimrc
 	cp $(VIMRC) $(USER_HOME)/.vimrc.bak
 
-.PHONY:
+.PHONY: bashrc
 bashrc:               ## customize bash
 	sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
 	sed -i 's/HISTSIZE=1000/HISTSIZE=16384/' $(BASHRC)
