@@ -1,12 +1,7 @@
-" vim configuration file
-" __file__  .vimrc
-
-scriptencoding utf-8
 set encoding=utf-8
-
+scriptencoding utf-8
 set nocompatible              " be iMproved, required
 filetype off                  " required
-
 set exrc                      " load vimrc from working directory
 set secure                    " limit commands from non-default vimrc files
 
@@ -14,9 +9,8 @@ set secure                    " limit commands from non-default vimrc files
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " PACKAGES
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set rtp+=~/.vim/bundle/Vundle.vim               " add vundle to runtime path
+call vundle#begin()                             " initialize vundle
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -34,14 +28,21 @@ Plugin 'scrooloose/syntastic'                   " syntax checking
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
-" install synastic?
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
 "Plugin 'git://github.com/majutsushi/tagbar.git' " class outline viewer
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+call vundle#end()            " required, all plugins must be added before this
 filetype plugin indent on    " required
 
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" SHORTCUTS
+
+" split navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
