@@ -11,8 +11,7 @@ set secure                    " limit commands from non-default vimrc files
 
 set rtp+=~/.vim/bundle/Vundle.vim               " add vundle to runtime path
 call vundle#begin()                             " initialize vundle
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+"call vundle#begin('~/some/path/here')          " or set a plugin install dir
 
 Plugin 'VundleVim/Vundle.vim'                   " let Vundle manage Vundle, required
 
@@ -73,6 +72,8 @@ augroup END
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 call matchadd('ColorColumn', '\%81v', 88)          "only highlight when over
 
+set tw=0             " do not automatically break lines at certain length
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " LANGUAGES
@@ -129,7 +130,8 @@ if !exists('g:airline_symbols')
 endif
 
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1        " enable list of buffers
+let g:airline#extensions#tabline#fnamemod = ':t'    " show just filename in buffer list
 let g:airline#extensions#branch#enabled = 1
 
 " airline unicode, requires:    # apt-get install fonts-powerline
@@ -159,3 +161,5 @@ let g:airline_symbols.branch = ''  " ''
 " airline formatting
 let g:airline#extensions#whitespace#enabled = 0  " remove section on right
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utr-8
+
+
