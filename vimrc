@@ -24,6 +24,7 @@ Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
 Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 Plugin 'scrooloose/syntastic'                   " syntax checking
+Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
