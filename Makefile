@@ -3,9 +3,8 @@
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-USER_HOME := /home/$(USER)
-VIMRC := $(USER_HOME)/.vimrc
-BASHRC := $(USER_HOME)/.bashrc
+VIMRC := $(HOME)/.vimrc
+BASHRC := $(HOME)/.bashrc
 
 
 .PHONY: help
@@ -33,11 +32,11 @@ plugins:              ## install vim plugins
 
 .PHONY: vundle
 vundle:               ## install vundle
-	git clone https://github.com/VundleVim/Vundle.vim.git $(USER_HOME)/.vim/bundle/Vundle.vim
+	git clone https://github.com/VundleVim/Vundle.vim.git $(HOME)/.vim/bundle/Vundle.vim
 
 .PHONY: backup
 backup:               ## backup your vimrc
-	cp $(VIMRC) $(USER_HOME)/.vimrc.bak
+	cp $(VIMRC) $(HOME)/.vimrc.bak
 
 .PHONY: bashrc
 bashrc:               ## customize bash
