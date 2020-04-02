@@ -50,7 +50,8 @@ map <C-l> <C-w>l
 " also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
 set term=screen-256color   " fix colors for vim inside tmux
 
-colorscheme herald
+silent! colorscheme ron
+silent! colorscheme herald
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
