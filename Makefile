@@ -5,6 +5,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VIMRC := $(HOME)/.vimrc
 BASHRC := $(HOME)/.bashrc
+TMUX_CONF := $(HOME)/.tmux.conf
 
 
 .PHONY: help
@@ -47,3 +48,6 @@ bashrc:               ## customize bash
 	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#BASH_CUSTOMIZATIONS_START.*?#BASH_CUSTOMIZATIONS_END/`cat bash-customizations`/se' $(BASHRC)
 
+.PHONY: tmux.conf
+tmux.conf:
+	cp $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
