@@ -1,3 +1,16 @@
+"     s                                          .x+=:.      .
+"    :8                                         z`    ^%    @88>
+"   .88                  .u    .                   .   <k   %8P
+"  :888ooo      .u     .d88B :@8c       .u       .@8Ned8"    .
+"-*8888888   ud8888.  ="8888f8888r   ud8888.   .@^%8888"   .@88u
+"  8888    :888'8888.   4888>'88"  :888'8888. x88:  `)8b. ''888E`
+"  8888    d888 '88%"   4888> '    d888 '88%" 8888N=*8888   888E
+"  8888    8888.+"      4888>      8888.+"     %8"    R88   888E
+" .8888Lu= 8888L       .d888L .+   8888L        @8Wou 9%    888E
+" ^%888*   '8888c. .+  ^"8888*"    '8888c. .+ .888888P`     888&
+"   'Y"     "88888%       "Y"       "88888%   `   ^"F       R888"
+"             "YP'                    "YP'                   ""
+
 set encoding=utf-8
 scriptencoding utf-8
 set nocompatible              " be iMproved, required
@@ -75,6 +88,14 @@ highlight ColorColumn ctermbg=0 guibg=lightgrey
 call matchadd('ColorColumn', '\%81v', 88)          "only highlight when over
 
 set tw=0             " do not automatically break lines at certain length
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" NAVIGATION
+
+set path+=**                     " add working dir to search :find
+set wildmenu                     " turn on tab completion for :find
+set wildignore+=**/.git/**       " ignore git folders
+set hidden                       " allow buffer switch w/o save
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -162,6 +183,6 @@ let g:airline_symbols.branch = ''  " ''
 
 " airline formatting
 let g:airline#extensions#whitespace#enabled = 0  " remove section on right
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utr-8
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utf-8
 
 
