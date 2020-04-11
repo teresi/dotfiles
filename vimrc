@@ -8,8 +8,8 @@
 "  8888    8888.+"      4888>      8888.+"     %8"    R88   888E
 " .8888Lu= 8888L       .d888L .+   8888L        @8Wou 9%    888E
 " ^%888*   '8888c. .+  ^"8888*"    '8888c. .+ .888888P`     888&
-"   'Y"     "88888%       "Y"       "88888%   `   ^"F       R888"
-"             "YP'                    "YP'                   ""
+"   'Y"     '88888%       'Y'       '88888%   `   ^"F       R888"
+"             'YP'                    'YP'                   ''
 
 set encoding=utf-8
 scriptencoding utf-8
@@ -38,6 +38,7 @@ Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 Plugin 'scrooloose/syntastic'                   " syntax checking
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
+Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
@@ -118,6 +119,7 @@ augroup END
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " SYNTASTIC
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
