@@ -40,6 +40,7 @@ Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'itchyny/lightline.vim'                  " status line, bottom
 Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
 Plugin 'itchyny/vim-gitbranch'                  " provides gitbranch#name() function
+Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
@@ -65,8 +66,9 @@ map <C-l> <C-w>l
 " also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
 set term=screen-256color   " fix colors for vim inside tmux
 
-silent! colorscheme ron
-silent! colorscheme herald
+silent! colorscheme ron        " default color
+silent! colorscheme herald     " next color if downloaded
+silent! colorscheme onedark    " next color if downloaded
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
@@ -172,7 +174,12 @@ let g:lightline.separator = {
 let g:lightline.subseparator = {
       \   'left': '', 'right': ''
       \}
+let g:lightline.colorscheme = 'onedark'
 
+" TODO (?) add customizations for better tabs from:
+" https://github.com/NovaDev94/lightline-onedark
+" TODO (?) add tmux colors to compliment onedark from:
+" https://github.com/odedlaz/tmux-onedark-theme
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " LIGHTLINE-BUFFERLINE (buffer list on top)
