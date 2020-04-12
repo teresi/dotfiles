@@ -28,6 +28,7 @@ call vundle#begin()                             " initialize vundle
 
 Plugin 'VundleVim/Vundle.vim'                   " let Vundle manage Vundle, required
 
+Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
 Plugin 'flazz/vim-colorschemes'                 " more colors
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
@@ -59,6 +60,9 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+nnoremap <F2> :NERDTreeToggle<CR>
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
@@ -168,13 +172,13 @@ let g:lightline = {
       \   'colorscheme': 'wombat',
       \ }
 
-let g:lightline.separator = {
-      \   'left': '', 'right': ''
-      \}
-let g:lightline.subseparator = {
-      \   'left': '', 'right': ''
-      \}
-let g:lightline.colorscheme = 'onedark'
+"let g:lightline.separator = {
+"      \   'left': '', 'right': ''
+"      \}
+"let g:lightline.subseparator = {
+"      \   'left': '', 'right': ''
+"      \}
+"let g:lightline.colorscheme = 'onedark'
 
 " TODO (?) add customizations for better tabs from:
 " https://github.com/NovaDev94/lightline-onedark
