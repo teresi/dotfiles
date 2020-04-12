@@ -28,8 +28,6 @@ call vundle#begin()                             " initialize vundle
 
 Plugin 'VundleVim/Vundle.vim'                   " let Vundle manage Vundle, required
 
-Plugin 'vim-airline/vim-airline'                " status bar
-Plugin 'vim-airline/vim-airline-themes'         " status bar colors
 Plugin 'flazz/vim-colorschemes'                 " more colors
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
@@ -39,6 +37,9 @@ Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 Plugin 'scrooloose/syntastic'                   " syntax checking
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
+Plugin 'itchyny/lightline.vim'                  " status line, bottom
+Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
+Plugin 'itchyny/vim-gitbranch'                  " provides gitbranch#name() function
 
 Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 
@@ -80,15 +81,16 @@ set title           " show title in window bar
 set cursorline      " highlight current line
 
 " automatically load vimrc on change
-augroup myvimrc
-	au!
-	au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup reload_vimrc
+	autocmd!
+	autocmd bufwritepost $MYVIMRC nested source $MYVIMRC
 augroup END
 
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 call matchadd('ColorColumn', '\%81v', 88)          "only highlight when over
 
 set tw=0             " do not automatically break lines at certain length
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " NAVIGATION
@@ -118,7 +120,7 @@ augroup END
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" SYNTASTIC
+" SYNTASTIC (syntax checker)
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -145,46 +147,41 @@ nnoremap <F9> :call ToggleSyntastic()<CR>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" AIRLINE
-set laststatus=2                      " show airline
-let g:airline_highlighting_cache = 0  " make airline faster
-let g:airline_powerline_fonts = 1     " enable symbols
+" LIGHTLINE (status line on bottom)
 
-if !exists('g:airline_symbols')
-	let g:airline_symbols = {}
-endif
+set laststatus=2                                     " show status line
+set guioptions-=e                                    " don't use gui tabline
+" SEE `:h g:lightline.component`
+let g:lightline = {
+      \   'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo', 'syntastic' ],
+      \              [ 'percent' ],
+      \              [ 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'gitbranch#name'
+      \ },
+      \   'colorscheme': 'wombat',
+      \ }
 
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1        " enable list of buffers
-let g:airline#extensions#tabline#fnamemod = ':t'    " show just filename in buffer list
-let g:airline#extensions#branch#enabled = 1
-
-" airline unicode, requires:    # apt-get install fonts-powerline
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-"let g:airline_symbols.linenr = '␊'
-"let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-"let g:airline_symbols.paste = 'Þ'
-"let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_left_alt_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-
-" remove specific airline symbols to improve spacing / speed
-let g:airline_symbols.linenr = ''  " ¶
-let g:airline_symbols.maxlinenr = ''  " '
-let g:airline_left_sep = ''  " 
-let g:airline_right_sep = ''  " 
-let g:airline_symbols.branch = ''  " ''
-
-" airline formatting
-let g:airline#extensions#whitespace#enabled = 0  " remove section on right
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " don't show encoding if utf-8
+let g:lightline.separator = {
+      \   'left': '', 'right': ''
+      \}
+let g:lightline.subseparator = {
+      \   'left': '', 'right': ''
+      \}
 
 
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" LIGHTLINE-BUFFERLINE (buffer list on top)
+
+set showtabline=2                                    " show tabline (top buffer list)
+let g:lightline#bufferline#show_number  = 1          " prepend buffer number
+"let g:lightline#bufferline#shorten_path = 1          " abbreviate paths
+let g:lightline#bufferline#filename_modifier = ':t'  " no path in buf filename
+let g:lightline#bufferline#unnamed = '[No Name]'
+let g:lightline.tabline = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+let g:lightline.component_type   = {'buffers': 'tabsel'}
