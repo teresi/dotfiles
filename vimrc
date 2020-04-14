@@ -26,7 +26,7 @@ set rtp+=~/.vim/bundle/Vundle.vim               " add vundle to runtime path
 call vundle#begin()                             " initialize vundle
 "call vundle#begin('~/some/path/here')          " or set a plugin install dir
 
-Plugin 'VundleVim/Vundle.vim'                   " let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
 Plugin 'flazz/vim-colorschemes'                 " more colors
@@ -40,11 +40,10 @@ Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'itchyny/lightline.vim'                  " status line, bottom
 Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
-Plugin 'itchyny/vim-gitbranch'                  " provides gitbranch#name() function
+Plugin 'itchyny/vim-gitbranch'                  " adds gitbranch#name() func
 Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 
-Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
-
+"Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
 "Plugin 'git://github.com/majutsushi/tagbar.git' " class outline viewer
 
@@ -138,6 +137,12 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_auto_jump = 0
 
+let g:syntastic_mode_map = {
+    \ 'mode': 'passive',
+    \ 'active_filetypes': [],
+    \ 'passive_filetypes': ['python']
+    \}
+
 function! ToggleSyntastic()
     let g:syntastic_auto_loc_list = 1          " 1: re-enable quickfix window
     for i in range(1, winnr('$'))
@@ -175,10 +180,10 @@ let g:lightline = {
 "let g:lightline.separator = {
 "      \   'left': '', 'right': ''
 "      \}
-"let g:lightline.subseparator = {
-"      \   'left': '', 'right': ''
-"      \}
-"let g:lightline.colorscheme = 'onedark'
+let g:lightline.subseparator = {
+      \   'left': '', 'right': ''
+      \}
+let g:lightline.colorscheme = 'onedark'
 
 " TODO (?) add customizations for better tabs from:
 " https://github.com/NovaDev94/lightline-onedark
@@ -193,6 +198,7 @@ let g:lightline#bufferline#show_number  = 1          " prepend buffer number
 "let g:lightline#bufferline#shorten_path = 1          " abbreviate paths
 let g:lightline#bufferline#filename_modifier = ':t'  " no path in buf filename
 let g:lightline#bufferline#unnamed = '[No Name]'
-let g:lightline.tabline = {'left': [['buffers']], 'right': [['close']]}
+let g:lightline.tabline = {'left': [['buffers']], 'right': [['tabs']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
+
