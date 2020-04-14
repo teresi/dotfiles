@@ -38,10 +38,13 @@ Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 Plugin 'scrooloose/syntastic'                   " syntax checking
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
-Plugin 'itchyny/lightline.vim'                  " status line, bottom
-Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
-Plugin 'itchyny/vim-gitbranch'                  " adds gitbranch#name() func
 Plugin 'joshdick/onedark.vim'                   " color, atom onedark
+Plugin 'vim-airline/vim-airline'                " status bar
+Plugin 'vim-airline/vim-airline-themes'         " status bar colors
+
+"Plugin 'itchyny/lightline.vim'                  " status line, bottom
+"Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
+"Plugin 'itchyny/vim-gitbranch'                  " adds gitbranch#name() func
 
 "Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
@@ -157,48 +160,89 @@ endfunction
 nnoremap <F9> :call ToggleSyntastic()<CR>
 
 
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" LIGHTLINE (status line on bottom)
-
-set laststatus=2                                     " show status line
-set guioptions-=e                                    " don't use gui tabline
-" SEE `:h g:lightline.component`
-let g:lightline = {
-      \   'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-      \   'right': [ [ 'lineinfo', 'syntastic' ],
-      \              [ 'percent' ],
-      \              [ 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'gitbranch#name'
-      \ },
-      \   'colorscheme': 'wombat',
-      \ }
-
-"let g:lightline.separator = {
-"      \   'left': '', 'right': ''
+"" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+"" LIGHTLINE (status line on bottom)
+"
+"set laststatus=2                                     " show status line
+"set guioptions-=e                                    " don't use gui tabline
+"" SEE `:h g:lightline.component`
+"let g:lightline = {
+"      \   'active': {
+"      \   'left': [ [ 'mode', 'paste' ],
+"      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+"      \   'right': [ [ 'lineinfo', 'syntastic' ],
+"      \              [ 'percent' ],
+"      \              [ 'filetype' ] ]
+"      \ },
+"      \ 'component_function': {
+"      \   'gitbranch': 'gitbranch#name'
+"      \ },
+"      \   'colorscheme': 'wombat',
+"      \ }
+"
+""let g:lightline.separator = {
+""      \   'left': '', 'right': ''
+""      \}
+"let g:lightline.subseparator = {
+"      \   'left': '', 'right': ''
 "      \}
-let g:lightline.subseparator = {
-      \   'left': '', 'right': ''
-      \}
-let g:lightline.colorscheme = 'onedark'
-
-" TODO (?) add customizations for better tabs from:
-" https://github.com/NovaDev94/lightline-onedark
-" TODO (?) add tmux colors to compliment onedark from:
-" https://github.com/odedlaz/tmux-onedark-theme
-
+"let g:lightline.colorscheme = 'onedark'
+"
+"" TODO (?) add customizations for better tabs from:
+"" https://github.com/NovaDev94/lightline-onedark
+"" TODO (?) add tmux colors to compliment onedark from:
+"" https://github.com/odedlaz/tmux-onedark-theme
+"
+"" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+"" LIGHTLINE-BUFFERLINE (buffer list on top)
+"
+"set showtabline=2                                    " show tabline (top buffer list)
+"let g:lightline#bufferline#show_number  = 1          " prepend buffer number
+""let g:lightline#bufferline#shorten_path = 1          " abbreviate paths
+"let g:lightline#bufferline#filename_modifier = ':t'  " no path in buf filename
+"let g:lightline#bufferline#unnamed = '[No Name]'
+"let g:lightline.tabline = {'left': [['buffers']], 'right': [['tabs']]}
+"let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+"let g:lightline.component_type   = {'buffers': 'tabsel'}
+"
+"
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" LIGHTLINE-BUFFERLINE (buffer list on top)
+" AIRLINE
+set laststatus=2                      " show airline
+let g:airline_highlighting_cache = 0  " make airline faster
+let g:airline_powerline_fonts = 1     " enable symbols
 
-set showtabline=2                                    " show tabline (top buffer list)
-let g:lightline#bufferline#show_number  = 1          " prepend buffer number
-"let g:lightline#bufferline#shorten_path = 1          " abbreviate paths
-let g:lightline#bufferline#filename_modifier = ':t'  " no path in buf filename
-let g:lightline#bufferline#unnamed = '[No Name]'
-let g:lightline.tabline = {'left': [['buffers']], 'right': [['tabs']]}
-let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-let g:lightline.component_type   = {'buffers': 'tabsel'}
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
 
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1        " enable list of buffers
+let g:airline#extensions#tabline#fnamemod = ':t'    " show just filename in buffer list
+let g:airline#extensions#branch#enabled = 1
+
+" airline unicode, requires:    # apt-get install fonts-powerline
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_left_alt_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" remove specific airline symbols
+let g:airline_symbols.linenr = ''  " ¶
+let g:airline_symbols.maxlinenr = ''  " '
+let g:airline_left_sep = ''  " 
+let g:airline_right_sep = ''  " 
+let g:airline_symbols.branch = ''  " ''
+
+" airline formatting
+let g:airline#extensions#whitespace#enabled = 0  " remove section on right
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " no show if utf8
