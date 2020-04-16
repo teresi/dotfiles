@@ -44,6 +44,7 @@ Plugin 'vim-airline/vim-airline-themes'         " status bar colors
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
+Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` is bd w/ closing win
 
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
 "Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
