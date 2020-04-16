@@ -41,6 +41,7 @@ Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'vim-airline/vim-airline-themes'         " status bar colors
+Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
 "Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
@@ -116,7 +117,7 @@ set hidden                       " allow buffer switch w/o save
 " LANGUAGES
 
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
-autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
+autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent noexpandtab
 
 " plugin 'indentLine' changes the 'conceallevel' from the default
 " change the settings for json files so it doesn't squash characters
