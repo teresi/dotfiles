@@ -69,6 +69,9 @@ nnoremap <F2> :NERDTreeToggle<CR>
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
 
+set ttyfast                    " speedup editing
+set lazyredraw                 " speedup editing
+
 " also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
 set term=screen-256color   " fix colors for vim inside tmux
 
@@ -208,25 +211,33 @@ nnoremap <F9> :call ToggleSyntastic()<CR>
 "
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " AIRLINE
-set laststatus=2                      " show airline
-let g:airline_highlighting_cache = 0  " make airline faster
-let g:airline_powerline_fonts = 1     " enable symbols
+set laststatus=2                                  " show airline
+let g:airline_powerline_fonts = 1                 " requires `fonts-powerline`
+let g:airline#extensions#whitespace#enabled = 0   " remove section on right
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 
+" optimizations
+" test `:profile start <ouput.log>` && `:profile func *` && `:profile file *"
+" use vim
+" read `:profile pause` && `:e <output.log>
+let g:airline_extensions = ['tabline']            " whitelist (massive speedup)
+let g:airline#extensions#tabline#enabled = 1      " enable list of buffers
+let g:airline#extensions#tabline#fnamemod = ':t'  " buffername is just filename
+let g:airline#extensions#branch#enabled = 0       " off, speedup airline
+let g:airline#extensions#syntastic#enabled = 0    " off, speedup airline
+let g:airline#extensions#fugitiveline#enabled = 0 " off, speedup airline
+let g:airline_highlighting_cache = 1              " on, speedup airline
+
+" airline unicode, requires:    # apt-get install fonts-powerline
 if !exists('g:airline_symbols')
 	let g:airline_symbols = {}
 endif
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1        " enable list of buffers
-let g:airline#extensions#tabline#fnamemod = ':t'    " show just filename in buffer list
-let g:airline#extensions#branch#enabled = 1
-
-" airline unicode, requires:    # apt-get install fonts-powerline
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 "let g:airline_symbols.linenr = '␊'
 "let g:airline_symbols.linenr = '␤'
 let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.branch = '⎇'
 let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.whitespace = 'Ξ'
@@ -241,8 +252,6 @@ let g:airline_symbols.linenr = ''  " ¶
 let g:airline_symbols.maxlinenr = ''  " '
 let g:airline_left_sep = ''  " 
 let g:airline_right_sep = ''  " 
+let g:airline_left_alt_sep = ''  " ''
+let g:airline_right_alt_sep = ''  " ''
 let g:airline_symbols.branch = ''  " ''
-
-" airline formatting
-let g:airline#extensions#whitespace#enabled = 0  " remove section on right
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'  " no show if utf8
