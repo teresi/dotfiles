@@ -43,6 +43,7 @@ Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
+Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
 
 " colors
 Plugin 'flazz/vim-colorschemes'                 " colors
