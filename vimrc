@@ -82,6 +82,14 @@ nnoremap <F2> :NERDTreeToggle<CR>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" TERMINAL
+
+set shell=bash                 " :term default to bash
+"let g:Terminal_FastMode = 0   " 'tc50cal/vim-terminal' for speed
+"let g:Terminal_PyVersion = 3  " 'tc50cal/vim-terminal'
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
 
 set ttyfast                    " speedup editing
