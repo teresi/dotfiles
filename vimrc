@@ -18,6 +18,11 @@ filetype off                  " required
 set exrc                      " load vimrc from working directory
 set secure                    " limit commands from non-default vimrc files
 
+augroup reload_vimrc          " auto load on change
+	autocmd!
+	autocmd bufwritepost $MYVIMRC nested source $MYVIMRC
+augroup END
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " PACKAGES
@@ -28,31 +33,34 @@ call vundle#begin()                             " initialize vundle
 
 Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
+" tools
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
-Plugin 'flazz/vim-colorschemes'                 " more colors
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
-Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
-Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
 Plugin 'scrooloose/syntastic'                   " syntax checking
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
-Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 Plugin 'vim-airline/vim-airline'                " status bar
+Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
+
+" colors
+Plugin 'flazz/vim-colorschemes'                 " colors
 Plugin 'vim-airline/vim-airline-themes'         " status bar colors
+Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
+Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
+Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
-Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` is bd w/ closing win
 Plugin 'frazrepo/vim-rainbow'                   " braces / paren highlighting
 Plugin 'elzr/vim-json'                          " json syntax highlighting
 Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
 
+" future
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
 "Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
 "Plugin 'itchyny/vim-gitbranch'                  " adds gitbranch#name() func
-
 "Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
 "Plugin 'git://github.com/majutsushi/tagbar.git' " class outline viewer
@@ -98,17 +106,10 @@ set number          " show line numbers
 set hlsearch        " show highlighted search
 set title           " show title in window bar
 set cursorline      " highlight current line
+set tw=0            " do not automatically break lines at certain length
 
-" automatically load vimrc on change
-augroup reload_vimrc
-	autocmd!
-	autocmd bufwritepost $MYVIMRC nested source $MYVIMRC
-augroup END
-
-highlight ColorColumn ctermbg=0 guibg=lightgrey
-call matchadd('ColorColumn', '\%81v', 88)          "only highlight when over
-
-set tw=0             " do not automatically break lines at certain length
+highlight ColorColumn ctermbg=DarkBlue
+call matchadd('ColorColumn', '\%81v.', 100)          "only highlight when over
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -124,7 +125,7 @@ set hidden                       " allow buffer switch w/o save
 " LANGUAGES
 
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
-autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent noexpandtab
+autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 
 " plugin 'indentLine' changes the 'conceallevel' from the default
 " change the settings for json files so it doesn't squash characters
@@ -146,7 +147,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0              " 0: close quickfix window on startup
+let g:syntastic_auto_loc_list = 0            " 0: close quickfix win on start
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_auto_jump = 0
@@ -158,7 +159,7 @@ let g:syntastic_mode_map = {
     \}
 
 function! ToggleSyntastic()
-    let g:syntastic_auto_loc_list = 1          " 1: re-enable quickfix window
+    let g:syntastic_auto_loc_list = 1       " 1: re-enable quickfix window
     for i in range(1, winnr('$'))
         let bnum = winbufnr(i)
         if getbufvar(bnum, '&buftype') == 'quickfix'
