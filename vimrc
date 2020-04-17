@@ -45,6 +45,9 @@ Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` is bd w/ closing win
+Plugin 'frazrepo/vim-rainbow'                   " braces / paren highlighting
+Plugin 'elzr/vim-json'                          " json syntax highlighting
+Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
 
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
 "Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
@@ -82,6 +85,7 @@ set term=screen-256color   " fix colors for vim inside tmux
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
 silent! colorscheme onedark    " next color if downloaded
+let g:rainbow_active = 1       " turn on colored brackets
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
