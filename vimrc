@@ -185,6 +185,28 @@ endfunction
 nnoremap <F9> :call ToggleSyntastic()<CR>
 
 
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" CLIP BOARD
+
+" BUG gnome-terminal does not support OSC52, so this is untested
+"function! OscCopy()  " copy contents yanked into OS clipboard
+"  let encodedText=@"
+"  let encodedText=substitute(encodedText, '\', '\\\\', "g")
+"  let encodedText=substitute(encodedText, "'", "'\\\\''", "g")
+"  let executeCmd="echo -n '".encodedText."' | base64 | tr -d '\\n'"
+"  let encodedText=system(executeCmd)
+"  if $TMUX != ""
+"    "tmux
+"    let executeCmd='echo -en "\x1bPtmux;\x1b\x1b]52;;'.encodedText.'\x1b\x1b\\\\\x1b\\" > /dev/tty'
+"  else
+"    let executeCmd='echo -en "\x1b]52;;'.encodedText.'\x1b\\" > /dev/tty'
+"  endif
+"  call system(executeCmd)
+"  redraw!
+"endfunction
+"command! OscCopy :call OscCopy()
+
+
 "" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 "" LIGHTLINE (status line on bottom)
 "
