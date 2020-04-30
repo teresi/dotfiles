@@ -100,7 +100,7 @@ set term=screen-256color   " fix colors for vim inside tmux
 
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
-silent! colorscheme onedark    " next color if downloaded
+"silent! colorscheme onedark    " next color if downloaded
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
@@ -122,6 +122,8 @@ call matchadd('ColorColumn', '\%81v.', 100)          "only highlight when over
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " NAVIGATION
 
+set splitbelow                   " new split to bottom
+set splitright                   " new split to right
 set path+=**                     " add working dir to search :find
 set wildmenu                     " turn on tab completion for :find
 set wildignore+=**/.git/**       " ignore git folders
