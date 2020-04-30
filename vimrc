@@ -45,6 +45,7 @@ Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
 Plugin 'lervag/vimtex'                          " LaTeX language
+Plugin 'gregsexton/gitv'                        " gitk in vim
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
