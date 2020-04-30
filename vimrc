@@ -44,6 +44,7 @@ Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
+Plugin 'lervag/vimtex'                          " LaTeX language
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
