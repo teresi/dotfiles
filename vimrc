@@ -46,12 +46,9 @@ Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
 
 " colors
-Plugin 'flazz/vim-colorschemes'                 " colors
+Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
 Plugin 'vim-airline/vim-airline-themes'         " status bar colors
-Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
-Plugin 'xolox/vim-misc'                         " dependency for ^
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
-Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
 Plugin 'elzr/vim-json'                          " json syntax highlighting
@@ -60,10 +57,16 @@ Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
 " future
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
 "Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
-"Plugin 'itchyny/vim-gitbranch'                  " adds gitbranch#name() func
+"Plugin 'itchyny/vim-gitbranch'                  " lightline gitbranch#name() func
 "Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
 "Plugin 'git://github.com/majutsushi/tagbar.git' " class outline viewer
+
+" old
+"Plugin 'flazz/vim-colorschemes'                 " colors
+"Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
+"Plugin 'xolox/vim-misc'                         " dependency for ^
+"Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 
 call vundle#end()            " required, all plugins must be added before this
 filetype plugin indent on    " required
@@ -100,7 +103,7 @@ set term=screen-256color   " fix colors for vim inside tmux
 
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
-"silent! colorscheme onedark    " next color if downloaded
+let g:airline_theme='ayu_mirage'
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
