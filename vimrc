@@ -46,6 +46,7 @@ Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
 Plugin 'lervag/vimtex'                          " LaTeX language
 Plugin 'gregsexton/gitv'                        " gitk in vim
+Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
@@ -84,6 +85,16 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 nnoremap <F2> :NERDTreeToggle<CR>
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" MARKDOWN PREVIEW 'JamshedVesuna/vim-markdown-preview'
+" apt-get install xdotool
+" pip install grip
+
+let vim_markdown_preview_toggle=3  " show markdown on write, no images
+let vim_markdown_preview_github=1
+
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "

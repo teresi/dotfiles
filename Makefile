@@ -22,6 +22,7 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory vimrc
 	$(MAKE) --no-print-directory -ik plugins
 	$(MAKE) --no-print-directory -ik bashrc
+	$(MAKE) --no-print-directory -ik depends
 
 .PHONY: vimrc
 vimrc:                ## overwrite /home/$USER/.vimrc
@@ -30,6 +31,10 @@ vimrc:                ## overwrite /home/$USER/.vimrc
 .PHONY: plugins
 plugins:              ## install vim plugins
 	$(ROOT_DIR)/install_vim_pkgs.sh
+
+.PHONY: depends
+depends:
+	$(ROOT_DIR)/install_dependencies.sh
 
 .PHONY: vundle
 vundle:               ## install vundle
