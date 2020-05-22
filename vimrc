@@ -86,9 +86,18 @@ map <C-l> <C-w>l
 
 nnoremap <F2> :NERDTreeToggle<CR>
 
-nnoremap <TAB> :bnext<CR>  " TAB in general mode will move to text buffer
+" TAB in general mode will move to text buffer
+nnoremap <TAB> :bnext<CR>
 " SHIFT-TAB will go back
 nnoremap <S-TAB> :bprevious<CR>
+
+" tabbing a visual block more than once
+vnoremap < <gv
+vnoremap > >gv
+
+" Easy CAPS
+inoremap <c-u> <ESC>viwUi
+nnoremap <c-u> viwU<Esc>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -110,6 +119,11 @@ set shell=bash                 " :term default to bash
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
+
+" clipboard support may require (apt) `vim-gnome`
+" you should see `+clipboard` and/or `+xterm_clipboard` in:
+" `vim --version | grep clipboard`
+set clipboard=unnamedplus      " use system clipboard as default register
 
 set ttyfast                    " speedup editing
 set lazyredraw                 " speedup editing
