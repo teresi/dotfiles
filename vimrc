@@ -86,6 +86,10 @@ map <C-l> <C-w>l
 
 nnoremap <F2> :NERDTreeToggle<CR>
 
+nnoremap <TAB> :bnext<CR>  " TAB in general mode will move to text buffer
+" SHIFT-TAB will go back
+nnoremap <S-TAB> :bprevious<CR>
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " MARKDOWN PREVIEW 'JamshedVesuna/vim-markdown-preview'
@@ -94,7 +98,6 @@ nnoremap <F2> :NERDTreeToggle<CR>
 
 let vim_markdown_preview_toggle=3  " show markdown on write, no images
 let vim_markdown_preview_github=1
-
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -116,7 +119,7 @@ set term=screen-256color   " fix colors for vim inside tmux
 
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
-let g:airline_theme='ayu_mirage'
+let g:airline_theme='term'
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
@@ -132,7 +135,7 @@ set cursorline      " highlight current line
 set tw=0            " do not automatically break lines at certain length
 
 highlight ColorColumn ctermbg=DarkBlue
-call matchadd('ColorColumn', '\%81v.', 100)          "only highlight when over
+call matchadd('ColorColumn', '\%88v.', 100)          "only highlight when over
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
