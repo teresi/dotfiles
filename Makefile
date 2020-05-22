@@ -22,6 +22,9 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory vimrc
 	$(MAKE) --no-print-directory -ik plugins
 	$(MAKE) --no-print-directory -ik bashrc
+
+.PHONY: install       ## install all system dependencies
+install:
 	$(MAKE) --no-print-directory -ik depends
 
 .PHONY: vimrc
