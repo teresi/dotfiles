@@ -95,10 +95,6 @@ nnoremap <S-TAB> :bprevious<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" Easy CAPS
-inoremap <c-u> <ESC>viwUi
-nnoremap <c-u> viwU<Esc>
-
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " MARKDOWN PREVIEW 'JamshedVesuna/vim-markdown-preview'
