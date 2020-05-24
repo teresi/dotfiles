@@ -1,6 +1,7 @@
 #BASH_CUSTOMIZATIONS_START
 
 TERM=screen-256color           # fix vim colors inside tmux
+set -o vi
 
 HISTTIMEFORMAT="%F %T: "       # add timestamps to history
 HISTIGNORE='ls:bg:fg:history'  # ignore specific commands

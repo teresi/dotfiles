@@ -22,6 +22,7 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory vimrc
 	$(MAKE) --no-print-directory -ik plugins
 	$(MAKE) --no-print-directory -ik bashrc
+	$(ROOT_DIR)/keymaps.sh -s
 
 .PHONY: install       ## install all system dependencies
 install:
