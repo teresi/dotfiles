@@ -3,6 +3,11 @@
 TERM=screen-256color           # fix vim colors inside tmux
 set -o vi
 
+# Remap the CapsLock key to a Control key for X Window
+if type setxkbmap >/dev/null 2>&1; then
+        setxkbmap -layout us -option ctrl:nocaps 2>/dev/null
+fi
+
 HISTTIMEFORMAT="%F %T: "       # add timestamps to history
 HISTIGNORE='ls:bg:fg:history'  # ignore specific commands
 
