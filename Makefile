@@ -59,3 +59,7 @@ bashrc:               ## customize bash
 .PHONY: tmux.conf
 tmux.conf:
 	cp $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
+
+.PHONY: rxvt
+rxvt:
+	$(ROOT_DIR)/install_ranger.sh
