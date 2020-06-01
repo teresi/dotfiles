@@ -1,0 +1,7 @@
+#BASH_CUSTOMIZATIONS_VI_START
+
+set -o vi
+set show-mode-in-prompt on
+
+
+#BASH_CUSTOMIZATIONS_VI_END

@@ -129,7 +129,7 @@ set term=screen-256color   " fix colors for vim inside tmux
 
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
-let g:airline_theme='term'
+let g:airline_theme='base16_chalk'
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE

@@ -1,7 +1,6 @@
 #BASH_CUSTOMIZATIONS_START
 
 TERM=screen-256color           # fix vim colors inside tmux
-set -o vi
 
 # Remap the CapsLock key to a Control key for X Window
 if type setxkbmap >/dev/null 2>&1; then
