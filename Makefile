@@ -26,8 +26,8 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory -ik inputrc
 	$(MAKE) --no-print-directory -ik tmux.conf
 
-.PHONY: install       ## install all system dependencies
-install:
+.PHONY: install
+install:              ## install all system dependencies
 	$(MAKE) --no-print-directory -ik depends
 
 .PHONY: vimrc
