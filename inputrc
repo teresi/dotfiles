@@ -10,6 +10,9 @@ set completion-ignore-case on
 # options when hitting TAB
 set menu-complete-display-prefix on
 
+# decrease time to switch between modes
+set keyseq-timeout 100
+
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)
 set keymap vi-command
