@@ -1,0 +1,9 @@
+#PYTHON_CUSTOMIZATIONS_START
+
+export VIRTUALENVWRAPPER_PYTHON=`which python3`
+export WORKON_HOME=/home/`whoami`/.virtualenvs
+export VIRTUALENVWRAPPER_VIRTUALENV=/home/`whoami`/.local/bin/virtualenv
+source /home/`whoami`/.local/bin/virtualenvwrapper.sh
+export PIP_DOWNLOAD_CACHE=/home/`whoami`/.pip/cache
+
+#PYTHON_CUSTOMIZATIONS_END

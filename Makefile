@@ -48,9 +48,13 @@ bashrc:               ## customize bash
 	sed -i 's/HISTSIZE=1000/HISTSIZE=16384/' $(BASHRC)
 	sed -i 's/HISTFILESIZE=2000\n/HISTFILESIZE=65536/' $(BASHRC)
 	# replace block of text between markers
-	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
+	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || \
+		printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#BASH_CUSTOMIZATIONS_START.*?#BASH_CUSTOMIZATIONS_END/`cat bash-customizations`/se' $(BASHRC)
-
+	grep -q -F '#PYTHON_CUSTOMIZATIONS_START' $(BASHRC) || \
+		printf '\n#PYTHON_CUSTOMIZATIONS_START\n#PYTHON_CUSTOMIZATIONS_END' >> $(BASHRC)
+	perl -i -p0e 's/#PYTHON_CUSTOMIZATIONS_START.*?#PYTHON_CUSTOMIZATIONS_END/`cat python-customizations`/se' $(BASHRC)
+	
 .PHONY: plugins
 plugins:              ## install vim plugins
 	$(ROOT_DIR)/install_vim_pkgs.sh
