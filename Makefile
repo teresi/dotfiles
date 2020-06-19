@@ -1,5 +1,9 @@
 # helper scripts to install dotfiles
 # __file__ Makefile
+#
+# FYI having this many phony recipes (not creating files) is an anti-pattern
+# for makefiles, but is done here as it is cleaner than adding this many switches
+# to a bash file
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -25,6 +29,7 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory -ik bashrc
 	$(MAKE) --no-print-directory -ik inputrc
 	$(MAKE) --no-print-directory -ik tmux.conf
+	$(MAKE) --no-print-directory -ik virtualenvwrapper
 
 .PHONY: install
 install:              ## install all system dependencies
@@ -39,7 +44,7 @@ inputrc:              ## overwrite /home/$USER/.inputrc for vi mode in the termi
 	cp $(ROOT_DIR)/inputrc $(INPUTRC)
 
 .PHONY: tmux.conf
-tmux.conf:
+tmux.conf:            ## configuration for tmux
 	cp $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
 
 .PHONY: bashrc
@@ -51,6 +56,9 @@ bashrc:               ## customize bash
 	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || \
 		printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#BASH_CUSTOMIZATIONS_START.*?#BASH_CUSTOMIZATIONS_END/`cat bash-customizations`/se' $(BASHRC)
+
+.PHONY: virtualenvwrapper
+virtualenvwrapper:    ## variables for python virtual env wrapper
 	grep -q -F '#PYTHON_CUSTOMIZATIONS_START' $(BASHRC) || \
 		printf '\n#PYTHON_CUSTOMIZATIONS_START\n#PYTHON_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#PYTHON_CUSTOMIZATIONS_START.*?#PYTHON_CUSTOMIZATIONS_END/`cat python-customizations`/se' $(BASHRC)
@@ -60,7 +68,7 @@ plugins:              ## install vim plugins
 	$(ROOT_DIR)/install_vim_pkgs.sh
 
 .PHONY: depends
-depends:
+depends:              ## install apt / python packages to host
 	$(ROOT_DIR)/install_dependencies.sh
 
 .PHONY: vundle
@@ -68,7 +76,7 @@ vundle:               ## install vundle
 	git clone https://github.com/VundleVim/Vundle.vim.git $(HOME)/.vim/bundle/Vundle.vim
 
 .PHONY: backup
-backup:               ## backup dotfiles
+backup:               ## backup dotfiles (vim / bach / inputrc / tmux)
 	cp $(VIMRC) $(HOME)/.vimrc.bak
 	cp $(BASHRC) $(HOME)/.bashrc.bak
 	cp $(INPUTRC) $(HOME)/.inputrc.bak
