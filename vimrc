@@ -147,6 +147,12 @@ set tw=0            " do not automatically break lines at certain length
 highlight ColorColumn ctermbg=DarkBlue
 call matchadd('ColorColumn', '\%88v.', 100)          "only highlight when over
 
+" default LaTeX style
+let g:tex_flavor = 'latex'
+
+" don't hide unicode / escape char
+let g:conceallevel = 0
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " NAVIGATION

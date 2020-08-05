@@ -9,6 +9,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VIMRC := $(HOME)/.vimrc
 BASHRC := $(HOME)/.bashrc
+BASHPROFILE := $(HOME)/.bash_profile
 INPUTRC := $(HOME)/.inputrc
 TMUX_CONF := $(HOME)/.tmux.conf
 
@@ -56,6 +57,13 @@ bashrc:               ## customize bash
 	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || \
 		printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#BASH_CUSTOMIZATIONS_START.*?#BASH_CUSTOMIZATIONS_END/`cat bash-customizations`/se' $(BASHRC)
+
+.PHONY: bashprofile
+bashprofile:
+	grep -q -F '#BASH_PROFILE_CUSTOMIZATIONS_START' $(BASHPROFILE) || \
+		printf '\n#BASH_PROFILE_CUSTOMIZATIONS_START\n#BASH_PROFILE_CUSTOMIZATIONS_END' >> $(BASHPROFILE)
+	perl -i -p0e 's/#BASH_PROFILE_CUSTOMIZATIONS_START.*?#BASH_PROFILE_CUSTOMIZATIONS_END/`cat bash-profile-customizations`/se' $(BASHPROFILE)
+
 
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## variables for python virtual env wrapper
