@@ -152,6 +152,8 @@ let g:tex_flavor = 'latex'
 
 " don't hide unicode / escape char
 let g:conceallevel = 0
+" indent line resets conceallevel on load, so fix for LaTeX
+let g:indentLine_fileTypeExclude = ['tex']
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
