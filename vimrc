@@ -47,6 +47,7 @@ Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
 Plugin 'lervag/vimtex'                          " LaTeX language
 Plugin 'gregsexton/gitv'                        " gitk in vim
 Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
+Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
@@ -84,7 +85,10 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" show file tree
 nnoremap <F2> :NERDTreeToggle<CR>
+" format the buffer
+nnoremap <F3> :Autoformat<CR>
 
 " TAB in general mode will move to text buffer
 nnoremap <TAB> :bnext<CR>
@@ -127,6 +131,8 @@ set lazyredraw                 " speedup editing
 " also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
 set term=screen-256color   " fix colors for vim inside tmux
 
+syntax enable
+set background=dark
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
 let g:airline_theme='base16_chalk'
