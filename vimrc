@@ -48,6 +48,7 @@ Plugin 'lervag/vimtex'                          " LaTeX language
 Plugin 'gregsexton/gitv'                        " gitk in vim
 Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
+Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
