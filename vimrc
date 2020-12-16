@@ -159,9 +159,18 @@ set tw=0            " do not automatically break lines at certain length
 :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 :augroup END
 
-" highlight column limit
+" highlight column limit on active window
 highlight ColorColumn ctermbg=DarkBlue
-call matchadd('ColorColumn', '\%88v.', 100)          "only highlight when over
+let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc
+function! HighlightColumn( LIMIT )
+	let l:expr = '\%' . a:LIMIT . 'v.'
+	call matchadd('ColorColumn', l:expr, 100)
+endfunc
+augroup column_highlighting
+	autocmd!
+	autocmd BufEnter,WinEnter,FocusGained * silent! call HighlightColumn(HIGHLIGHT_COLS)
+	autocmd BufLeave,WinLeave,FocusLost * silent! call clearmatches()
+augroup END
 
 " default LaTeX style
 let g:tex_flavor = 'latex'
