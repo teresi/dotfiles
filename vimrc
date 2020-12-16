@@ -151,6 +151,15 @@ set title           " show title in window bar
 set cursorline      " highlight current line
 set tw=0            " do not automatically break lines at certain length
 
+" show relative numbers on active window
+:set number relativenumber
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
+
+" highlight column limit
 highlight ColorColumn ctermbg=DarkBlue
 call matchadd('ColorColumn', '\%88v.', 100)          "only highlight when over
 
