@@ -50,6 +50,7 @@ Plugin 'gregsexton/gitv'                        " gitk in vim
 Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
 Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
+"Plugin 'neoclide/coc.nvim'                      " auto complete
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
@@ -363,3 +364,11 @@ let g:airline_right_sep = ''  " 
 let g:airline_left_alt_sep = ''  " ''
 let g:airline_right_alt_sep = ''  " ''
 let g:airline_symbols.branch = ''  " ''
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" CoC
+"source $HOME/.config/vim/plug-config/coc.vim
+"hi Pmenu ctermbg=black ctermfg=white
+"set signcolumn=yes  " fix issue where CoC messes up git gutter spacing
+"set cmdheight=1     " fix issue where CoC sets 2 lines for cmdheight
