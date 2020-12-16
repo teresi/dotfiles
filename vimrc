@@ -145,7 +145,10 @@ let g:airline_theme='base16_chalk'
 "set list lcs=trail:\uB7,tab:»·
 "set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\ 
 "set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\ 
-set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
+"set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
+set list lcs=tab:¦\ ,trail:·,precedes:«,extends:»
+" match indentline colors
+highlight SpecialKey ctermfg=239
 set number          " show line numbers
 set hlsearch        " show highlighted search
 set title           " show title in window bar
