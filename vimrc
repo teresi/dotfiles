@@ -169,9 +169,11 @@ function! HighlightColumn( LIMIT )
 endfunc
 augroup column_highlighting
 	autocmd!
-	autocmd BufEnter,WinEnter,FocusGained * silent! call HighlightColumn(HIGHLIGHT_COLS)
-	autocmd BufLeave,WinLeave,FocusLost * silent! call clearmatches()
+	let ft_to_ignore = ['floggraph']
+	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
+	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
 augroup END
+
 
 " default LaTeX style
 let g:tex_flavor = 'latex'
