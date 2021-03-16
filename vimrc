@@ -204,6 +204,7 @@ set hidden                       " allow buffer switch w/o save
 
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
+autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 
 " plugin 'indentLine' changes the 'conceallevel' from the default
 " change the settings for json files so it doesn't squash characters
