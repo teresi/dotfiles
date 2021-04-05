@@ -93,3 +93,10 @@ backup:               ## backup dotfiles (vim / bach / inputrc / tmux)
 .PHONY: rxvt
 rxvt:                 ## install ranger & urxvt for image preview
 	$(ROOT_DIR)/install_ranger.sh
+
+.PHONY: functions
+functions:            ## add extra bash functions
+	grep -q -F '#BASH_FUNCTIONS_START' $(BASHRC) || \
+		printf '\n#BASH_FUNCTIONS_START\n#BASH_FUNCTIONS_END' >> $(BASHRC)
+	perl -i -p0e 's/#BASH_FUNCTIONS_START.*?#BASH_FUNCTIONS_END/`cat bash-functions`/se' $(BASHRC)
+	
