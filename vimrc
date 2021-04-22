@@ -138,7 +138,11 @@ syntax enable
 set background=dark
 silent! colorscheme ron        " default color
 silent! colorscheme herald     " next color if downloaded
-let g:airline_theme='base16_chalk'
+"let g:airline_theme='base16_chalk'
+" colors in docker get messed up somehow? (not even in tmux)
+" so use 'deus' since that one is consistent
+let g:airline_theme='deus'
+
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
