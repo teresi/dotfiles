@@ -170,17 +170,17 @@ set tw=0            " do not automatically break lines at certain length
 
 " highlight column limit on active window
 highlight ColorColumn ctermbg=DarkBlue
-let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc
-function! HighlightColumn( LIMIT )
-	let l:expr = '\%' . a:LIMIT . 'v.'
-	call matchadd('ColorColumn', l:expr, 100)
-endfunc
-augroup column_highlighting
-	autocmd!
-	let ft_to_ignore = ['floggraph']
-	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
-	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
-augroup END
+let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for per project setting
+"function! HighlightColumn( LIMIT )
+"	let l:expr = '\%' . a:LIMIT . 'v.'
+"	call matchadd('ColorColumn', l:expr, 100)
+"endfunc
+"augroup column_highlighting
+"	autocmd!
+"	let ft_to_ignore = ['floggraph']
+"	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
+"	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
+"augroup END
 
 
 " default LaTeX style
