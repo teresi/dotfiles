@@ -12,6 +12,8 @@ BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 INPUTRC := $(HOME)/.inputrc
 TMUX_CONF := $(HOME)/.tmux.conf
+ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
+ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 
 
 .PHONY: help
@@ -31,6 +33,7 @@ all:                  ## overwrite vimrc / bashrc, download plugins (requires Vu
 	$(MAKE) --no-print-directory -ik inputrc
 	$(MAKE) --no-print-directory -ik tmux.conf
 	$(MAKE) --no-print-directory -ik virtualenvwrapper
+	$(MAKE) --no-print-directory -ik alacritty.yml
 
 .PHONY: install
 install:              ## install all system dependencies
@@ -64,6 +67,13 @@ bashprofile:
 		printf '\n#BASH_PROFILE_CUSTOMIZATIONS_START\n#BASH_PROFILE_CUSTOMIZATIONS_END' >> $(BASHPROFILE)
 	perl -i -p0e 's/#BASH_PROFILE_CUSTOMIZATIONS_START.*?#BASH_PROFILE_CUSTOMIZATIONS_END/`cat bash-profile-customizations`/se' $(BASHPROFILE)
 
+
+.PHONY: alacritty.yml
+alacritty.yml: | $(ALACRITTY_CFG_DIR)  ## configuration for alacritty terminal
+	cp $(ROOT_DIR)/alacritty.yml $(ALACRITTY_YML)
+
+$(ALACRITTY_CFG_DIR):
+	mkdir -p $(ALACRITTY_CFG_DIR)
 
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## variables for python virtual env wrapper
