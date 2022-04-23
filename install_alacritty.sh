@@ -4,14 +4,19 @@
 #   installs rust and other dependencies
 #   NB this will update your rust compiler
 
-ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $ROOT_DIR/helpers.bash
 
+_ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source $_ROOT_DIR/helpers.bash
+notify "compling alacritty..."
+
+
+# FUTURE make these paths configurable?
 ALA_SRC="https://github.com/alacritty/alacritty.git"
 ALA_SRC_DIR="$HOME/alacritty"
 DEPENDS=( cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 )
 INSTALL_DIR="$HOME/.local/bin"
 BASH_COMPLETION="$ALA_SRC_DIR/extra/completions/alacritty.bash"
+
 
 is_installed () {
 	# return 0 if package is installed
@@ -19,6 +24,7 @@ is_installed () {
 	dpkg -s $1 | grep -q "^Status: install ok installed"
 	return $?
 }
+
 
 install_pkgs () {
 	# check an array of packages and install them if not already installed
@@ -35,6 +41,7 @@ install_pkgs () {
 	done
 }
 
+
 install_rust () {
 	# install and update rust to stable
 	set -x
@@ -48,10 +55,11 @@ install_rust () {
 	rustup update stable
 }
 
+
 set -e
 
 notify "updating alacritty source..."
-update_repo_to_master "https://github.com/alacritty/alacritty.git" "$ALA_SRC_DIR"
+update_repo_to_master "$ALA_SRC" "$ALA_SRC_DIR"
 
 notify "installing dependencies..."
 install_pkgs "${DEPENDS[@]}"
@@ -63,7 +71,7 @@ notify "  rust installed!"
 
 notify "building alacritty..."
 cd "$ALA_SRC_DIR"
-cargo build --release
+cargo build -j $(nproc) --release
 
 notify "updating terminfo..."
 if [[ $(infocmp alacritty > /dev/null) != 0 ]]; then

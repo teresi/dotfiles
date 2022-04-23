@@ -1,10 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# install apt / python packages to host
+# install packages to host
+# for generic packages that aren't tied to an install script
+
 
 set -ex
-sudo apt-get install fonts-powerline              # unicode
-sudo apt-get install xdotool                      # for 'JamshedVesuna/vim-markdown-preview'
+echo -e "\e[32mINFO  install OS dependencies...\e[39m"
+
+
+# NB required for setting up our configuration
+echo -e "\e[32mINFO      install compile-time dependencies...\e[39m"
+sudo apt-get install git                          # for downloading dependencies
+sudo apt-get install python3-pip                  # for downloading dependencies
+
+
+# NB required for running our configuration
+echo -e "\e[32mINFO      install run-time dependencies...\e[39m"
+sudo apt-get install tmux
+sudo apt-get install fonts-powerline              # for airline unicode
 sudo apt-get install vim-gnome                    # for vim / os clipboard integration
-python3 -m pip install --user grip                # for 'JamshedVesuna/vim-markdown-preview' 
-python3 -m pip install --user virtualenvwrapper   # python envs
+sudo apt-get install xdotool                      # for 'JamshedVesuna/vim-markdown-preview'

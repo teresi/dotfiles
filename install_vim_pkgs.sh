@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-#vim -E -u NONE -S /home/`whoami`/.vundle.vim +PluginInstall +qall
-#vim -E +PluginInstall +qall
+
+# download plugins
+
+echo -e "\e[32mINFO  download VIM plugins...\e[39m"
 vim --noplugin -E +PluginInstall +qall
