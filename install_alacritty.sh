@@ -16,38 +16,42 @@ ALA_SRC_DIR="$HOME/alacritty"
 DEPENDS=( cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 )
 INSTALL_DIR="$HOME/.local/bin"
 BASH_COMPLETION="$ALA_SRC_DIR/extra/completions/alacritty.bash"
+INSTALL=0
 
 
 is_installed () {
 	# return 0 if package is installed
 	_pkg="$1"
-	dpkg -s $1 | grep -q "^Status: install ok installed"
-	return $?
+	_pkg_installed=$(dpkg-query -W --showformat='${status}\n' $_pkg 2>/dev/null| grep "install ok installed") 2>/dev/null
+	if [ "" = "$_pkg_installed" ]; then
+		return 1
+	else
+		return 0
+	fi
 }
 
 
-install_pkgs () {
+check_pkgs () {
 	# check an array of packages and install them if not already installed
 	_dependencies=("$@")
+	_success="true"
 	for pkg in "${_dependencies[@]}"
 	do
-		$(is_installed "$pkg")
-		if [[ $? != 0 ]]; then
-			warn "$pkg not installed!"
-			set -x
-			sudo apt install "$pkg"
-			set +x
-		fi
+		$(is_installed "$pkg") || warn "missing package! $pkg" _success="false"
 	done
+	if [ "false" = "$_success" ]; then
+		return 1
+	else
+		return 0
+	fi
 }
 
 
 install_rust () {
 	# install and update rust to stable
-	set -x
 	_which_rust=`which rustup` || true
 	if [[ -z $_which_rust ]]; then
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 	fi
 	. "$HOME"/.bashrc
 	. "$HOME"/.cargo/env
@@ -56,14 +60,50 @@ install_rust () {
 }
 
 
+usage () {
+	echo "$(basename $0) [OPTION]"
+	echo ""
+	echo "compile alacritty to user space"
+	echo ""
+	echo "-h, --help         show usage"
+	echo "-a, --apt          install apt dependencies"
+	echo ""
+}
+
+
+while [[ $# -gt 0 ]]
+do
+	key="${1}"
+	case ${key} in
+	-a|--apt)
+		INSTALL=1
+		shift
+		shift
+		;;
+	-h|--help)
+		usage
+		shift
+		;;
+	*)    # unknown option
+		shift
+		;;
+	esac
+	shift
+done
+
+
 set -e
 
 notify "updating alacritty source..."
 update_repo_to_master "$ALA_SRC" "$ALA_SRC_DIR"
 
-notify "installing dependencies..."
-install_pkgs "${DEPENDS[@]}"
-notify "  dependencies installed!"
+if [ "$INSTALL" = 1 ]; then
+	notify "installing dependencies..."
+	set -x
+	sudo apt install "${DEPENDS[@]}"
+	set +x
+fi
+check_pkgs "${DEPENDS[@]}" || error "missing dependencies... exit" usage exit 1
 
 notify "installing / updating rust..."
 install_rust
