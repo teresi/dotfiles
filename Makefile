@@ -146,3 +146,22 @@ fzf:                  ## command-line fuzzy finder
 .PHONY: python_extra
 python_extra:         ## extra python package dependencies
 	$(ROOT_DIR)/install_python_extra.bash
+
+.PHONY: gnome_config
+gnome_config:         ## gnome desktop configuration
+	# NOTE testing on 18.04
+	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+	# switch windows instead of applications w/ alt-tab
+	gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
+	gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "[]"
+	gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab', '<Super>Tab']"
+	gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Alt><Shift>Tab', '<Super><Shift>Tab']"
+	# change windows aross all workspaces
+	#gsettings set org.gnome.shell.window-switcher current-workspace-only true
+	gsettings set org.gnome.Terminal.Legacy.Settings theme-variant 'dark'
+	gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
+	# gedit
+	gsettings set org.gnome.gedit.preferences.editor display-line-numbers true
+	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
+	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
+	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
