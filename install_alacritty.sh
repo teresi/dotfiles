@@ -14,7 +14,7 @@ notify "compling alacritty..."
 ALA_SRC="https://github.com/alacritty/alacritty.git"
 ALA_SRC_DIR="$HOME/alacritty"
 DEPENDS=( cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 )
-INSTALL_DIR="$HOME/.local/bin"
+INSTALL_DIR="$HOME/.local/bin/"
 BASH_COMPLETION="$ALA_SRC_DIR/extra/completions/alacritty.bash"
 INSTALL=0
 
@@ -122,6 +122,7 @@ if [[ $(infocmp alacritty > /dev/null) != 0 ]]; then
 fi
 
 notify "installing alacritty to $INSTALL_DIR..."
+mkdir -p $"INSTALL_DIR"
 cp target/release/alacritty "$INSTALL_DIR"
 
 # TODO add extras if a sudo flag is set
