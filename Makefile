@@ -1,8 +1,8 @@
 # helper scripts to install dotfiles
 # __file__ Makefile
 #
-# NB having this many phony recipes (not creating files) is an anti-pattern for Make
-# but is done here b/c it's easier than adding switches to a bash script
+# NB using phony recipes (not creating files) is an anti-pattern for Make
+# but is used b/c it's cleaner than adding switches to a bash script
 
 
 SHELL := /bin/bash
