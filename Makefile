@@ -45,6 +45,7 @@ config:               ## copy configs
 	$(MAKE) --no-print-directory -ik tmux.conf
 	$(MAKE) --no-print-directory -ik alacritty.yml
 	$(MAKE) --no-print-directory -ik functions
+	$(MAKE) --no-print-directory -ik git_config
 
 
 .PHONY: depends
@@ -117,6 +118,13 @@ virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	-bash -c "python3 -m pip install --user virtualenvwrapper"
 
 
+.PHONY: rc.conf
+rc.conf:              ## ranger configuration
+	ranger --copy-config=all
+	sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' ~/.config/ranger/rc.conf
+	sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' ~/.config/ranger/rc.conf
+
+
 .PHONY: backup
 backup:               ## backup dotfiles
 	cp $(VIMRC) $(HOME)/.vimrc.bak
@@ -124,11 +132,6 @@ backup:               ## backup dotfiles
 	cp $(INPUTRC) $(HOME)/.inputrc.bak
 	cp $(TMUX_CONF) $(HOME)/.tmux.conf.bak
 	cp $(ALACRITTY_YML) $(ALACRITTY_YML).bak
-
-
-.PHONY: rxvt
-rxvt:                 ## install ranger & urxvt for image preview
-	$(ROOT_DIR)/install_ranger.sh
 
 
 .PHONY: functions
@@ -146,6 +149,7 @@ fzf:                  ## command-line fuzzy finder
 .PHONY: python_extra
 python_extra:         ## extra python package dependencies
 	$(ROOT_DIR)/install_python_extra.bash
+
 
 .PHONY: gnome_config
 gnome_config:         ## gnome desktop configuration
@@ -165,3 +169,12 @@ gnome_config:         ## gnome desktop configuration
 	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
 	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
 	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
+	# cinnamon
+	#gsettings set org.cinnamon.background slideshow-folder $(ROOT_DIR)/wallpapers
+	#gsettings set org.cinnamon.background mode slideshow
+
+
+.PHONY: git_config
+git_config:           ## configure git
+	git lfs install  # just need to call once after installing `git-lfs` from apt
+	git config --global credential.helper cache  # cache user/pass for 15 minutes
