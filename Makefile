@@ -112,10 +112,10 @@ alacritty:            ## compile alacritty terminal
 
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
+	-bash -c "python3 -m pip install --user virtualenvwrapper"
 	grep -q -F '#PYTHON_CUSTOMIZATIONS_START' $(BASHRC) || \
 		printf '\n#PYTHON_CUSTOMIZATIONS_START\n#PYTHON_CUSTOMIZATIONS_END' >> $(BASHRC)
 	perl -i -p0e 's/#PYTHON_CUSTOMIZATIONS_START.*?#PYTHON_CUSTOMIZATIONS_END/`cat python-customizations`/se' $(BASHRC)
-	-bash -c "python3 -m pip install --user virtualenvwrapper"
 
 
 .PHONY: rc.conf

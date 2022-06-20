@@ -1,9 +1,34 @@
 #PYTHON_CUSTOMIZATIONS_START
 
-export VIRTUALENVWRAPPER_PYTHON=`which python3`
-export WORKON_HOME="$HOME"/.virtualenvs
-export VIRTUALENVWRAPPER_VIRTUALENV="$HOME"/.local/bin/virtualenv
-source "$HOME"/.local/bin/virtualenvwrapper.sh
-export PIP_DOWNLOAD_CACHE="$HOME"/.pip/cache
+source_venvwrapper ()
+{
+	# source virtualenvwrapper to setup it's shell functions
+	## NB export PATH prior to sourcing virtualenvwrapper.sh
+
+	# MAGIC usually installed here if using `pip install --user` (recommended)
+	local venv_user="$HOME"/.local/bin/virtualenvwrapper.sh
+	# MAGIC installed here if installed via sudo (not recommended)
+	local venv_root=/usr/local/bin/virtualenvwrapper.sh
+
+	if [ -f "$venv_user" ]; then
+		source "$venv_user"
+	elif [ -f "$venv_root" ]; then
+		source "$venv_root"
+	else
+		echo "could not source virtualenvwrapper.sh!"
+		echo "  not a file: $venv_user"
+		echo "  not a file: $venv_root"
+	fi
+}
+
+export PIP_DOWNLOAD_CACHE="$HOME"/.pip/cache       # use home in case /tmp is not large enough
+
+# SEE https://virtualenvwrapper.readthedocs.io/en/latest/install.html
+export WORKON_HOME="$HOME"/.virtualenvs                    # environments dir
+export VIRTUALENVWRAPPER_TMPDIR="$HOME/.virtualenv_tmpdir  # cache dir
+#export PROJECT_HOME="$HOME"/.virtualenv_projects           # project working dir (i.e. source code under dev)
+#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python          # use this interpreter
+#export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv  # use this virtualenv binary
+source_venvwrapper
 
 #PYTHON_CUSTOMIZATIONS_END

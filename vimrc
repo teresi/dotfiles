@@ -50,6 +50,7 @@ Plugin 'gregsexton/gitv'                        " gitk in vim
 Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
 Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
+Plugin 'tpope/vim-dispatch'                     " `:Make!` for async `:make`
 "Plugin 'neoclide/coc.nvim'                      " auto complete
 
 " colors
@@ -119,6 +120,15 @@ set shell=bash                 " :term default to bash
 "let g:Terminal_FastMode = 0   " 'tc50cal/vim-terminal' for speed
 "let g:Terminal_PyVersion = 3  " 'tc50cal/vim-terminal'
 
+" Function keys that start with an <Esc> are recognized in Insert
+" mode.  When this option is off, the cursor and function keys cannot be
+" used in Insert mode if they start with an <Esc>.  The advantage of
+" this is that the single <Esc> is recognized immediately, instead of
+" after one second.  Instead of resetting this option, you might want to
+" try changing the values for 'timeoutlen' and 'ttimeoutlen'.  Note that
+" when 'esckeys' is off, you can still map anything, but the cursor keys
+" won't work by default.
+set noesckeys
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " EDITOR
@@ -189,7 +199,7 @@ let g:tex_flavor = 'latex'
 " don't hide unicode / escape char
 let g:conceallevel = 0
 " indent line resets conceallevel on load, so fix for LaTeX
-let g:indentLine_fileTypeExclude = ['tex']
+let g:indentLine_fileTypeExclude = ['tex', 'cls']
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -209,6 +219,14 @@ set hidden                       " allow buffer switch w/o save
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
+
+augroup debianlatexfix
+  " Remove all vimrc autocommands within scope
+  autocmd!
+  autocmd BufNewFile,BufRead *.tex   set syntax=tex
+  autocmd BufNewFile,BufRead *.cls   set syntax=tex
+augroup END
+
 
 " plugin 'indentLine' changes the 'conceallevel' from the default
 " change the settings for json files so it doesn't squash characters
@@ -253,6 +271,14 @@ function! ToggleSyntastic()
     SyntasticCheck
 endfunction
 nnoremap <F9> :call ToggleSyntastic()<CR>
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" VIM DISPATCH
+
+"map <Leader>n :cn<CR>
+"map <Leader>p :cp<CR>
+
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
