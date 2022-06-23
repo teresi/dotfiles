@@ -51,6 +51,7 @@ Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
 Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
 Plugin 'tpope/vim-dispatch'                     " `:Make!` for async `:make`
+Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cnext), [q (cprevious)
 "Plugin 'neoclide/coc.nvim'                      " auto complete
 
 " colors
@@ -274,11 +275,21 @@ nnoremap <F9> :call ToggleSyntastic()<CR>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" VIM DISPATCH
+" VIM DISPATCH / QUICKFIX
 
-"map <Leader>n :cn<CR>
-"map <Leader>p :cp<CR>
-
+" add a key to toggle quickfix window 'yoq'
+" this follows the style for the unimpaired option toggling (yoX)
+" SEE:  https://github.com/tpope/vim-unimpaired/blob/master/doc/unimpaired.txt
+" SEE:  https://github.com/tpope/vim-unimpaired/issues/97
+function! ToggleQuickFix()
+    if getqflist({'winid' : 0}).winid
+        cclose
+    else
+        copen
+    endif
+endfunction
+command! -nargs=0 -bar ToggleQuickFix call ToggleQuickFix()
+nnoremap yoq :ToggleQuickFix<CR>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
