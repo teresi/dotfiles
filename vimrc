@@ -38,7 +38,7 @@ Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
 Plugin 'rbong/vim-flog'                         " git graph
-Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)
+Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
 Plugin 'scrooloose/syntastic'                   " syntax checking
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
