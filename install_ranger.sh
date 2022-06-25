@@ -17,5 +17,3 @@ echo -e "\e[32mINFO  setup ranger / RXVT...\e[39m"
 # ranger w/ sane defaults
 sudo apt-get install ranger
 ranger --copy-config=all
-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' ~/.config/ranger/rc.conf
-sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ w3m/' ~/.config/ranger/rc.conf

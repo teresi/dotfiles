@@ -125,6 +125,13 @@ rc.conf:              ## ranger configuration
 	sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' ~/.config/ranger/rc.conf
 
 
+.PHONY: rxvt
+rxvt:                 ## rxvt configuration
+	# needs apt packatges: rxvt-unicode xsel
+	cp $(ROOT_DIR)/Xresources $(HOME)/.Xresources  # sane defaults
+	xrdb -merge $(HOME)/.Xresources
+
+
 .PHONY: backup
 backup:               ## backup dotfiles
 	cp $(VIMRC) $(HOME)/.vimrc.bak

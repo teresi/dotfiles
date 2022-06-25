@@ -20,3 +20,7 @@ sudo apt-get install tmux
 sudo apt-get install fonts-powerline              # for airline unicode
 sudo apt-get install vim-gnome                    # for vim / os clipboard integration
 sudo apt-get install xdotool                      # for 'JamshedVesuna/vim-markdown-preview'
+
+# NB required for rxvt
+echo -e "\e[32mINFO      install rxvt dependencies...\e[39m"
+sudo apt install rxvt-unicode xsel libx11-dev libxext-dev
