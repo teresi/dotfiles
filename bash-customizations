@@ -46,5 +46,7 @@ export VISUAL=vim
 # set default editor for legacy programs
 export EDITOR="$VISUAL"
 
-
+if [ ! -z "$TMOUT" ]; then
+	exec env TMOUT='' bash
+fi
 #BASH_CUSTOMIZATIONS_END
