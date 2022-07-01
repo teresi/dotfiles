@@ -1,0 +1,3 @@
+start ssh agent on login, useful for ssh where the agent doesn't always get started
+try the systemd solution
+https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
