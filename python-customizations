@@ -24,10 +24,10 @@ source_venvwrapper ()
 export PIP_DOWNLOAD_CACHE="$HOME"/.pip/cache       # use home in case /tmp is not large enough
 
 # SEE https://virtualenvwrapper.readthedocs.io/en/latest/install.html
-export WORKON_HOME="$HOME"/.virtualenvs                    # environments dir
+export VIRTUALENVWRAPPER_PYTHON=`which python3`             # use this interpreter
+export WORKON_HOME="$HOME"/.virtualenvs                     # environments dir
 export VIRTUALENVWRAPPER_TMPDIR="$HOME"/.virtualenv_tmpdir  # cache dir
 #export PROJECT_HOME="$HOME"/.virtualenv_projects           # project working dir (i.e. source code under dev)
-#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python          # use this interpreter
 #export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv  # use this virtualenv binary
 source_venvwrapper
 
