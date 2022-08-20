@@ -7,15 +7,58 @@
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-VIMRC := $(HOME)/.vimrc
-VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
+
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 INPUTRC := $(HOME)/.inputrc
+
+VIMRC := $(HOME)/.vimrc
+VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
+VUNDLE_URL=https://github.com/VundleVim/Vundle.vim.git
 TMUX_CONF := $(HOME)/.tmux.conf
+TPM := $(HOME)/.tmux/plugins/tpm
+TPM_URL=https://github.com/tmux-plugins/tpm
+
+# TODO rename for consistency (ALACRITTY_CFG_DIR -> ALACRITTY)
 ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
+
 FZF := $(HOME)/.fzf
+
+
+# clone or pull master
+# 1    git url
+# 2    directory
+define update_repo
+	@source $(ROOT_DIR)/helpers.bash && update_repo_to_master $(1) $(2)
+endef
+
+# color codes for 'tput'
+# NB use tput / print for color text inside Makefile function,
+#    as there was an issue using the escape sequences
+_TPUT_FG_GR := $(shell tput setaf 2)
+_TPUT_FG_YW := $(shell tput setaf 3)
+_TPUT_FG_RD := $(shell tput setaf 1)
+_TPUT_RESET := $(shell tput sgr0)
+
+# green text
+# alternatively w/ tput:  @printf "$(_TPUT_FG_GR)INFO\t$(1)$(_TPUT_RESET)\n"
+define log_info
+	@echo -e "\e[32mINFO\t$1\e[39m"
+endef
+
+# yellow text
+# alternatively w/ tput:  @printf "$(_TPUT_FG_YW)WARN\t$(1)$(_TPUT_RESET)\n"
+define log_warn
+	@echo -e "\e[33mWARN\t$1\e[39m"
+endef
+
+# red text
+# NB also using TPUT:
+# alternatively w/ tput:  @printf "$(_TPUT_FG_RD)ERROR\t$(1)$(_TPUT_RESET)\n"
+define log_error
+	@echo -e "\e[91mERROR\t$1\e[39m"
+endef
 
 
 .PHONY: help
@@ -62,6 +105,10 @@ vimrc:                ## vim config
 vundle:               ## vim package manager
 	$(ROOT_DIR)/install_vundle.bash $(VUNDLE)
 
+.PHONY: tpm
+tpm:                  ## tmux plugin manager
+
+	$(call update_repo,$(TPM_URL),$(TPM))
 
 .PHONY: plugins
 plugins:              ## download vim plugins
