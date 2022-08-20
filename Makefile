@@ -47,19 +47,27 @@ define git_clone
 endef
 
 # git pull
-#	NB prevent merge by using fetch / checkout / reset
+#	Prevent merge by using fetch / checkout / reset
 #	1    directory
 define git_pull
 	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
 endef
 
 # clone or pull master
-# 1    git url
-# 2    directory
+#	1    git url
+#	2    directory
 define update_repo
 	$(call log_info,updating $(1) -> $(2))
 	$(call git_clone,$(1), $(2))
 	$(call git_pull,$(2))
+endef
+
+# update a file
+#	Copy if source is newer or the files differ, so repeated backup calls don't create duplicates
+#	1    source
+#	2    destination
+define update_file
+	if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
 
@@ -104,7 +112,7 @@ depends:              ## system dependencies
 .PHONY: vimrc
 vimrc:                ## vim config
 	$(call log_info,updating $@...)
-	cp -u $(ROOT_DIR)/vimrc $(VIMRC)
+	$(call update_file,$(ROOT_DIR)/vimrc,$(VIMRC))
 
 
 .PHONY: vundle
@@ -128,13 +136,13 @@ vim_plugins:          ## download vim plugins
 .PHONY: inputrc
 inputrc:              ## command line config
 	$(call log_info,updating $@...)
-	cp -u $(ROOT_DIR)/inputrc $(INPUTRC)
+	$(call update_file,$(ROOT_DIR)/inputrc,$(INPUTRC))
 
 
 .PHONY: tmux.conf
 tmux.conf:            ## tmux config
 	$(call log_info,updating $@...)
-	cp -u $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
+	$(call update_file,$(ROOT_DIR)/tmux.conf,$(TMUX_CONF))
 
 
 # TODO use an include rather than copying block of text into the bashrc
@@ -195,7 +203,7 @@ rc.conf:              ## ranger configuration
 rxvt.conf:            ## rxvt configuration
 	$(call log_info,updating $@...)
 	# needs apt packatges: rxvt-unicode xsel
-	cp -u $(ROOT_DIR)/Xresources $(RXVT_CONF)
+	$(call update_file,$(ROOT_DIR)/Xresources,$(RXVT_CONF))
 	xrdb -merge $(RXVT_CONF)
 
 
