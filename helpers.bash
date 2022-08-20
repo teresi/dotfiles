@@ -28,10 +28,7 @@ update_repo_to_master () {
 	local _REPO="$1"
 	local _DIR="$2"
 	notify "updating $_REPO"
-	if [[ -d $_DIR ]]; then
-		notify "\tgit -C $_DIR fetch"
-		git -C "$_DIR" fetch
-	else
+	if [[ ! -d $_DIR ]]; then
 		notify "\tgit clone $_REPO $_DIR"
 		git clone $_REPO $_DIR
 	fi

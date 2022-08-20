@@ -121,6 +121,14 @@ if [[ $(infocmp alacritty > /dev/null) != 0 ]]; then
 	set +x
 fi
 
+notify "installing bash completions..."
+if grep -q "source $BASH_COMPLETION" ~/.bashrc; then
+	# this requires one to no delete the source
+	# done this way b/c installing to '~/.bash_completion'
+	# cause extraneous warning messages when sourcing bashrc
+	echo "source $BASH_COMPLETION" >> ~/.bashrc
+fi
+
 notify "installing alacritty to $INSTALL_DIR..."
 mkdir -p $"INSTALL_DIR"
 cp target/release/alacritty "$INSTALL_DIR"
@@ -136,10 +144,3 @@ cp target/release/alacritty "$INSTALL_DIR"
 #gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
 #gzip -c extra/alacritty-msg.man | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz > /dev/null
 
-notify "installing bash completions..."
-if grep -q "source $BASH_COMPLETION" ~/.bashrc; then
-	# this requires one to no delete the source
-	# done this way b/c installing to '~/.bash_completion'
-	# cause extraneous warning messages when sourcing bashrc
-	echo "source $BASH_COMPLETION" >> ~/.bashrc
-fi

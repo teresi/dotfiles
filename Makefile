@@ -4,60 +4,62 @@
 # NB using phony recipes (not creating files) is an anti-pattern for Make
 # but is used b/c it's cleaner than adding switches to a bash script
 
-
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+MAKEFLAGS += --no-print-directory
 
+# URIs
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 INPUTRC := $(HOME)/.inputrc
-
+TMUX_CONF := $(HOME)/.tmux.conf
 VIMRC := $(HOME)/.vimrc
 VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
 VUNDLE_URL=https://github.com/VundleVim/Vundle.vim.git
-TMUX_CONF := $(HOME)/.tmux.conf
 TPM := $(HOME)/.tmux/plugins/tpm
 TPM_URL=https://github.com/tmux-plugins/tpm
-
-# TODO rename for consistency (ALACRITTY_CFG_DIR -> ALACRITTY)
+FZF := $(HOME)/.fzf
+FZF_URL := https://github.com/junegunn/fzf.git
 ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
+RXVT_CONF := $(HOME)/.Xresources
+RC_CONF := $(HOME)/.config/ranger/rc.conf
 
-FZF := $(HOME)/.fzf
 
+# functions
+define log_info
+	@echo -e "\e[32mINFO\t$1\e[39m"
+endef
+
+define log_warn
+	@echo -e "\e[33mWARN\t$1\e[39m"
+endef
+
+define log_error
+	@echo -e "\e[91mERROR\t$1\e[39m"
+endef
+
+# git clone (if not exist)
+#	1    git url
+#	2    directory
+define git_clone
+	@if [ ! -d $(2) ]; then git clone $(1) $(2); fi;
+endef
+
+# git pull
+#	NB prevent merge by using fetch / checkout / reset
+#	1    directory
+define git_pull
+	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
+endef
 
 # clone or pull master
 # 1    git url
 # 2    directory
 define update_repo
-	@source $(ROOT_DIR)/helpers.bash && update_repo_to_master $(1) $(2)
-endef
-
-# color codes for 'tput'
-# NB use tput / print for color text inside Makefile function,
-#    as there was an issue using the escape sequences
-_TPUT_FG_GR := $(shell tput setaf 2)
-_TPUT_FG_YW := $(shell tput setaf 3)
-_TPUT_FG_RD := $(shell tput setaf 1)
-_TPUT_RESET := $(shell tput sgr0)
-
-# green text
-# alternatively w/ tput:  @printf "$(_TPUT_FG_GR)INFO\t$(1)$(_TPUT_RESET)\n"
-define log_info
-	@echo -e "\e[32mINFO\t$1\e[39m"
-endef
-
-# yellow text
-# alternatively w/ tput:  @printf "$(_TPUT_FG_YW)WARN\t$(1)$(_TPUT_RESET)\n"
-define log_warn
-	@echo -e "\e[33mWARN\t$1\e[39m"
-endef
-
-# red text
-# NB also using TPUT:
-# alternatively w/ tput:  @printf "$(_TPUT_FG_RD)ERROR\t$(1)$(_TPUT_RESET)\n"
-define log_error
-	@echo -e "\e[91mERROR\t$1\e[39m"
+	$(call log_info,updating $(1) -> $(2))
+	$(call git_clone,$(1), $(2))
+	$(call git_pull,$(2))
 endef
 
 
@@ -69,26 +71,29 @@ help:                 ## usage
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 
+# NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
-all: | config         ## setup user configs / programs
-	$(MAKE) --no-print-directory -ik vundle
-	$(MAKE) --no-print-directory -ik plugins
-	$(MAKE) --no-print-directory -ik virtualenvwrapper
-	$(MAKE) --no-print-directory -ik fzf
-	$(MAKE) --no-print-directory -ik alacritty
-	$(MAKE) --no-print-directory -ik python_extra
+all: | config         ## install programs and configs
+	$(MAKE) -ik vundle
+	$(MAKE) -ik vim_plugins
+	$(MAKE) -ik tpm
+	$(MAKE) -ik virtualenvwrapper
+	$(MAKE) -ik fzf
 
 
 .PHONY: config
-config:               ## copy configs
-	$(MAKE) --no-print-directory -ik vimrc
-	$(MAKE) --no-print-directory -ik bashrc
-	$(MAKE) --no-print-directory -ik bashprofile
-	$(MAKE) --no-print-directory -ik inputrc
-	$(MAKE) --no-print-directory -ik tmux.conf
-	$(MAKE) --no-print-directory -ik alacritty.yml
-	$(MAKE) --no-print-directory -ik functions
-	$(MAKE) --no-print-directory -ik git_config
+config: | backup     ## install configs
+	$(MAKE) -ik vimrc
+	$(MAKE) -ik bashrc
+	$(MAKE) -ik bashprofile
+	$(MAKE) -ik inputrc
+	$(MAKE) -ik tmux.conf
+	$(MAKE) -ik rc.conf
+	$(MAKE) -ik alacritty.yml
+	$(MAKE) -ik functions
+	$(MAKE) -ik git_config
+	$(MAKE) -ik python_packages
+	$(MAKE) -ik rxvt.conf
 
 
 .PHONY: depends
@@ -98,35 +103,44 @@ depends:              ## system dependencies
 
 .PHONY: vimrc
 vimrc:                ## vim config
-	cp $(ROOT_DIR)/vimrc $(VIMRC)
+	$(call log_info,updating $@...)
+	cp -u $(ROOT_DIR)/vimrc $(VIMRC)
 
 
 .PHONY: vundle
 vundle:               ## vim package manager
-	$(ROOT_DIR)/install_vundle.bash $(VUNDLE)
+	$(call log_info,updating $@...)
+	$(call update_repo,$(VUNDLE_URL),$(VUNDLE))
+
 
 .PHONY: tpm
 tpm:                  ## tmux plugin manager
-
+	$(call log_info,updating $@...)
 	$(call update_repo,$(TPM_URL),$(TPM))
 
-.PHONY: plugins
-plugins:              ## download vim plugins
-	$(ROOT_DIR)/install_vim_pkgs.sh
+
+.PHONY: vim_plugins
+vim_plugins:          ## download vim plugins
+	$(call log_info,updating $@...)
+	vim --noplugin +PluginInstall +qall
 
 
 .PHONY: inputrc
 inputrc:              ## command line config
-	cp $(ROOT_DIR)/inputrc $(INPUTRC)
+	$(call log_info,updating $@...)
+	cp -u $(ROOT_DIR)/inputrc $(INPUTRC)
 
 
 .PHONY: tmux.conf
 tmux.conf:            ## tmux config
-	cp $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
+	$(call log_info,updating $@...)
+	cp -u $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
 
 
+# TODO use an include rather than copying block of text into the bashrc
 .PHONY: bashrc
 bashrc:               ## login shell config
+	$(call log_info,updating $@...)
 	sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
 	sed -i 's/HISTSIZE=1000/HISTSIZE=16384/' $(BASHRC)
 	sed -i 's/HISTFILESIZE=2000\n/HISTFILESIZE=65536/' $(BASHRC)
@@ -138,6 +152,7 @@ bashrc:               ## login shell config
 
 .PHONY: bashprofile
 bashprofile:          ## non-login shell config
+	$(call log_info,updating $@...)
 	grep -q -F '#BASH_PROFILE_CUSTOMIZATIONS_START' $(BASHPROFILE) || \
 		printf '\n#BASH_PROFILE_CUSTOMIZATIONS_START\n#BASH_PROFILE_CUSTOMIZATIONS_END' >> $(BASHPROFILE)
 	perl -i -p0e 's/#BASH_PROFILE_CUSTOMIZATIONS_START.*?#BASH_PROFILE_CUSTOMIZATIONS_END/`cat bash-profile-customizations`/se' $(BASHPROFILE)
@@ -145,7 +160,8 @@ bashprofile:          ## non-login shell config
 
 .PHONY: alacritty.yml ## alacritty terminal config
 alacritty.yml: | $(ALACRITTY_CFG_DIR)  ## configuration for alacritty terminal
-	cp $(ROOT_DIR)/alacritty.yml $(ALACRITTY_YML)
+	$(call log_info,updating $@...)
+	cp  -u $(ROOT_DIR)/alacritty.yml $(ALACRITTY_YML)
 
 
 $(ALACRITTY_CFG_DIR): ## alacritty config directory
@@ -154,11 +170,13 @@ $(ALACRITTY_CFG_DIR): ## alacritty config directory
 
 .PHONY: alacritty
 alacritty:            ## compile alacritty terminal
-	$(ROOT_DIR)/install_alacritty.sh
+	$(call log_info,updating $@...)
+	@$(ROOT_DIR)/install_alacritty.sh || echo -e "\e[91mERROR\t install failed; remember to close all Alacritty instances first \e[39m"
 
 
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
+	$(call log_info,updating $@...)
 	-bash -c "python3 -m pip install --user virtualenvwrapper"
 	grep -q -F '#PYTHON_CUSTOMIZATIONS_START' $(BASHRC) || \
 		printf '\n#PYTHON_CUSTOMIZATIONS_START\n#PYTHON_CUSTOMIZATIONS_END' >> $(BASHRC)
@@ -167,25 +185,30 @@ virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 
 .PHONY: rc.conf
 rc.conf:              ## ranger configuration
+	$(call log_info,updating $@...)
 	ranger --copy-config=all
-	sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' ~/.config/ranger/rc.conf
-	sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' ~/.config/ranger/rc.conf
+	sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
+	sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
 
 
-.PHONY: rxvt
-rxvt:                 ## rxvt configuration
+.PHONY: rxvt.conf
+rxvt.conf:            ## rxvt configuration
+	$(call log_info,updating $@...)
 	# needs apt packatges: rxvt-unicode xsel
-	cp $(ROOT_DIR)/Xresources $(HOME)/.Xresources  # sane defaults
-	xrdb -merge $(HOME)/.Xresources
+	cp -u $(ROOT_DIR)/Xresources $(RXVT_CONF)
+	xrdb -merge $(RXVT_CONF)
 
 
+# NB -u: update if newer, --backup=t: number the backups
 .PHONY: backup
 backup:               ## backup dotfiles
-	cp $(VIMRC) $(HOME)/.vimrc.bak
-	cp $(BASHRC) $(HOME)/.bashrc.bak
-	cp $(INPUTRC) $(HOME)/.inputrc.bak
-	cp $(TMUX_CONF) $(HOME)/.tmux.conf.bak
-	cp $(ALACRITTY_YML) $(ALACRITTY_YML).bak
+	cp -u --backup=t $(VIMRC){,~}
+	cp -u --backup=t $(BASHRC){,~}
+	cp -u --backup=t $(INPUTRC){,~}
+	cp -u --backup=t $(TMUX_CONF){,~}
+	cp -u --backup=t $(ALACRITTY_YML){,~}
+	cp -u --backup=t $(RC_CONF){,~}
+	cp -u --backup=t $(RXVT_CONF){,~}
 
 
 .PHONY: functions
@@ -197,16 +220,20 @@ functions:            ## bash helper functions
 
 .PHONY: fzf
 fzf:                  ## command-line fuzzy finder
-	$(ROOT_DIR)/install_fzf.bash $(FZF)
+	$(call log_info,updating $@...)
+	$(call update_repo,$(FZF_URL),$(FZF))
+	$(FZF)/install --all
 
 
-.PHONY: python_extra
-python_extra:         ## extra python package dependencies
-	$(ROOT_DIR)/install_python_extra.bash
+.PHONY: python_packages
+python_packages:      ## extra python package dependencies
+	$(call log_info,updating $@...)
+	python3 -m pip install --user grip                # for 'JamshedVesuna/vim-markdown-preview' 
 
 
 .PHONY: gnome_config
 gnome_config:         ## gnome desktop configuration
+	$(call log_info,updating $@...)
 	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 	# switch windows instead of applications w/ alt-tab
