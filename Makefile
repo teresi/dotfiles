@@ -212,13 +212,13 @@ rxvt.conf:            ## rxvt configuration
 # NB -u: update if newer, --backup=t: number the backups
 .PHONY: backup
 backup:               ## backup dotfiles
-	cp -u --backup=t $(VIMRC){,~}
-	cp -u --backup=t $(BASHRC){,~}
-	cp -u --backup=t $(INPUTRC){,~}
-	cp -u --backup=t $(TMUX_CONF){,~}
-	cp -u --backup=t $(ALACRITTY_YML){,~}
-	cp -u --backup=t $(RC_CONF){,~}
-	cp -u --backup=t $(RXVT_CONF){,~}
+	-cp -u --backup=t $(VIMRC){,~}
+	-cp -u --backup=t $(BASHRC){,~}
+	-cp -u --backup=t $(INPUTRC){,~}
+	-cp -u --backup=t $(TMUX_CONF){,~}
+	-cp -u --backup=t $(ALACRITTY_YML){,~}
+	-cp -u --backup=t $(RC_CONF){,~}
+	-cp -u --backup=t $(RXVT_CONF){,~}
 
 
 .PHONY: functions
