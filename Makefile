@@ -67,7 +67,7 @@ endef
 #	1    source
 #	2    destination
 define update_file
-	if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
+	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
 

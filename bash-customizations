@@ -29,7 +29,7 @@ git_br ()
 }
 
 PS1_BACKUP=$PSI
-PS1_HOST_ALIAS='COMPY'
+export PS1_HOST_ALIAS='COMPY'
 PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}'
 PS1+='\[\033[01;37m\]`[ \j -gt 0 ] && echo [\j]`\[\033[00m\]\'  # show number of background tasks
 PS1+='[\033[01;32m\][\A $PS1_HOST_ALIAS]\[\033[00m\]'  # clock and alias
