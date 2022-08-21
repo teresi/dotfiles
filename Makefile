@@ -4,6 +4,8 @@
 # NB using phony recipes (not creating files) is an anti-pattern for Make
 # but is used b/c it's cleaner than adding switches to a bash script
 
+# TODO use gnu-stow instead of cp commands for installing configs
+
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
