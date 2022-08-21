@@ -8,16 +8,20 @@ source_venvwrapper ()
 	# MAGIC usually installed here if using `pip install --user` (recommended)
 	local venv_user="$HOME"/.local/bin/virtualenvwrapper.sh
 	# MAGIC installed here if installed via sudo (not recommended)
-	local venv_root=/usr/local/bin/virtualenvwrapper.sh
+	local venv_local=/usr/local/bin/virtualenvwrapper.sh
+	local venv_share=/usr/share/virtualenvwrapper/virtualenvwrapper.sh
 
 	if [ -f "$venv_user" ]; then
 		source "$venv_user"
-	elif [ -f "$venv_root" ]; then
-		source "$venv_root"
+	elif [ -f "$venv_local" ]; then
+		source "$venv_local"
+	elif [ -f "$venv_share" ]; then
+		source "$venv_share"
 	else
 		echo "could not source virtualenvwrapper.sh!"
 		echo "  not a file: $venv_user"
-		echo "  not a file: $venv_root"
+		echo "  not a file: $venv_local"
+		echo "  not a file: $venv_share"
 	fi
 }
 
