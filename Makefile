@@ -4,23 +4,25 @@
 # NB using phony recipes (not creating files) is an anti-pattern for Make
 # but is used b/c it's cleaner than adding switches to a bash script
 
-# TODO use gnu-stow instead of cp commands for installing configs
-
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 
 
-# user input
-#
+# OPTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 # install configuration files for a target (e.g. bashrc, etc) if ON, else uninstall target
 INSTALL_RC ?= ON
+# set the host's nickname for bash prompt and tmux
+HOST_ALIAS ?= COMPY
 
 
-# URIs
+# FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
+HOST_ALIAS_RC := $(HOME)/.config/host_alias
 INPUTRC := $(HOME)/.inputrc
 TMUX_CONF := $(HOME)/.tmux.conf
 VIMRC := $(HOME)/.vimrc
@@ -36,7 +38,8 @@ RXVT_CONF := $(HOME)/.Xresources
 RC_CONF := $(HOME)/.config/ranger/rc.conf
 
 
-# functions
+# FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 define log_info
 	@echo -e "\e[32mINFO\t$1\e[39m"
 endef
@@ -72,7 +75,7 @@ define update_repo
 	$(call git_pull,$(2))
 endef
 
-# update a file
+# update a file at $2 with contents of $1
 #	Copy if source is newer or the files differ, so repeated backup calls don't create duplicates
 #	1    source
 #	2    destination
@@ -80,12 +83,21 @@ define update_file
 	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
+# add symlink at $1 pointing to target $2
+#      Backup file at $1 if exists and is not a symlink
+#      1    filepath of symlink
+#      2    target of symlink
+define update_link
+	@if [ ! -L $(2) ] && [ -f $(2) ]; then cp -fu --backup=t $(2){,~}; fi
+	@ln -sfn $(1) $(2)
+endef
+
 # uncomment a line in a file given a pattern if flag is ON, comment out else
 #	1   filepath
 #	2   pattern
 #	3   flag (ON|OFF)
 define comment_line
-	if [ "$3" == "ON" ]; then sed -i '/$(2)/s/^#*\s*//g' $(1); else sed -i '/$(2)/s/^#*/#/g' $(1); fi
+	@if [ "$3" == "ON" ]; then sed -i '/$(2)/s/^#*\s*//g' $(1); else sed -i '/$(2)/s/^#*/#/g' $(1); fi
 endef
 
 # append a 'source $3' call to a file $1
@@ -95,10 +107,11 @@ endef
 #      2    magic keyword
 #      3    filepath to source
 define source_file
-	@grep -q $(2) $(1) || \
-		@echo "[ -r $(3) ] && source $(3)  # $(2)" >> $(1)
+	grep -q $(2) $(1) || echo "[ -r $(3) ] && source $(3)  # $(2)" >> $(1)
 endef
 
+
+# RECIPES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 .PHONY: help
 help:                 ## usage
@@ -122,7 +135,7 @@ all: | config         ## install programs and configs
 
 
 .PHONY: config
-config: | backup     ## install configs
+config:               ## install configs
 	$(MAKE) -ik vimrc
 	$(MAKE) -ik bashrc
 	$(MAKE) -ik aliases
@@ -145,7 +158,7 @@ depends:              ## system dependencies
 .PHONY: vimrc
 vimrc:                ## vim config
 	$(call log_info,updating $@...)
-	$(call update_file,$(ROOT_DIR)/vimrc,$(VIMRC))
+	$(call update_link,$(ROOT_DIR)/vimrc,$(VIMRC))
 
 
 .PHONY: vundle
@@ -163,19 +176,19 @@ vim_plugins: | vundle ## download vim plugins
 .PHONY: inputrc
 inputrc:              ## add command line config
 	$(call log_info,updating $@...)
-	$(call update_file,$(ROOT_DIR)/inputrc,$(INPUTRC))
+	$(call update_link,$(ROOT_DIR)/inputrc,$(INPUTRC))
 
 
 .PHONY: tmux.conf
 tmux.conf:            ## add tmux config file
 	$(call log_info,updating $@...)
-	$(call update_file,$(ROOT_DIR)/tmux.conf,$(TMUX_CONF))
+	$(call update_link,$(ROOT_DIR)/tmux.conf,$(TMUX_CONF))
 
 
 .PHONY: tmux_plugins
 tmux_plugins: | tpm   ## download tmux plugins
 	$(call log_info,updating $@...)
-	@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
+	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
 
 
 .PHONY: tpm
@@ -188,27 +201,24 @@ tpm:                  ## tmux plugin manager
 .PHONY: bashrc
 bashrc:               ## login shell config
 	$(call log_info,updating $@...)
-	sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
-	sed -i 's/HISTSIZE=1000/HISTSIZE=16384/' $(BASHRC)
-	sed -i 's/HISTFILESIZE=2000\n/HISTFILESIZE=65536/' $(BASHRC)
-	# replace block of text between markers
-	grep -q -F '#BASH_CUSTOMIZATIONS_START' $(BASHRC) || \
-		printf '\n#BASH_CUSTOMIZATIONS_START\n#BASH_CUSTOMIZATIONS_END' >> $(BASHRC)
-	perl -i -p0e 's/#BASH_CUSTOMIZATIONS_START.*?#BASH_CUSTOMIZATIONS_END/`cat bash-customizations`/se' $(BASHRC)
+	@sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
+	$(call update_link,$(ROOT_DIR)/bashrc,~/.config/bashrc)
+	$(call source_file,$(BASHRC),CUSTOM_BASHRC,~/.config/bashrc)
+	$(call comment_line,$(BASHRC),CUSTOM_BASHRC,$(INSTALL_RC))
 
 
 .PHONY: bashprofile
 bashprofile:          ## non-login shell config
 	$(call log_info,updating $@...)
-	grep -q -F '#BASH_PROFILE_CUSTOMIZATIONS_START' $(BASHPROFILE) || \
-		printf '\n#BASH_PROFILE_CUSTOMIZATIONS_START\n#BASH_PROFILE_CUSTOMIZATIONS_END' >> $(BASHPROFILE)
-	perl -i -p0e 's/#BASH_PROFILE_CUSTOMIZATIONS_START.*?#BASH_PROFILE_CUSTOMIZATIONS_END/`cat bash-profile-customizations`/se' $(BASHPROFILE)
+	$(call update_link,$(ROOT_DIR)/bash_profile,~/.config/bash_profile)
+	$(call source_file,$(BASHPROFILE),CUSTOM_BASHPROFILE,~/.config/bash_profile)
+	$(call comment_line,$(BASHPROFILE),CUSTOM_BASHPROFILE,$(INSTALL_RC))
 
 
 .PHONY: alacritty.yml
 alacritty.yml: | $(ALACRITTY_CFG_DIR)  ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
-	cp  -u $(ROOT_DIR)/alacritty.yml $(ALACRITTY_YML)
+	$(call update_link,$(ROOT_DIR)/alacritty.yml,$(ALACRITTY_YML))
 
 
 $(ALACRITTY_CFG_DIR):
@@ -224,10 +234,10 @@ alacritty:            ## compile alacritty terminal
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
+	$(call update_link,$(ROOT_DIR)/python_venv,~/.config/python_venv)
+	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
+	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
 	-bash -c "python3 -m pip install --user virtualenvwrapper"
-	grep -q -F '#PYTHON_CUSTOMIZATIONS_START' $(BASHRC) || \
-		printf '\n#PYTHON_CUSTOMIZATIONS_START\n#PYTHON_CUSTOMIZATIONS_END' >> $(BASHRC)
-	perl -i -p0e 's/#PYTHON_CUSTOMIZATIONS_START.*?#PYTHON_CUSTOMIZATIONS_END/`cat python-customizations`/se' $(BASHRC)
 
 
 .PHONY: rc.conf
@@ -241,8 +251,8 @@ rc.conf:              ## ranger configuration
 .PHONY: rxvt.conf
 rxvt.conf:            ## rxvt configuration
 	$(call log_info,updating $@...)
-	# needs apt packatges: rxvt-unicode xsel
-	$(call update_file,$(ROOT_DIR)/Xresources,$(RXVT_CONF))
+	@# needs apt packages: rxvt-unicode xsel
+	$(call update_link,$(ROOT_DIR)/Xresources,$(RXVT_CONF))
 	xrdb -merge $(RXVT_CONF)
 
 
@@ -261,15 +271,16 @@ backup:               ## backup dotfiles
 .PHONY: functions
 functions:            ## bash helper functions
 	$(call log_info,updating $@...)
-	@$(call source_file,$(BASHRC),CUSTOM_ALIASES,~/.config/functions)
-	@$(call comment_line,$(BASHRC),CUSTOM_ALIASES,$(INSTALL_RC))
-	@ln -sfn $(ROOT_DIR)/bash-functions ~/.config/functions
+	$(call update_link,$(ROOT_DIR)/bash-functions,~/.config/functions)
+	@$(call source_file,$(BASHRC),CUSTOM_FUNCTIONS,~/.config/functions)
+	@$(call comment_line,$(BASHRC),CUSTOM_FUNCTIONS,$(INSTALL_RC))
 
 
 .PHONY: aliases
 aliases:              ## bash aliases
 	$(call log_info,updating $@...)
-	@ln -sfn $(ROOT_DIR)/bash_aliases ~/.bash_aliases
+	@# Ubuntu sourcs ~/.bash_aliases by default
+	$(call update_link,$(ROOT_DIR)/bash_aliases,~/.bash_aliases)
 
 
 .PHONY: fzf
@@ -314,3 +325,9 @@ git_config:           ## sensible git (install LFS, add credential helper)
 	$(call log_info,updating $@...)
 	git lfs install  # just need to call once after installing `git-lfs` from apt
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
+
+
+.PHONY: host_alias    ## set the nickname for this machine
+host_alias:
+	$(call log_info,updating $@...)
+	@echo $(HOST_ALIAS) > $(HOST_ALIAS_RC)

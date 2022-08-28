@@ -1,8 +1,4 @@
-#BASH_PROFILE_CUSTOMIZATIONS_START
-
 # source bashrc here so tmux loads it
 if [ -f ~/.bashrc ]; then
 	. ~/.bashrc
 fi
-
-#BASH_PROFILE_CUSTOMIZATIONS_END
