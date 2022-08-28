@@ -6,9 +6,17 @@
 
 # TODO use gnu-stow instead of cp commands for installing configs
 
+
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
+
+
+# user input
+#
+# install configuration files for a target (e.g. bashrc, etc) if ON, else uninstall target
+INSTALL_RC ?= ON
+
 
 # URIs
 BASHRC := $(HOME)/.bashrc
@@ -55,7 +63,7 @@ define git_pull
 	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
 endef
 
-# clone or pull master
+# clone or fetch/merge master
 #	1    git url
 #	2    directory
 define update_repo
@@ -72,11 +80,34 @@ define update_file
 	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
+# uncomment a line in a file given a pattern if flag is ON, comment out else
+#	1   filepath
+#	2   pattern
+#	3   flag (ON|OFF)
+define comment_line
+	if [ "$3" == "ON" ]; then sed -i '/$(2)/s/^#*\s*//g' $(1); else sed -i '/$(2)/s/^#*/#/g' $(1); fi
+endef
+
+# append a 'source $3' call to a file $1
+#      Appends the line if it does *not* exist
+#      Uses the magic keyword as a comment (# delimited) to test if the call exists
+#      1    filepath to append to
+#      2    magic keyword
+#      3    filepath to source
+define source_file
+	@grep -q $(2) $(1) || \
+		@echo "[ -r $(3) ] && source $(3)  # $(2)" >> $(1)
+endef
+
 
 .PHONY: help
 help:                 ## usage
-	@echo Usage:  make [RECIPE]
+	@echo Usage:  make [RECIPE] [OPTIONS]
+	@echo ""
 	@echo "    recipes to configure dotfiles, tools, etc."
+	@echo ""
+	@echo "    OPTIONS:"
+	@echo "        INSTALL_RC (ON|OFF): un/install configuration/rc file"
 	@echo
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
@@ -84,9 +115,8 @@ help:                 ## usage
 # NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
 all: | config         ## install programs and configs
-	$(MAKE) -ik vundle
 	$(MAKE) -ik vim_plugins
-	$(MAKE) -ik tpm
+	$(MAKE) -ik tmux_plugins
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
 
@@ -95,6 +125,7 @@ all: | config         ## install programs and configs
 config: | backup     ## install configs
 	$(MAKE) -ik vimrc
 	$(MAKE) -ik bashrc
+	$(MAKE) -ik aliases
 	$(MAKE) -ik bashprofile
 	$(MAKE) -ik inputrc
 	$(MAKE) -ik tmux.conf
@@ -123,28 +154,34 @@ vundle:               ## vim package manager
 	$(call update_repo,$(VUNDLE_URL),$(VUNDLE))
 
 
-.PHONY: tpm
-tpm:                  ## tmux plugin manager
-	$(call log_info,updating $@...)
-	$(call update_repo,$(TPM_URL),$(TPM))
-
-
 .PHONY: vim_plugins
-vim_plugins:          ## download vim plugins
+vim_plugins: | vundle ## download vim plugins
 	$(call log_info,updating $@...)
 	vim --noplugin +PluginInstall +qall
 
 
 .PHONY: inputrc
-inputrc:              ## command line config
+inputrc:              ## add command line config
 	$(call log_info,updating $@...)
 	$(call update_file,$(ROOT_DIR)/inputrc,$(INPUTRC))
 
 
 .PHONY: tmux.conf
-tmux.conf:            ## tmux config
+tmux.conf:            ## add tmux config file
 	$(call log_info,updating $@...)
 	$(call update_file,$(ROOT_DIR)/tmux.conf,$(TMUX_CONF))
+
+
+.PHONY: tmux_plugins
+tmux_plugins: | tpm   ## download tmux plugins
+	$(call log_info,updating $@...)
+	@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
+
+
+.PHONY: tpm
+tpm:                  ## tmux plugin manager
+	$(call log_info,updating $@...)
+	$(call update_repo,$(TPM_URL),$(TPM))
 
 
 # TODO use an include rather than copying block of text into the bashrc
@@ -168,13 +205,13 @@ bashprofile:          ## non-login shell config
 	perl -i -p0e 's/#BASH_PROFILE_CUSTOMIZATIONS_START.*?#BASH_PROFILE_CUSTOMIZATIONS_END/`cat bash-profile-customizations`/se' $(BASHPROFILE)
 
 
-.PHONY: alacritty.yml ## alacritty terminal config
+.PHONY: alacritty.yml
 alacritty.yml: | $(ALACRITTY_CFG_DIR)  ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
 	cp  -u $(ROOT_DIR)/alacritty.yml $(ALACRITTY_YML)
 
 
-$(ALACRITTY_CFG_DIR): ## alacritty config directory
+$(ALACRITTY_CFG_DIR):
 	mkdir -p $(ALACRITTY_CFG_DIR)
 
 
@@ -223,10 +260,17 @@ backup:               ## backup dotfiles
 
 .PHONY: functions
 functions:            ## bash helper functions
-	grep -q -F '#BASH_FUNCTIONS_START' $(BASHRC) || \
-		printf '\n#BASH_FUNCTIONS_START\n#BASH_FUNCTIONS_END' >> $(BASHRC)
-	perl -i -p0e 's/#BASH_FUNCTIONS_START.*?#BASH_FUNCTIONS_END/`cat bash-functions`/se' $(BASHRC)
-	
+	$(call log_info,updating $@...)
+	@$(call source_file,$(BASHRC),CUSTOM_ALIASES,~/.config/functions)
+	@$(call comment_line,$(BASHRC),CUSTOM_ALIASES,$(INSTALL_RC))
+	@ln -sfn $(ROOT_DIR)/bash-functions ~/.config/functions
+
+
+.PHONY: aliases
+aliases:              ## bash aliases
+	$(call log_info,updating $@...)
+	@ln -sfn $(ROOT_DIR)/bash_aliases ~/.bash_aliases
+
 
 .PHONY: fzf
 fzf:                  ## command-line fuzzy finder
@@ -266,6 +310,7 @@ gnome_config:         ## gnome desktop configuration
 
 
 .PHONY: git_config
-git_config:           ## configure git
+git_config:           ## sensible git (install LFS, add credential helper)
+	$(call log_info,updating $@...)
 	git lfs install  # just need to call once after installing `git-lfs` from apt
 	git config --global credential.helper cache  # cache user/pass for 15 minutes

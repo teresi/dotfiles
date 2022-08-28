@@ -13,8 +13,13 @@ Includes:
 ## USAGE
 
 ```
-make all   # default configuration
-make help  # show usage
+make all                    # default configuration
+make help                   # show usage
+```
+
+Options
+```
+INSTALL_RC=(ON|OFF):        # install config file for a target if ON, uninstall if OFF
 ```
 
 
