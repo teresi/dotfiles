@@ -3,3 +3,5 @@ try the systemd solution
 https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
 
 https://effective-shell.com/part-5-building-your-toolkit/managing-your-dotfiles/
+
+https://gitlab.com/tukusejssirs/lnx_scripts/-/blob/master/bash/functions/gshort.sh

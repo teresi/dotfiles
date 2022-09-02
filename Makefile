@@ -132,6 +132,8 @@ all: | config         ## install programs and configs
 	$(MAKE) -ik tmux_plugins
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
+	$(MAKE) -ik gnome
+	$(MAKE) -ik cinnamon
 
 
 .PHONY: config
@@ -296,9 +298,18 @@ python_packages:      ## extra python package dependencies
 	python3 -m pip install --user grip                # for 'JamshedVesuna/vim-markdown-preview' 
 
 
-.PHONY: gnome_config
-gnome_config:         ## gnome desktop configuration
+.PHONY: cinnamon
+cinnamon:             ## cinnamon desktop
 	$(call log_info,updating $@...)
+	$(ROOT_DIR)/kb_shortcuts_cinnamon.bash
+	@#gsettings set org.cinnamon.background slideshow-folder $(ROOT_DIR)/wallpapers
+	@#gsettings set org.cinnamon.background mode slideshow
+
+
+.PHONY: gnome
+gnome:                ## gnome desktop
+	$(call log_info,updating $@...)
+	$(ROOT_DIR)/kb_shortcuts_gnome.bash
 	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 	# switch windows instead of applications w/ alt-tab
@@ -315,9 +326,6 @@ gnome_config:         ## gnome desktop configuration
 	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
 	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
 	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
-	# cinnamon
-	#gsettings set org.cinnamon.background slideshow-folder $(ROOT_DIR)/wallpapers
-	#gsettings set org.cinnamon.background mode slideshow
 
 
 .PHONY: git_config
