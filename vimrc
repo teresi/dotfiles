@@ -39,7 +39,7 @@ Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
 Plugin 'rbong/vim-flog'                         " git graph
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
-Plugin 'scrooloose/syntastic'                   " syntax checking
+Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'vim-airline/vim-airline'                " status bar
@@ -239,39 +239,6 @@ augroup roslaunch
 	autocmd BufNewFile,BufRead *.launch   set syntax=xml
 augroup END
 "let g:indent_guides_enable_on_vim_startup = 1
-
-
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" SYNTASTIC (syntax checker)
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0            " 0: close quickfix win on start
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_auto_jump = 0
-
-let g:syntastic_mode_map = {
-    \ 'mode': 'passive',
-    \ 'active_filetypes': [],
-    \ 'passive_filetypes': ['python']
-    \}
-
-function! ToggleSyntastic()
-    let g:syntastic_auto_loc_list = 1       " 1: re-enable quickfix window
-    for i in range(1, winnr('$'))
-        let bnum = winbufnr(i)
-        if getbufvar(bnum, '&buftype') == 'quickfix'
-            lclose
-            return
-        endif
-    endfor
-    SyntasticCheck
-endfunction
-nnoremap <F9> :call ToggleSyntastic()<CR>
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
