@@ -35,6 +35,7 @@ Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
 " tools
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
+Plugin 'preservim/tagbar'                       " browse tags (class structure etc.)
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
 Plugin 'rbong/vim-flog'                         " git graph
@@ -94,6 +95,8 @@ map <C-l> <C-w>l
 nnoremap <F2> :NERDTreeToggle<CR>
 " format the buffer
 nnoremap <F3> :Autoformat<CR>
+
+nnoremap <F8> :TagbarToggle<CR>
 
 " TAB in general mode will move to text buffer
 nnoremap <TAB> :bnext<CR>
