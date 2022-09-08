@@ -130,7 +130,7 @@ if grep -q "source $BASH_COMPLETION" ~/.bashrc; then
 fi
 
 notify "installing alacritty to $INSTALL_DIR..."
-mkdir -p $"INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
 cp target/release/alacritty "$INSTALL_DIR"
 
 # TODO add extras if a sudo flag is set
