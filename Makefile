@@ -16,7 +16,8 @@ MAKEFLAGS += --no-print-directory
 INSTALL_RC ?= ON
 # set the host's nickname for bash prompt and tmux
 HOST_ALIAS ?= COMPY
-
+# use symlinks for config files, else copy files to destination
+USE_SYMLINKS ?= ON
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -89,7 +90,7 @@ endef
 #      2    target of symlink
 define update_link
 	@if [ ! -L $(2) ] && [ -f $(2) ]; then cp -fu --backup=t $(2){,~}; fi
-	@ln -sfn $(1) $(2)
+	@if [ "$(USE_SYMLINKS)" == "ON" ]; then ln -sfn $(1) $(2); else cp $(1) $(2); fi
 endef
 
 # uncomment a line in a file given a pattern if flag is ON, comment out else
@@ -120,7 +121,8 @@ help:                 ## usage
 	@echo "    recipes to configure dotfiles, tools, etc."
 	@echo ""
 	@echo "    OPTIONS:"
-	@echo "        INSTALL_RC (ON|OFF): un/install configuration/rc file"
+	@echo "        INSTALL_RC   (ON|OFF): un/install configuration/rc file (ON)"
+	@echo "        USE_SYMLINKS (ON|OFF): use symlinks for configs, else copy (ON)"
 	@echo
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
