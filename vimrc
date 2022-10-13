@@ -384,3 +384,10 @@ let g:airline_symbols.branch = ''  " ''
 "hi Pmenu ctermbg=black ctermfg=white
 "set signcolumn=yes  " fix issue where CoC messes up git gutter spacing
 "set cmdheight=1     " fix issue where CoC sets 2 lines for cmdheight
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" ALE
+
+" NOTE not an issue on Vim8.1+?
+let g:ale_echo_delay = 500  " mitigate cursor disappears on lines /w errors
