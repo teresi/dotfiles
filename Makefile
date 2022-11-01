@@ -303,7 +303,7 @@ python_packages:      ## extra python package dependencies
 .PHONY: cinnamon
 cinnamon:             ## cinnamon desktop
 	$(call log_info,updating $@...)
-	$(ROOT_DIR)/kb_shortcuts_cinnamon.bash
+	bash -i $(ROOT_DIR)/kb_shortcuts_cinnamon.bash
 	@#gsettings set org.cinnamon.background slideshow-folder $(ROOT_DIR)/wallpapers
 	@#gsettings set org.cinnamon.background mode slideshow
 
@@ -311,7 +311,7 @@ cinnamon:             ## cinnamon desktop
 .PHONY: gnome
 gnome:                ## gnome desktop
 	$(call log_info,updating $@...)
-	$(ROOT_DIR)/kb_shortcuts_gnome.bash
+	bash -i $(ROOT_DIR)/kb_shortcuts_gnome.bash
 	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 	# switch windows instead of applications w/ alt-tab
@@ -323,6 +323,8 @@ gnome:                ## gnome desktop
 	#gsettings set org.gnome.shell.window-switcher current-workspace-only true
 	gsettings set org.gnome.Terminal.Legacy.Settings theme-variant 'dark'
 	gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
+	# scrolling direction (false = drag up to view content above)
+	gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 	# gedit
 	gsettings set org.gnome.gedit.preferences.editor display-line-numbers true
 	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
