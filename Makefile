@@ -306,6 +306,12 @@ cinnamon:             ## cinnamon desktop
 	bash -i $(ROOT_DIR)/kb_shortcuts_cinnamon.bash
 	@#gsettings set org.cinnamon.background slideshow-folder $(ROOT_DIR)/wallpapers
 	@#gsettings set org.cinnamon.background mode slideshow
+	# theme
+	# TODO find out how to download themes automatically to change window borders (wm/preferences)
+	gsettings set org.cinnamon.desktop.interface icon-theme "Yaru"
+	gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
+	# panel
+	gsettings set org.cinnamon enabled-applets "['panel1:left:0:menu@cinnamon.org:0', 'panel1:right:5:systray@cinnamon.org:3', 'panel1:right:6:xapp-status@cinnamon.org:4', 'panel1:right:7:notifications@cinnamon.org:5', 'panel1:right:8:network@cinnamon.org:10', 'panel1:right:9:sound@cinnamon.org:11', 'panel1:right:10:calendar@cinnamon.org:13', 'panel1:left:3:window-list@cinnamon.org:14', 'panel1:right:0:temperature@fevimu:15', 'panel1:right:2:multicore-sys-monitor@ccadeptic23:16', 'panel1:right:3:sysmonitor@orcus:17', 'panel1:right:1:workspace-grid@hernejj:18']"
 
 
 .PHONY: gnome
