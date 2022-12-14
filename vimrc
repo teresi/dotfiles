@@ -200,11 +200,15 @@ let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for
 " default LaTeX style
 let g:tex_flavor = 'latex'
 
-" don't hide unicode / escape char
-let g:conceallevel = 0
 " indent line resets conceallevel on load, so fix for LaTeX
 let g:indentLine_fileTypeExclude = ['tex', 'cls']
 
+" don't hide unicode / escape char
+let g:conceallevel = 0
+
+" enable line numbers in NERDTree
+let NERDTreeShowLineNumbers=1
+autocmd FileType nerdtree setlocal relativenumber
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " NAVIGATION
