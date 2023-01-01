@@ -228,6 +228,11 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 
+
+" LaTeX commands and symbols can get converted to unicode, so disable that
+autocmd BufEnter *.tex set conceallevel=0
+
+
 augroup debianlatexfix
   " Remove all vimrc autocommands within scope
   autocmd!
@@ -239,6 +244,7 @@ augroup END
 " plugin 'indentLine' changes the 'conceallevel' from the default
 " change the settings for json files so it doesn't squash characters
 autocmd Filetype json let g:indentLine_enabled = 0
+
 
 " use xml colors for ros launch
 augroup roslaunch
