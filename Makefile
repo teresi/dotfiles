@@ -61,9 +61,9 @@ define git_clone
 endef
 
 # git pull
-#	Prevent merge by using fetch / checkout / reset
+#	Fetch and reset to origin/master
 #	1    directory
-define git_pull
+define git_master
 	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
 endef
 
@@ -73,7 +73,7 @@ endef
 define update_repo
 	$(call log_info,updating $(1) -> $(2))
 	$(call git_clone,$(1), $(2))
-	$(call git_pull,$(2))
+	$(call git_master,$(2))
 endef
 
 # update a file at $2 with contents of $1
@@ -123,7 +123,12 @@ help:                 ## usage
 	@echo "    OPTIONS:"
 	@echo "        INSTALL_RC   (ON|OFF): un/install configuration/rc file (ON)"
 	@echo "        USE_SYMLINKS (ON|OFF): use symlinks for configs, else copy (ON)"
-	@echo
+	@echo ""
+	@echo "    NOTE:"
+	@echo "        configurations are installed using symlinks"
+	@echo "        so the configurations will be removed if this repo is deleted;"
+	@echo "        to opt out of this use USE_SYMLINMKS:=off flag"
+	@echo ""
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 
@@ -146,7 +151,7 @@ config:               ## install configs
 	$(MAKE) -ik bashprofile
 	$(MAKE) -ik inputrc
 	$(MAKE) -ik tmux.conf
-	$(MAKE) -ik rc.conf
+	$(MAKE) -ik ranger
 	$(MAKE) -ik alacritty.yml
 	$(MAKE) -ik functions
 	$(MAKE) -ik git_config
@@ -155,8 +160,14 @@ config:               ## install configs
 
 
 .PHONY: depends
-depends:              ## system dependencies
+depends:              ## install system dependencies
 	$(ROOT_DIR)/install_dependencies.sh
+
+
+.PHONY: vim
+vim:                  ## vim config and plugins
+	$(MAKE) -ik vimrc
+	$(MAKE) -ik vim_plugins
 
 
 .PHONY: vimrc
@@ -177,10 +188,10 @@ vim_plugins: | vundle ## download vim plugins
 	vim --noplugin +PluginInstall +qall
 
 
-.PHONY: inputrc
-inputrc:              ## add command line config
-	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/inputrc,$(INPUTRC))
+.PHONY: tmux
+tmux:                 ## add tmux config and plugins
+	$(MAKE) -ik tmux.conf
+	$(MAKE) -ik tmux_plugins
 
 
 .PHONY: tmux.conf
@@ -201,7 +212,12 @@ tpm:                  ## tmux plugin manager
 	$(call update_repo,$(TPM_URL),$(TPM))
 
 
-# TODO use an include rather than copying block of text into the bashrc
+.PHONY: inputrc
+inputrc:              ## add command line config
+	$(call log_info,updating $@...)
+	$(call update_link,$(ROOT_DIR)/inputrc,$(INPUTRC))
+
+
 .PHONY: bashrc
 bashrc:               ## login shell config
 	$(call log_info,updating $@...)
@@ -244,12 +260,12 @@ virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	-bash -c "python3 -m pip install --user virtualenvwrapper"
 
 
-.PHONY: rc.conf
-rc.conf:              ## ranger configuration
+.PHONY: ranger
+ranger:               ## ranger configuration
 	$(call log_info,updating $@...)
-	ranger --copy-config=all
-	sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
-	sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
+	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
+	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
+	-sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
 
 
 .PHONY: rxvt.conf
@@ -342,11 +358,13 @@ gnome:                ## gnome desktop
 .PHONY: git_config
 git_config:           ## sensible git (install LFS, add credential helper)
 	$(call log_info,updating $@...)
-	git lfs install  # just need to call once after installing `git-lfs` from apt
+	@# just need to call once after installing `git-lfs` from apt
+	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
 
 
-.PHONY: host_alias    ## set the nickname for this machine
-host_alias:
+.PHONY: host_alias
+host_alias:           ## set the nickname for this machine
 	$(call log_info,updating $@...)
+	@mkdir -p `dirname $(HOST_ALIAS_RC)`
 	@echo $(HOST_ALIAS) > $(HOST_ALIAS_RC)

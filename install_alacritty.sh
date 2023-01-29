@@ -19,8 +19,9 @@ BASH_COMPLETION="$ALA_SRC_DIR/extra/completions/alacritty.bash"
 INSTALL=0
 
 
+# return 0 if package is installed
+#	1: package name
 is_installed () {
-	# return 0 if package is installed
 	_pkg="$1"
 	_pkg_installed=$(dpkg-query -W --showformat='${status}\n' $_pkg 2>/dev/null| grep "install ok installed") 2>/dev/null
 	if [ "" = "$_pkg_installed" ]; then
@@ -31,8 +32,8 @@ is_installed () {
 }
 
 
+# check an array of packages and install them if not already installed
 check_pkgs () {
-	# check an array of packages and install them if not already installed
 	_dependencies=("$@")
 	_success="true"
 	for pkg in "${_dependencies[@]}"
@@ -47,8 +48,8 @@ check_pkgs () {
 }
 
 
+# install and update rust to stable
 install_rust () {
-	# install and update rust to stable
 	_which_rust=`which rustup` || true
 	if [[ -z $_which_rust ]]; then
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

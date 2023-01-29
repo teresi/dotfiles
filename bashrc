@@ -4,6 +4,7 @@
 ################################################################################
 # PATH  ########################################################################
 export PATH+=:"$HOME"/.local/bin     # user bins, e.g. alacritty, virtualenvwrapper, etc.
+export PATH+=:/data/.local/bin       # user bins, e.g. alacritty, virtualenvwrapper, etc.
 
 
 ################################################################################
