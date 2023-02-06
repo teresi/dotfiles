@@ -42,11 +42,9 @@ Plugin 'rbong/vim-flog'                         " git graph
 Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
 Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
-Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
 Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
-Plugin 'lervag/vimtex'                          " LaTeX language
 Plugin 'gregsexton/gitv'                        " gitk in vim
 Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
@@ -58,6 +56,11 @@ Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cn
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
 Plugin 'vim-airline/vim-airline-themes'         " status bar colors
+
+" languages
+Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
+Plugin 'lervag/vimtex'                          " LaTeX syntax
+Plugin 'rust-lang/rust.vim'                     " Rust basics: syntastic, :RustFmt, tagbar
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
