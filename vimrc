@@ -66,6 +66,7 @@ Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
 Plugin 'elzr/vim-json'                          " json syntax highlighting
 Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
+Plugin '7erra/vim-sqf'                          " SQF syntax (Arma III)
 
 " future
 "Plugin 'itchyny/lightline.vim'                  " status line, bottom
