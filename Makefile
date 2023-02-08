@@ -129,7 +129,7 @@ help:                 ## usage
 	@echo "        so the configurations will be removed if this repo is deleted;"
 	@echo "        to opt out of this use USE_SYMLINMKS:=off flag"
 	@echo ""
-	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
 # NB not installing alacritty here b/c it's not used on remote logins
