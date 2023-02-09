@@ -48,7 +48,7 @@ check_pkgs () {
 }
 
 
-# install and update rust to stable
+# install and update rust
 install_rust () {
 	_which_rust=`which rustup` || true
 	if [[ -z $_which_rust ]]; then
@@ -56,7 +56,6 @@ install_rust () {
 	fi
 	. "$HOME"/.bashrc
 	. "$HOME"/.cargo/env
-	rustup override set stable
 	rustup update stable
 }
 
@@ -112,7 +111,7 @@ notify "  rust installed!"
 
 notify "building alacritty..."
 cd "$ALA_SRC_DIR"
-cargo build -j $(nproc) --release
+cargo +stable build -j $(nproc) --release
 
 notify "updating terminfo..."
 if [[ $(infocmp alacritty > /dev/null) != 0 ]]; then
