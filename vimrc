@@ -52,6 +52,7 @@ Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g.
 Plugin 'tpope/vim-dispatch'                     " `:Make!` for async `:make`
 Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cnext), [q (cprevious)
 "Plugin 'neoclide/coc.nvim'                      " auto complete
+Plugin 'ojroques/vim-oscyank'                   " clipboard overr SSH
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
