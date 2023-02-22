@@ -31,7 +31,9 @@ set rtp+=~/.vim/bundle/Vundle.vim               " add vundle to runtime path
 call vundle#begin()                             " initialize vundle
 "call vundle#begin('~/some/path/here')          " or set a plugin install dir
 
-Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
+" NB had to temporarily move the url of vundle b/c the original is 404
+"Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
+Plugin 'teresi/Vundle.vim'                       " use Vundle, required
 
 " tools
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
