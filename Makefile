@@ -261,6 +261,11 @@ virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	-bash -c "python3 -m pip install --user virtualenvwrapper"
 
 
+.PHONY: conda
+conda:                ## miniconda python distribution & package manager
+	@$(ROOT_DIR)/install_miniconda.sh
+
+
 .PHONY: ranger
 ranger:               ## ranger configuration
 	$(call log_info,updating $@...)

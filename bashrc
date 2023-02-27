@@ -69,6 +69,8 @@ PS1+='\n\$ '                          # vi mode (if using) and '$' symbol
 ################################################################################
 # BUGFIXES #####################################################################
 
+export CONDA_AUTO_ACTIVATE_BASE=false # prevent conda from automatically activating 'base' env
+
 if [ ! -z "$TMOUT" ]; then            # prevent terminal from closing and deleting your work
 	exec env TMOUT='' bash
 fi
