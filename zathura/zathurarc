@@ -1,0 +1,17 @@
+# zathura configuration
+
+set window-title-basename "true"
+set selection-clipboard "clipboard"
+
+set page-padding 2                  # pixel gap between pages (1)
+set page-cache-size 32              # max number pages in cache (15)
+
+set adjust-open width               # autoadjustment mode {best-fit, width}
+set recolor true                    # invert colors (false)
+set recolor-keephue                 # keep original hue when recoloring (false)
+set highlight-transparency 0.6      # opacity of highlights (0.5)
+
+set synctex-editor-command "vim"
+#set font "Ubuntu Mono 12"
+
+include nord

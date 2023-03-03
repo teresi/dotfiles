@@ -85,10 +85,10 @@ define update_file
 	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
-# add symlink at $1 pointing to target $2
+# add symlink at $2 pointing to target $1
 #      Backup file at $1 if exists and is not a symlink
-#      1    filepath of symlink
-#      2    target of symlink
+#      1    target of symlink
+#      2    linkname of symlink
 define update_link
 	@if [ ! -L $(2) ] && [ -f $(2) ]; then cp -fu --backup=t $(2){,~}; fi
 	@if [ "$(USE_SYMLINKS)" == "ON" ]; then ln -sfn $(1) $(2); else cp $(1) $(2); fi
@@ -374,3 +374,9 @@ host_alias:           ## set the nickname for this machine
 	$(call log_info,updating $@...)
 	@mkdir -p `dirname $(HOST_ALIAS_RC)`
 	@echo $(HOST_ALIAS) > $(HOST_ALIAS_RC)
+
+
+.PHONY: zathura
+zathura:             ## zathura pdf reader config
+	$(call log_info,updating $@...)
+	$(call update_link,$(ROOT_DIR)/zathura,~/.config/zathura)
