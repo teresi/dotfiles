@@ -25,7 +25,7 @@ USE_SYMLINKS ?= ON
 
 # TODO take user input for install dir, e.g. install to /data/.local/bin
 # TODO add recipe to make install dir
-INSTALL_DIR := $(HOME)/.local/bin
+BIN_DIR := $(HOME)/.local/bin/
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 HOST_ALIAS_RC := $(HOME)/.config/host_alias
@@ -390,10 +390,11 @@ zathura:             ## zathura pdf reader config
 
 
 .PHONY: neovim
-neovim:              ## neovim
+neovim:              ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	@# TODO check for dependencies:  ninja-build gettext libtool-bin cmake g++ pkg-config unzip curl
 	rm -rf $(NVIM)/build
-	make -C $(NVIM) CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)"
+	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
+	$(call update_link,$(NVIM)/bin/nvim,$(BIN_DIR)/nvim)
