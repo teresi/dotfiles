@@ -14,4 +14,4 @@ set highlight-transparency 0.6      # opacity of highlights (0.5)
 set synctex-editor-command "vim"
 #set font "Ubuntu Mono 12"
 
-include nord
+include catppuccin-mocha

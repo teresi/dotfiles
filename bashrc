@@ -24,7 +24,7 @@ export TZ='America/New_York';         # fix clock in tmux using the wrong TZ
 export VISUAL=vim;                    # default editor
 export EDITOR="$VISUAL";              # set default editor for legacy programs
 
-export HISTSIZE='65536';              # no. lines stored in memory for a session
+export HISTSIZE='98304';              # no. lines stored in memory for a session
 export HISTFILESIZE='131072';         # no. lines stored in history file
 export HISTTIMEFORMAT="[%F %T] ";     # add timestamps to history
 HISTIGNORE='ls:bg:fg:history';
