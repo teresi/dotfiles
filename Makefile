@@ -1,3 +1,5 @@
+#!/usr/bin/make -f
+
 # helper scripts to install dotfiles
 # __file__ Makefile
 #
@@ -21,6 +23,9 @@ USE_SYMLINKS ?= ON
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+# TODO take user input for install dir, e.g. install to /data/.local/bin
+# TODO add recipe to make install dir
+INSTALL_DIR := $(HOME)/.local/bin
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 HOST_ALIAS_RC := $(HOME)/.config/host_alias
@@ -38,6 +43,8 @@ ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
 RC_CONF := $(HOME)/.config/ranger/rc.conf
+NVIM := $(HOME)/neovim
+NVIM_URL := https://github.com/neovim/neovim.git
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -380,3 +387,13 @@ host_alias:           ## set the nickname for this machine
 zathura:             ## zathura pdf reader config
 	$(call log_info,updating $@...)
 	$(call update_link,$(ROOT_DIR)/zathura,~/.config/zathura)
+
+
+.PHONY: neovim
+neovim:              ## neovim
+	$(call log_info,updating $@...)
+	$(call update_repo,$(NVIM_URL),$(NVIM))
+	@# TODO check for dependencies:  ninja-build gettext libtool-bin cmake g++ pkg-config unzip curl
+	rm -rf $(NVIM)/build
+	make -C $(NVIM) CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)"
+	make -C $(NVIM) install
