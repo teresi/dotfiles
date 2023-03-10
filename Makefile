@@ -45,6 +45,7 @@ RXVT_CONF := $(HOME)/.Xresources
 RC_CONF := $(HOME)/.config/ranger/rc.conf
 NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
+NVIM_RC := $(HOME)/.config/nvim
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -398,3 +399,9 @@ neovim:              ## compile neovim
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
 	$(call update_link,$(NVIM)/bin/nvim,$(BIN_DIR)/nvim)
+
+
+.PHONY: neovimrc
+neovimrc:            ## neovim config
+	$(call log_info,updating $@...)
+	$(call update_link,$(ROOT_DIR)/nvim,$(NVIM_RC))
