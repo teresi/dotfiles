@@ -1,0 +1,34 @@
+font:
+  normal:
+    family: Ubuntu Mono
+    style: Regular
+
+  bold:
+    family: Ubuntu Mono
+    style: Bold
+
+  italic:
+    family: Ubuntu Mono
+    style: Italic
+
+  bold_italic:
+    family: Ubuntu Mono
+    style: Bold Italic
+
+  size: 11
+
+
+scrolling:
+  # maximum number of lines in the scrollback buffer. Specifying '0' will
+  # disable scrolling.
+  history: 100000
+
+  # Number of lines the viewport will move for every line scrolled when
+  # scrollback is enabled (history > 0).
+  multiplier: 3
+
+
+# Colors
+import:
+  #- ~/.config/alacritty/themes/xterm.yaml
+  - ~/.config/alacritty/hyper.yml

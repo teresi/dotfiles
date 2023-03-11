@@ -245,13 +245,9 @@ bashprofile:          ## non-login shell config
 
 
 .PHONY: alacritty.yml
-alacritty.yml: | $(ALACRITTY_CFG_DIR)  ## configuration for alacritty terminal
+alacritty.yml: |      ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/alacritty.yml,$(ALACRITTY_YML))
-
-
-$(ALACRITTY_CFG_DIR):
-	mkdir -p $(ALACRITTY_CFG_DIR)
+	$(call update_link,$(ROOT_DIR)/alacritty,$(ALACRITTY_CFG_DIR))
 
 
 .PHONY: alacritty
