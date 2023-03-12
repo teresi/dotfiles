@@ -42,6 +42,7 @@ FZF_URL := https://github.com/junegunn/fzf.git
 ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
+RXVT_CONF_D := $(HOME)/.Xresources.d
 RC_CONF := $(HOME)/.config/ranger/rc.conf
 NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
@@ -283,6 +284,7 @@ rxvt.conf:            ## rxvt configuration
 	$(call log_info,updating $@...)
 	@# needs apt packages: rxvt-unicode xsel
 	$(call update_link,$(ROOT_DIR)/Xresources,$(RXVT_CONF))
+	$(call update_link,$(ROOT_DIR)/Xresources.d,$(RXVT_CONF_D))
 	xrdb -merge $(RXVT_CONF)
 
 
