@@ -89,13 +89,9 @@ require('lazy').setup({
       vim.cmd.colorscheme 'heraldish'
     end,
   },
---  { -- Theme inspired by Atom
---    'navarasu/onedark.nvim',
---    priority = 2000,
---    config = function()
---      vim.cmd.colorscheme 'onedark'
---    end,
---  },
+  {
+    "norcalli/nvim-colorizer.lua",
+  },
 
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -392,6 +388,8 @@ local servers = {
     },
   },
 }
+
+require'colorizer'.setup()
 
 -- Setup neovim lua configuration
 require('neodev').setup()

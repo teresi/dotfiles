@@ -47,6 +47,7 @@ RC_CONF := $(HOME)/.config/ranger/rc.conf
 NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
 NVIM_RC := $(HOME)/.config/nvim
+FONTS := $(HOME)/.local/share/fonts
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -151,6 +152,7 @@ all: | config         ## install programs and configs
 	$(MAKE) -ik fzf
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
+	$(MAKE) -ik fonts
 
 
 .PHONY: config
@@ -403,3 +405,17 @@ neovim:              ## compile neovim
 neovimrc:            ## neovim config
 	$(call log_info,updating $@...)
 	$(call update_link,$(ROOT_DIR)/nvim,$(NVIM_RC))
+
+
+.PHONY: fonts
+fonts:               ## install fonts
+	@# TODO make this a function
+	curl -o /tmp/UbuntuMono.zip -L -O -C - https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/UbuntuMono.zip
+	mkdir -p $(FONTS)/UbuntuMono
+	unzip -u /tmp/UbuntuMono.zip -d $(FONTS)/UbuntuMono
+
+	curl -o /tmp/DejaVuSansMono.zip -L -O -C - https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/DejaVuSansMono.zip
+	mkdir -p $(FONTS)/DejaVuSansMono
+	unzip -u /tmp/DejaVuSansMono.zip -d $(FONTS)/DejaVuSansMono
+
+	fc-cache -f
