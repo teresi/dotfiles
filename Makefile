@@ -375,6 +375,7 @@ git_config:           ## sensible git (install LFS, add credential helper)
 	@# just need to call once after installing `git-lfs` from apt
 	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
+	$(call update_link,$(ROOT_DIR)/tigrc,$(HOME)/.tigrc)
 
 
 .PHONY: host_alias
