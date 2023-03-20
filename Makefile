@@ -10,6 +10,8 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
+DEPENDENCIES := ranger python3-pip vim curl
+DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 
 
 # OPTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -120,6 +122,12 @@ endef
 #      3    filepath to source
 define source_file
 	grep -q $(2) $(1) || echo "[ -r $(3) ] && source $(3)  # $(2)" >> $(1)
+endef
+
+define check_pkgs
+	@for pkg in $(1); do \
+		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || echo "\e[33mWARNmissing package:  $$pkg\e[39m"; \
+	done
 endef
 
 
@@ -420,3 +428,10 @@ fonts:               ## install fonts
 	unzip -u /tmp/DejaVuSansMono.zip -d $(FONTS)/DejaVuSansMono
 
 	fc-cache -f
+
+
+.PHONY: check_packages  ## warn if missing packages
+check_packages: SHELL:=/bin/sh
+check_packages:
+	$(call check_pkgs,$(DEPENDENCIES))
+	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
