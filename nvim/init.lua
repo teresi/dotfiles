@@ -1,3 +1,9 @@
+require("user.keymaps")
+require("user.nvim-tree-config")
+require("user.whichkey")
+require("user.color-cfg")
+
+
 
 
 -- Set <space> as the leader key
@@ -14,6 +20,11 @@ vim.opt.titlestring = [[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr
 vim.opt.hlsearch = true
 vim.opt.relativenumber = true
 
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
 
 
 -- Install package manager
@@ -32,6 +43,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
+
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
@@ -41,6 +54,27 @@ require('lazy').setup({
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+
+  {
+      'nvim-tree/nvim-tree.lua',
+      lazy = true,
+      dependencies = {
+          'nvim-tree/nvim-web-devicons',
+      },
+  },
+
+--  {
+--    "nvim-neo-tree/neo-tree.nvim",
+--    dependencies = {
+--      'MunifTanjim/nui.nvim',
+--    },
+--      keys = {
+--        { "<leader>ft", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+--      },
+--      config = function()
+--        require("neo-tree").setup()
+--      end,
+--  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -145,6 +179,31 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'akinsho/bufferline.nvim',
+    version = "v3.*",
+  },
+
+--  {'romgrk/barbar.nvim',
+--    dependencies = 'nvim-tree/nvim-web-devicons',
+--    opts = {
+--      animation = false,
+--      highlight_alternate = false,
+--      icons = {
+--        buffer_index = true,
+--        filetype = {
+--          enabled = false,
+--          custom_colors = true,
+--        },
+--      },
+--    },
+--    version = '^1.0.0', -- optional: only update when a new 1.x version is released
+--  },
+--  {
+--  'nvim-telescope/telescope.nvim', tag = '0.1.1',
+--    dependencies = { 'nvim-lua/plenary.nvim' }
+--  },
+
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
@@ -191,15 +250,6 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
--- [[ Basic Keymaps ]]
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -465,3 +515,27 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+
+
+
+
+-- settings to call after loading plugins
+
+-- make the nvim tree commands available
+require'nvim-tree'.setup {}
+
+require("bufferline").setup{}
+require("user.bufferline_cfg")
+
+
+-- relative numbers
+vim.cmd([[highlight LineNr guibg=black]])
+vim.cmd([[highlight CursorLineNr guifg=yellow]])
+
+-- barbar
+--vim.cmd([[highlight BufferCurrent guibg=green]])
+--vim.cmd([[highlight BufferCurrentIcon guibg=green]])
+
+
+

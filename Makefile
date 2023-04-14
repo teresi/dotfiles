@@ -7,6 +7,9 @@
 # but is used b/c it's cleaner than adding switches to a bash script
 
 
+# FUTURE add dependency checker:  golang-go luarocks xsel git make cargo node
+
+
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
