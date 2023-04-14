@@ -6,6 +6,8 @@
 export PATH+=:"$HOME"/.local/bin     # user bins, e.g. alacritty, virtualenvwrapper, etc.
 export PATH+=:/data/.local/bin       # user bins, e.g. alacritty, virtualenvwrapper, etc.
 
+[ -d /data/ ] && export CARGO_INSTALL_ROOT=/data/.cargo
+[ -d /data/ ] && export PATH+=:/data/.cargo/bin
 
 ################################################################################
 # KEYBOARD  ####################################################################

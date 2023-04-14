@@ -164,6 +164,7 @@ all: | config         ## install programs and configs
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
 	$(MAKE) -ik fonts
+	$(MAKE) -ik exa
 
 
 .PHONY: config
@@ -441,3 +442,11 @@ check_packages: SHELL:=/bin/sh
 check_packages:
 	$(call check_pkgs,$(DEPENDENCIES))
 	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
+
+
+.PHONY: exa
+exa: $(CARGO_INSTALL_ROOT)/bin/exa
+
+
+$(CARGO_INSTALL_ROOT)/bin/exa:
+	cargo install exa
