@@ -25,6 +25,8 @@ INSTALL_RC ?= ON
 HOST_ALIAS ?= COMPY
 # use symlinks for config files, else copy files to destination
 USE_SYMLINKS ?= ON
+# use this branch when compiling cpython
+CPYTHON_VERSION ?= 3.11
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -53,6 +55,12 @@ NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
 NVIM_RC := $(HOME)/.config/nvim
 FONTS := $(HOME)/.local/share/fonts
+
+CPY_VER := $(CPYTHON_VERSION)
+CPY_URL := https://github.com/python/cpython.git
+CPY_SRC := $(HOME)/cpython
+CPY_PRE := $(HOME)/.local
+CPY_DEP := build-essential gdb lcov pkg-config libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev libncurses5-dev libreadline-dev libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -451,4 +459,12 @@ $(CARGO_INSTALL_ROOT)/bin/exa:
 	cargo install exa
 
 
-
+.PHONY: cpython
+cpython:
+	$(call check_pkgs,$(CPY_DEP))
+	if [ ! -d $(CPY_SRC) ]; then git clone $(CPY_URL) $(CPY_SRC) --branch $(CPY_VER) --single-branch; fi
+	cd $(CPY_SRC) && git fetch && git checkout $(CPY_VER) && git reset --hard origin/$(CPY_VER)
+	-make -C $(CPY_SRC) clean
+	cd $(CPY_SRC) && ./configure --prefix=$(CPY_PRE) --enable-optimizations --with-lto
+	make -C $(CPY_SRC) all -j
+	make -C $(CPY_SRC) install -j
