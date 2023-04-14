@@ -444,9 +444,11 @@ check_packages:
 	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
 
 
-.PHONY: exa
-exa: $(CARGO_INSTALL_ROOT)/bin/exa
+exa: $(CARGO_INSTALL_ROOT)/bin/exa  ## improved `ls` command
 
 
 $(CARGO_INSTALL_ROOT)/bin/exa:
 	cargo install exa
+
+
+
