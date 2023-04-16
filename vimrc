@@ -142,9 +142,6 @@ set shell=bash                 " :term default to bash
 " won't work by default.
 set noesckeys
 
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" EDITOR
-
 " clipboard support may require (apt) `vim-gnome`
 " you should see `+clipboard` and/or `+xterm_clipboard` in:
 " `vim --version | grep clipboard`
@@ -156,6 +153,10 @@ set lazyredraw                 " speedup editing
 " also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
 set term=screen-256color   " fix colors for vim inside tmux
 
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" VISUALIZATION
+
 syntax enable
 set background=dark
 silent! colorscheme ron        " default color
@@ -164,7 +165,6 @@ silent! colorscheme herald     " next color if downloaded
 " colors in docker get messed up somehow? (not even in tmux)
 " so use 'deus' since that one is consistent
 let g:airline_theme='deus'
-
 
 " show whitespace
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
@@ -204,19 +204,19 @@ let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for
 "	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
 "augroup END
 
-
-" default LaTeX style
-let g:tex_flavor = 'latex'
-
-" indent line resets conceallevel on load, so fix for LaTeX
-let g:indentLine_fileTypeExclude = ['tex', 'cls']
-
 " don't hide unicode / escape char
 let g:conceallevel = 0
+
+" indent line can reset conceallevel on load, so set explicitly
+"let g:indentLine_fileTypeExclude = ['tex', 'cls']  " optionally exclude it
+autocmd BufEnter *.tex set conceallevel=0
+autocmd BufEnter *.md set conceallevel=0
+autocmd BufEnter *.json set conceallevel=0
 
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
 autocmd FileType nerdtree setlocal relativenumber
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " NAVIGATION
@@ -235,10 +235,7 @@ set hidden                       " allow buffer switch w/o save
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
-
-
-" LaTeX commands and symbols can get converted to unicode, so disable that
-autocmd BufEnter *.tex set conceallevel=0
+autocmd FileType make setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
 
 
 augroup debianlatexfix
@@ -260,6 +257,9 @@ augroup roslaunch
 	autocmd BufNewFile,BufRead *.launch   set syntax=xml
 augroup END
 "let g:indent_guides_enable_on_vim_startup = 1
+
+" default LaTeX style
+let g:tex_flavor = 'latex'
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
