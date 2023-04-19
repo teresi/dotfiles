@@ -56,6 +56,7 @@ Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cn
 "Plugin 'neoclide/coc.nvim'                      " auto complete
 Plugin 'ojroques/vim-oscyank'                   " clipboard overr SSH
 Plugin 'sheerun/vim-polyglot'                   " various language highlighting
+Plugin 'zchee/vim-flatbuffers'                  " flatbuffer syntax highlighting
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
