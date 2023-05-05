@@ -116,7 +116,7 @@ require('lazy').setup({
   },
 
 
-  { -- Theme inspired by Atom
+  {
     'petobens/colorish',
     priority = 1000,
     config = function()
@@ -294,6 +294,23 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+
+
+-- [[ Configure Bufferline ]]
+require("bufferline").setup({
+    highlights = {
+        fill = {
+            fg = '#100e23',
+            bg = '#1C1B1A'
+        },
+        buffer_selected = {
+            fg = '#100e23',
+            bg = '#87D787'
+        },
+    }
+})
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
