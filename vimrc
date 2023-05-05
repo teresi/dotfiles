@@ -31,9 +31,7 @@ set rtp+=~/.vim/bundle/Vundle.vim               " add vundle to runtime path
 call vundle#begin()                             " initialize vundle
 "call vundle#begin('~/some/path/here')          " or set a plugin install dir
 
-" NB had to temporarily move the url of vundle b/c the original is 404
-"Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
-Plugin 'teresi/Vundle.vim'                       " use Vundle, required
+Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
 " tools
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
@@ -410,3 +408,5 @@ let g:airline_symbols.branch = ''  " ''
 
 " NOTE not an issue on Vim8.1+?
 let g:ale_echo_delay = 500  " mitigate cursor disappears on lines /w errors
+let g:ale_sign_column_always = 1  " keep the gutter open
+let g:ale_lint_on_save = 1
