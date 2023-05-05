@@ -48,18 +48,6 @@ check_pkgs () {
 }
 
 
-# install and update rust
-install_rust () {
-	_which_rust=`which rustup` || true
-	if [[ -z $_which_rust ]]; then
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-	fi
-	. "$HOME"/.bashrc
-	. "$HOME"/.cargo/env
-	rustup update stable
-}
-
-
 usage () {
 	echo "$(basename $0) [OPTION]"
 	echo ""

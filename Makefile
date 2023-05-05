@@ -459,7 +459,7 @@ $(CARGO_INSTALL_ROOT)/bin/exa:
 
 
 .PHONY: cpython
-cpython:
+cpython:                ## compile cpython
 	$(call check_pkgs,$(CPY_DEP))
 	if [ ! -d $(CPY_SRC) ]; then git clone $(CPY_URL) $(CPY_SRC) --branch $(CPY_VER) --single-branch; fi
 	cd $(CPY_SRC) && git fetch && git checkout $(CPY_VER) && git reset --hard origin/$(CPY_VER)
@@ -467,3 +467,9 @@ cpython:
 	cd $(CPY_SRC) && ./configure --prefix=$(CPY_PRE) --enable-optimizations --with-lto
 	make -C $(CPY_SRC) all -j
 	make -C $(CPY_SRC) install -j
+
+
+.PHONY: rust
+rust:                   ## install rust compiler
+	$(call log_info,installing $@...)
+	@$(ROOT_DIR)/install_rust.sh
