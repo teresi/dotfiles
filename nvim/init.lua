@@ -297,25 +297,6 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 
 
 
--- [[ Configure Bufferline ]]
-require("bufferline").setup({
-    highlights = {
-        fill = {
-            fg = '#100e23',
-            bg = '#1C1B1A'
-        },
-        buffer_selected = {
-            fg = '#100e23',
-            bg = '#87D787'
-        },
-        modified = {
-            fg = '#100e23',
-            bg = '#00AFFF'
-        },
-    }
-})
-
-
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
@@ -542,7 +523,7 @@ local custom_onedark = require'lualine.themes.onedark'
 custom_onedark.normal.c.bg = '#1C1B1A'
 custom_onedark.normal.a.bg = '#87D787'
 custom_onedark.insert.a.bg = '#00AFFF'
-custom_onedark.visual.a.bg = '#D7F5D7'
+custom_onedark.visual.a.bg = '#D75FD7'
 
 require('lualine').setup {
   options = { theme  = custom_onedark },
@@ -555,8 +536,6 @@ require('lualine').setup {
 -- make the nvim tree commands available
 require'nvim-tree'.setup {}
 
---require("bufferline").setup{}
---require("user.bufferline_cfg")
 
 
 -- relative numbers
@@ -567,5 +546,34 @@ vim.cmd([[highlight CursorLineNr guifg=yellow]])
 --vim.cmd([[highlight BufferCurrent guibg=green]])
 --vim.cmd([[highlight BufferCurrentIcon guibg=green]])
 
+
+
+-- [[ Configure Bufferline ]]
+--require("user.bufferline_cfg")
+require("bufferline").setup({
+    options ={
+        modified_icon = '+',
+        show_buffer_icons = false,
+        show_buffer_close_icons = false,
+        indicator = {
+            icon = '▎', -- this should be omitted if indicator style is not 'icon'
+            style = 'icon',
+        },
+    },
+    highlights = {
+        fill = {
+            fg = '#100e23',
+            bg = '#1C1B1A'
+        },
+        buffer_selected = {
+            fg = '#100e23',
+            bg = '#87D787'
+        },
+        modified_selected = {
+            fg = '#100e23',
+            bg = '#00AFFF'
+        },
+    }
+})
 
 
