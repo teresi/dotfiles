@@ -133,7 +133,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'gruvbox',
         component_separators = '|',
         section_separators = '',
       },
@@ -307,6 +307,10 @@ require("bufferline").setup({
         buffer_selected = {
             fg = '#100e23',
             bg = '#87D787'
+        },
+        modified = {
+            fg = '#100e23',
+            bg = '#00AFFF'
         },
     }
 })
@@ -534,7 +538,16 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 
 
+local custom_onedark = require'lualine.themes.onedark'
+custom_onedark.normal.c.bg = '#1C1B1A'
+custom_onedark.normal.a.bg = '#87D787'
+custom_onedark.insert.a.bg = '#00AFFF'
+custom_onedark.visual.a.bg = '#D7F5D7'
 
+require('lualine').setup {
+  options = { theme  = custom_onedark },
+  ...
+}
 
 
 -- settings to call after loading plugins
@@ -542,8 +555,8 @@ cmp.setup {
 -- make the nvim tree commands available
 require'nvim-tree'.setup {}
 
-require("bufferline").setup{}
-require("user.bufferline_cfg")
+--require("bufferline").setup{}
+--require("user.bufferline_cfg")
 
 
 -- relative numbers
