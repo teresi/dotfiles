@@ -18,6 +18,7 @@ INSTALL_DIR="$HOME/.local/bin/"
 BASH_COMPLETION="$ALA_SRC_DIR/extra/completions/alacritty.bash"
 INSTALL=0
 
+# FUTURE refactor is_installed / check_pkgs compared w/ helpers.bash::are_package_missing
 
 # return 0 if package is installed
 #	1: package name

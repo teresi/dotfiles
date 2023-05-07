@@ -61,12 +61,13 @@ are_packages_missing () {
 		dpkg -s $pkg 2>/dev/null | grep -q "install ok installed" || _missing+=("$pkg")
 	done
 	if [ ${#_missing[@]} -eq 0 ]; then
-		return
+		return 0
 	fi
 
 	warn "you are missing packages!"
 	warn "please install:"
 	echo ""
-	echo ${_missing[@]}
+	echo "\t"${_missing[@]}
 	echo ""
+	return 1
 }

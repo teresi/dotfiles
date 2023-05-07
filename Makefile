@@ -136,7 +136,7 @@ endef
 
 define check_pkgs
 	@for pkg in $(1); do \
-		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || echo "\e[33mWARNmissing package:  $$pkg\e[39m"; \
+		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || echo -e "\033[;33mWARN  missing package:  $$pkg\033[0m"; \
 	done
 endef
 
@@ -197,6 +197,7 @@ depends:              ## install system dependencies
 
 .PHONY: vim
 vim:                  ## vim config and plugins
+	$(call check_pkgs,"vim git")
 	$(MAKE) -ik vimrc
 	$(MAKE) -ik vim_plugins
 
@@ -221,6 +222,7 @@ vim_plugins: | vundle ## download vim plugins
 
 .PHONY: tmux
 tmux:                 ## add tmux config and plugins
+	$(call check_pkgs,tmux)
 	$(MAKE) -ik tmux.conf
 	$(MAKE) -ik tmux_plugins
 
@@ -281,6 +283,7 @@ alacritty:            ## compile alacritty terminal
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
+	$(call check_pkgs,"python3-pip")
 	$(call update_link,$(ROOT_DIR)/python_venv,~/.config/python_venv)
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
 	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
@@ -295,6 +298,7 @@ conda:                ## miniconda python distribution & package manager
 .PHONY: ranger
 ranger:               ## ranger configuration
 	$(call log_info,updating $@...)
+	$(call check_pkgs,"ranger")
 	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
 	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
 	-sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
@@ -394,6 +398,7 @@ gnome:                ## gnome desktop
 .PHONY: git_config
 git_config:           ## sensible git (install LFS, add credential helper)
 	$(call log_info,updating $@...)
+	$(call check_pkgs,"git")
 	@# just need to call once after installing `git-lfs` from apt
 	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
@@ -410,6 +415,7 @@ host_alias:           ## set the nickname for this machine
 .PHONY: zathura
 zathura:             ## zathura pdf reader config
 	$(call log_info,updating $@...)
+	$(call check_pkgs,"zathura")
 	$(call update_link,$(ROOT_DIR)/zathura,~/.config/zathura)
 
 
