@@ -50,3 +50,23 @@ install_rust () {
 	rustup update stable
 }
 
+
+are_packages_missing () {
+	# print warning if any package in array $1 is not installed
+
+	local _pkgs=( "$@" )
+	local _missing=()
+
+	for pkg in ${_pkgs[@]}; do \
+		dpkg -s $pkg 2>/dev/null | grep -q "install ok installed" || _missing+=("$pkg")
+	done
+	if [ ${#_missing[@]} -eq 0 ]; then
+		return
+	fi
+
+	warn "you are missing packages!"
+	warn "please install:"
+	echo ""
+	echo ${_missing[@]}
+	echo ""
+}

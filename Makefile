@@ -13,7 +13,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
-DEPENDENCIES := ranger python3-pip vim curl
+DEPENDENCIES := ranger python3-pip vim curl htop tmux
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 
 
@@ -460,13 +460,8 @@ $(CARGO_INSTALL_ROOT)/bin/exa:
 
 .PHONY: cpython
 cpython:                ## compile cpython
-	$(call check_pkgs,$(CPY_DEP))
-	if [ ! -d $(CPY_SRC) ]; then git clone $(CPY_URL) $(CPY_SRC) --branch $(CPY_VER) --single-branch; fi
-	cd $(CPY_SRC) && git fetch && git checkout $(CPY_VER) && git reset --hard origin/$(CPY_VER)
-	-make -C $(CPY_SRC) clean
-	cd $(CPY_SRC) && ./configure --prefix=$(CPY_PRE) --enable-optimizations --with-lto
-	make -C $(CPY_SRC) all -j
-	make -C $(CPY_SRC) install -j
+	$(call log_info,updating $@...)
+	@$(ROOT_DIR)/install_cpython.bash
 
 
 .PHONY: rust
