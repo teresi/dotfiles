@@ -124,6 +124,9 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'heraldish'
+      vim.cmd.highlight 'cursorline guibg=#000000'
+      vim.cmd.highlight 'LineNR guibg=#000000'
+      vim.cmd.highlight 'CursorLineNr guifg=yellow'
     end,
   },
   {
@@ -148,8 +151,9 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
-      char = '┊',
+      char = '¦',
       show_trailing_blankline_indent = false,
+      show_current_context = true,
     },
   },
 
@@ -529,8 +533,15 @@ custom_onedark.insert.a.bg = '#00AFFF'
 custom_onedark.visual.a.bg = '#D75FD7'
 
 require('lualine').setup {
-  options = { theme  = custom_onedark },
-  ...
+  options = {
+    theme = custom_onedark,
+  },
+  sections = {
+    lualine_x = {'filetype'},
+  },
+  inactive_sections = {
+    lualine_x = {'encoding', 'fileformat'},
+  },
 }
 
 
@@ -542,8 +553,8 @@ require'nvim-tree'.setup {}
 
 
 -- relative numbers
-vim.cmd([[highlight LineNr guibg=black]])
-vim.cmd([[highlight CursorLineNr guifg=yellow]])
+--vim.cmd([[highlight LineNr guibg=black]])
+--vim.cmd([[highlight CursorLineNr guifg=yellow]])
 
 -- barbar
 --vim.cmd([[highlight BufferCurrent guibg=green]])
