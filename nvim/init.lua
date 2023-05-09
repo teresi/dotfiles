@@ -27,6 +27,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
 
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -192,6 +193,15 @@ require('lazy').setup({
     version = "v3.*",
   },
 
+  {
+    'm-demare/hlargs.nvim',
+  },
+
+--  {
+--    'theHamsta/nvim-semantic-tokens',
+--  },
+
+
 --  {'romgrk/barbar.nvim',
 --    dependencies = 'nvim-tree/nvim-web-devicons',
 --    opts = {
@@ -315,8 +325,11 @@ require('nvim-treesitter.configs').setup {
 	  'latex', 'lua', 'bibtex',
 	  'python',
 	  'rust',
-	  'bash', 'dockerfile', 'make',
-	  'json', 'help', 'vim' },
+    'bash', 'make',
+    'markdown',
+	  'dockerfile',
+    'json', 'toml', 'yaml',
+	  'help', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -592,3 +605,26 @@ require("bufferline").setup({
 })
 
 
+-- [[ Configure hlargs ]]
+-- highlight argument definitions
+-- https://github.com/m-demare/hlargs.nvim
+require('hlargs').setup({
+  excluded_argnames = {
+    declarations = {},
+    usages = {
+      python = { 'self', 'cls' },
+      lua = { 'self' }
+    }
+  },
+})
+require('hlargs').enable()
+
+--require("nvim-semantic-tokens").setup {
+--  preset = "default",
+--  -- highlighters is a list of modules following the interface of nvim-semantic-tokens.table-highlighter or 
+--  -- function with the signature: highlight_token(ctx, token, highlight) where 
+--  --        ctx (as defined in :h lsp-handler)
+--  --        token  (as defined in :h vim.lsp.semantic_tokens.on_full())
+--  --        highlight (a helper function that you can call (also multiple times) with the determined highlight group(s) as the only parameter)
+--  highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
+--}
