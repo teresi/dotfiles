@@ -17,6 +17,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 set exrc                      " load vimrc from working directory
 set secure                    " limit commands from non-default vimrc files
+let mapleader = ' '
 
 augroup reload_vimrc          " auto load on change
 	autocmd!
@@ -407,6 +408,26 @@ let g:airline_symbols.branch = ''  " ''
 " ALE
 
 " NOTE not an issue on Vim8.1+?
-let g:ale_echo_delay = 500  " mitigate cursor disappears on lines /w errors
-let g:ale_sign_column_always = 1  " keep the gutter open
-let g:ale_lint_on_save = 1
+let g:ale_echo_delay = 500         " mitigate cursor disappears on lines /w errors
+let g:ale_sign_column_always = 1   " keep the gutter open
+let g:ale_lint_on_save = 1         " return on save (default true)
+let g:ale_set_loclist = 1          " use loclist for ale results (default 1)
+let g:ale_set_quickfix = 0         " use quickfix for ale results (default 0)
+let g:airline#extensions#ale#enabled = 1
+
+" ALE navigation/list of warnings
+" NOTE w/ vim-unimpaired you can [l and ]l to goto prev/next on loclist
+nmap <silent> <S-k> <Plug>(ale_previous_wrap)
+nmap <silent> <S-j> <Plug>(ale_next_wrap)
+noremap <Leader>a :ALELint<CR>
+
+noremap <Leader>l :call LLocToggle()<CR>
+function! LLocToggle()
+  if exists("g:loclist_win")
+    lclose
+    unlet g:loclist_win
+  else
+    lopen
+    let g:loclist_win = bufnr("$")
+  endif
+endfunction
