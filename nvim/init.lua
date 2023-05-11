@@ -1,4 +1,5 @@
 require("user.keymaps")
+require("user.options")
 require("user.nvim-tree-config")
 require("user.whichkey")
 require("user.color-cfg")
@@ -6,26 +7,14 @@ require("user.color-cfg")
 
 
 
--- Set <space> as the leader key
--- See `:help mapleader`
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
 
-
-
-vim.wo.number = number          -- show line numbers
-vim.wo.cursorline = true
-vim.opt.titlestring = [[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr('$')})]]
-
-vim.opt.hlsearch = true
-vim.opt.relativenumber = true
 
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
--- set termguicolors to enable highlight groups
-vim.opt.termguicolors = true
 
+-- 
+vim.g.polyglot_disabled = { "autoindent", "sensible" }
 
 
 -- Install package manager
@@ -197,10 +186,13 @@ require('lazy').setup({
     'm-demare/hlargs.nvim',
   },
 
---  {
---    'theHamsta/nvim-semantic-tokens',
---  },
+  {
+    'theHamsta/nvim-semantic-tokens',
+  },
 
+  {
+    'sheerun/vim-polyglot'
+  },
 
 --  {'romgrk/barbar.nvim',
 --    dependencies = 'nvim-tree/nvim-web-devicons',
@@ -329,13 +321,16 @@ require('nvim-treesitter.configs').setup {
     'markdown',
 	  'dockerfile',
     'json', 'toml', 'yaml',
-	  'help', 'vim' },
+	  'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
-  highlight = { enable = true },
-  indent = { enable = true, disable = { 'python' } },
+  highlight = {
+    enable = false,
+    use_languagetree = true,
+  },
+  indent = { enable = true, },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -583,6 +578,7 @@ require("bufferline").setup({
         modified_icon = '+',
         show_buffer_icons = false,
         show_buffer_close_icons = false,
+        tab_size = 12,
         indicator = {
             icon = '▎', -- this should be omitted if indicator style is not 'icon'
             style = 'icon',
@@ -601,6 +597,10 @@ require("bufferline").setup({
             fg = '#100e23',
             bg = '#00AFFF'
         },
+        modified_visible = {
+            fg = '#100e23',
+            bg = '#00AFFF'
+        },
     }
 })
 
@@ -612,19 +612,20 @@ require('hlargs').setup({
   excluded_argnames = {
     declarations = {},
     usages = {
-      python = { 'self', 'cls' },
+--      python = { 'self', 'cls' },
       lua = { 'self' }
     }
   },
 })
 require('hlargs').enable()
 
---require("nvim-semantic-tokens").setup {
---  preset = "default",
---  -- highlighters is a list of modules following the interface of nvim-semantic-tokens.table-highlighter or 
---  -- function with the signature: highlight_token(ctx, token, highlight) where 
---  --        ctx (as defined in :h lsp-handler)
---  --        token  (as defined in :h vim.lsp.semantic_tokens.on_full())
---  --        highlight (a helper function that you can call (also multiple times) with the determined highlight group(s) as the only parameter)
---  highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
---}
+require("nvim-semantic-tokens").setup {
+  preset = "default",
+  -- highlighters is a list of modules following the interface of nvim-semantic-tokens.table-highlighter or 
+  -- function with the signature: highlight_token(ctx, token, highlight) where 
+  --        ctx (as defined in :h lsp-handler)
+  --        token  (as defined in :h vim.lsp.semantic_tokens.on_full())
+  --        highlight (a helper function that you can call (also multiple times) with the determined highlight group(s) as the only parameter)
+  highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
+}
+

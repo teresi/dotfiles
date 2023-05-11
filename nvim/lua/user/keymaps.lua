@@ -6,11 +6,18 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
+-- set <space> as the leader key
+-- see `:help mapleader`
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+-- faster movement between windows
 Map("n", "<C-h>", "<C-w>h")
 Map("n", "<C-j>", "<C-w>j")
 Map("n", "<C-k>", "<C-w>k")
 Map("n", "<C-l>", "<C-w>l")
 
+-- resize a window w/ arrows
 Map("n", "<C-Up>", ":resize -2<CR>")
 Map("n", "<C-Down>", ":resize +2<CR>")
 Map("n", "<C-Left>", ":vertical resize -2<CR>")
@@ -46,5 +53,5 @@ Map("n", "K", ":lua vim.lsp.buf.hover()<CR>")
 Map("n", "<leader>rn", ":lua vim.lsp.buf.rename()<CR>")
 Map("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
 
-
+-- file tree
 Map('n', "<F2>", "<cmd>NvimTreeToggle<cr>")
