@@ -10,6 +10,7 @@ source $_root_dir/helpers.bash
 notify "compling cpython..."
 
 
+_dry_run=""
 _cpy_ver=3.11
 _cpy_url=https://github.com/python/cpython.git
 _cpy_src="$HOME"/cpython
@@ -37,6 +38,8 @@ do
 		_cpy_ver=$2; shift 2;;
 	--prefix)
 		_cpy_pre=$2; shift 2;;
+	--dry-run)
+		_dry_run=1; shift;;
 	-h|--help)
 		usage; shift;;
 	*)    # unknown option
@@ -57,8 +60,13 @@ fi
 cd $_cpy_src && git fetch && git checkout $_cpy_ver && git reset --hard origin/$_cpy_ver
 
 
+if [ -n "$_dry_run" ]; then
+	notify "skipping compilation, dry-run is set"
+	exit 0
+fi
+
 notify "compiling..."
 make -C $_cpy_src clean
 cd $_cpy_src && ./configure --prefix="$_cpy_pre" --enable-optimizations --with-lto
 make -C $_cpy_src all -j
-make -C $_cpy_src install -j
+make -C $_cpy_src altinstall -j

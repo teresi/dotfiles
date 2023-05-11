@@ -13,7 +13,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
-DEPENDENCIES := ranger python3-pip vim curl htop tmux
+DEPENDENCIES := vim tmux python3-pip ranger curl htop ripgrep
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 
 
@@ -54,12 +54,6 @@ NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
 NVIM_RC := $(HOME)/.config/nvim
 FONTS := $(HOME)/.local/share/fonts
-
-CPY_VER := $(CPYTHON_VERSION)
-CPY_URL := https://github.com/python/cpython.git
-CPY_SRC := $(HOME)/cpython
-CPY_PRE := $(HOME)/.local
-CPY_DEP := build-essential gdb lcov pkg-config libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev libncurses5-dev libreadline-dev libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
