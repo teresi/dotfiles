@@ -40,7 +40,7 @@ Plugin 'preservim/tagbar'                       " browse tags (class structure e
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'tpope/vim-fugitive'                     " git tools
 "Plugin 'rbong/vim-flog'                         " git graph (broken atm)
-Plugin 'dantler/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
+Plugin 'ton/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
 Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'vim-airline/vim-airline'                " status bar
