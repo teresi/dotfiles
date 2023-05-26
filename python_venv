@@ -1,4 +1,4 @@
-#PYTHON_CUSTOMIZATIONS_START
+
 
 source_venvwrapper ()
 {
@@ -25,14 +25,31 @@ source_venvwrapper ()
 	fi
 }
 
-export PIP_DOWNLOAD_CACHE="$HOME"/.pip/cache       # use home in case /tmp is not large enough
+
+append_to_path() {
+    # append $1 to PATH if it is *not* already in the PATH
+		# SEE https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
+
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH+=:"$1"
+    fi
+}
+
 
 # SEE https://virtualenvwrapper.readthedocs.io/en/latest/install.html
+
 export VIRTUALENVWRAPPER_PYTHON=`which python3`             # use this interpreter
 export WORKON_HOME="$HOME"/.virtualenvs                     # environments dir
 export VIRTUALENVWRAPPER_TMPDIR="$HOME"/.virtualenv_tmpdir  # cache dir
+export PIP_DOWNLOAD_CACHE="$HOME"/.pip/cache                # use home in case /tmp is not large enough
+
 #export PROJECT_HOME="$HOME"/.virtualenv_projects           # project working dir (i.e. source code under dev)
 #export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv  # use this virtualenv binary
-source_venvwrapper
 
-#PYTHON_CUSTOMIZATIONS_END
+# NB you must amend your path prior to sourcing venvwrapper
+#    as it uses the current path to find the binaries and etc.
+# SEE https://virtualenvwrapper.readthedocs.io/en/latest/install.html#python-interpreter-virtualenv-and-path
+# NB add ~/.local/bin to the PATH b/c virtualenv can get installed there if you use `pip install --user`
+append_to_path "$HOME"/.local/bin
+
+source_venvwrapper

@@ -281,7 +281,7 @@ virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	$(call update_link,$(ROOT_DIR)/python_venv,~/.config/python_venv)
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
 	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
-	-bash -c "python3 -m pip install --user virtualenvwrapper"
+	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
 
 
 .PHONY: conda
