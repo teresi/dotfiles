@@ -1,12 +1,10 @@
 # DOTFILES
 
-User configuration.
+Install configs, compile utilities.
 
-Includes:
-- bashrc / vimrc / tmux.conf
-- vim plugins / tmux plugins
+e.g.
+- bash / vim / tmux
 - alacritty
-- fzf
 - gnome settings
 
 
@@ -22,22 +20,6 @@ Options
 ```
 INSTALL_RC=(ON|OFF):        # install config file for a target if ON, uninstall if OFF
 HOST_ALIAS=(<str>):         # user's nickname for their computer
+NO_SYMLINKS=ON              # copy config directly instead of linking to files here
+                            # useful if you delete this repo after install
 ```
-
-
-## DESIGN
-
-
-Symlinks dotfiles from `~/` and `~/.config/` pointing to this repo,
-  in order to simplify updates & backup procedures.
-
-Nests dotfiles if possible to decouple configurations.
-
-Installs to user space where ever possible,
-  in order limit need for root privileges.
-
-
-## CAVEAT
-
-If this repo is deleted then most customizations will also be deleted,
-  as the dotfiles are symlinked to the files in this repo.
