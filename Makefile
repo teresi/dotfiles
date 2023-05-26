@@ -149,31 +149,21 @@ help:                 ## usage
 
 # NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
-all: | config         ## install programs and configs
-	$(MAKE) -ik vim_plugins
-	$(MAKE) -ik tmux_plugins
+all:                  ## install programs and configs
+	$(MAKE) -ik vim
+	$(MAKE) -ik tmux
+	$(MAKE) -ik bash
+	$(MAKE) -ik git_config
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
 	$(MAKE) -ik fonts
 	$(MAKE) -ik exa
-
-
-.PHONY: config
-config:               ## install configs
-	$(MAKE) -ik vimrc
-	$(MAKE) -ik bashrc
-	$(MAKE) -ik aliases
-	$(MAKE) -ik bashprofile
-	$(MAKE) -ik inputrc
-	$(MAKE) -ik tmux.conf
+	$(MAKE) -ik rust
 	$(MAKE) -ik ranger
-	$(MAKE) -ik alacritty.yml
-	$(MAKE) -ik functions
-	$(MAKE) -ik git_config
-	$(MAKE) -ik python_packages
 	$(MAKE) -ik rxvt.conf
+	$(MAKE) -ik alacritty
 
 
 .PHONY: depends
@@ -204,6 +194,7 @@ vundle:               ## vim package manager
 vim_plugins: | vundle ## download vim plugins
 	$(call log_info,updating $@...)
 	vim --noplugin +PluginInstall +qall
+	python3 -m pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
 .PHONY: tmux
@@ -223,6 +214,7 @@ tmux.conf:            ## add tmux config file
 tmux_plugins: | tpm   ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
+	python3 -m pip install --user psutil  # for tmux cpu info
 
 
 .PHONY: tpm
@@ -230,6 +222,13 @@ tpm:                  ## tmux plugin manager
 	$(call log_info,updating $@...)
 	$(call update_repo,$(TPM_URL),$(TPM))
 
+.PHONY: bash
+bash:                 ## bash: bashrc, inputrc, bashrprofile, functions, aliases
+	$(MAKE) -ik inputrc
+	$(MAKE) -ik bashrc
+	$(MAKE) -ik bashprofile
+	$(MAKE) -ik functions
+	$(MAKE) -ik aliases
 
 .PHONY: inputrc
 inputrc:              ## add command line config
@@ -264,16 +263,18 @@ alacritty.yml: |      ## configuration for alacritty terminal
 alacritty:            ## compile alacritty terminal
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/install_alacritty.sh || echo -e "\e[91mERROR\t install failed; remember to close all Alacritty instances first \e[39m"
+	$(MAKE) -ik alacritty.yml
 
 
+# TODO install pip w/o apt (python3-pip)
 .PHONY: virtualenvwrapper
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
 	$(call check_pkgs,"python3-pip")
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/python_venv ~/.config/python_venv
+	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
 	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
-	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
 
 
 .PHONY: conda
@@ -332,12 +333,6 @@ fzf:                  ## command-line fuzzy finder
 	$(call log_info,updating $@...)
 	$(call update_repo,$(FZF_URL),$(FZF))
 	$(FZF)/install --all
-
-
-.PHONY: python_packages
-python_packages:      ## extra python package dependencies
-	$(call log_info,updating $@...)
-	python3 -m pip install --user grip                # for 'JamshedVesuna/vim-markdown-preview' 
 
 
 .PHONY: cinnamon
@@ -437,9 +432,9 @@ fonts:               ## install fonts
 	fc-cache -f
 
 
-.PHONY: check_packages  ## warn if missing packages
+.PHONY: check_packages
 check_packages: SHELL:=/bin/sh
-check_packages:
+check_packages:         ## warn if missing packages
 	$(call check_pkgs,$(DEPENDENCIES))
 	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
 

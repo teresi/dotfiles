@@ -63,9 +63,10 @@ git_hash ()
 
 PS1_BACKUP=$PS1
 if [[ -f ~/.config/host_alias ]]; then
-	HOST_ALIAS=`cat ~/.config/host_alias`;  # location of this computer's host alias
+	# MAGIC our convention, store the alias in a file
+	HOST_ALIAS=`cat ~/.config/host_alias`;
 else
-	HOST_ALIAS="COMPY";  # default alias
+	HOST_ALIAS="$(HOSTNAME)";
 fi
 export HOST_ALIAS                     # nickname for this computer
 PS1='\[\033[01;37m\]`[ \j -gt 0 ] && echo [\j]`\[\033[00m\]\'  # no. background tasks if any
