@@ -22,9 +22,10 @@ DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev 
 # install configuration files for a target (e.g. bashrc, etc) if ON, else uninstall target
 INSTALL_RC ?= ON
 # set the host's nickname for bash prompt and tmux
-HOST_ALIAS ?= COMPY
-# use symlinks for config files, else copy files to destination
-USE_SYMLINKS ?= ON
+HOST_ALIAS ?= $(HOSTNAME)
+# if defined, copy configuration files to destination instead of linking to this repo's copies
+NO_SYMLINKS ?=
+export NO_SYMLINKS
 # use this branch when compiling cpython
 CPYTHON_VERSION ?= 3.11
 
@@ -101,15 +102,6 @@ define update_file
 	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
 endef
 
-# add symlink at $2 pointing to target $1
-#      Backup file at $1 if exists and is not a symlink
-#      1    target of symlink
-#      2    linkname of symlink
-define update_link
-	@if [ ! -L $(2) ] && [ -f $(2) ]; then cp -fu --backup=t $(2){,~}; fi
-	@if [ "$(USE_SYMLINKS)" == "ON" ]; then ln -sfn $(1) $(2); else cp $(1) $(2); fi
-endef
-
 # uncomment a line in a file given a pattern if flag is ON, comment out else
 #	1   filepath
 #	2   pattern
@@ -144,13 +136,13 @@ help:                 ## usage
 	@echo "    recipes to configure dotfiles, tools, etc."
 	@echo ""
 	@echo "    OPTIONS:"
-	@echo "        INSTALL_RC   (ON|OFF): un/install configuration/rc file (ON)"
-	@echo "        USE_SYMLINKS (ON|OFF): use symlinks for configs, else copy (ON)"
+	@echo "        INSTALL_RC  (ON|OFF): un/install configuration/rc file (ON)"
+	@echo "        NO_SYMLINKS     (ON): copy configuration files instead of linking to this project"
 	@echo ""
 	@echo "    NOTE:"
 	@echo "        configurations are installed using symlinks"
 	@echo "        so the configurations will be removed if this repo is deleted;"
-	@echo "        to opt out of this use USE_SYMLINMKS:=off flag"
+	@echo "        to opt out of this use NO_SYMLINMKS:=ON flag"
 	@echo ""
 	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -199,7 +191,7 @@ vim:                  ## vim config and plugins
 .PHONY: vimrc
 vimrc:                ## vim config
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/vimrc,$(VIMRC))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/vimrc $(VIMRC)
 
 
 .PHONY: vundle
@@ -224,7 +216,7 @@ tmux:                 ## add tmux config and plugins
 .PHONY: tmux.conf
 tmux.conf:            ## add tmux config file
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/tmux.conf,$(TMUX_CONF))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/tmux.conf $(TMUX_CONF)
 
 
 .PHONY: tmux_plugins
@@ -242,14 +234,14 @@ tpm:                  ## tmux plugin manager
 .PHONY: inputrc
 inputrc:              ## add command line config
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/inputrc,$(INPUTRC))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/inputrc $(INPUTRC)
 
 
 .PHONY: bashrc
 bashrc:               ## login shell config
 	$(call log_info,updating $@...)
 	@sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
-	$(call update_link,$(ROOT_DIR)/bashrc,~/.config/bashrc)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bashrc ~/.config/bashrc
 	$(call source_file,$(BASHRC),CUSTOM_BASHRC,~/.config/bashrc)
 	$(call comment_line,$(BASHRC),CUSTOM_BASHRC,$(INSTALL_RC))
 
@@ -257,7 +249,7 @@ bashrc:               ## login shell config
 .PHONY: bashprofile
 bashprofile:          ## non-login shell config
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/bash_profile,~/.config/bash_profile)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bash_profile ~/.config/bash_profile
 	$(call source_file,$(BASHPROFILE),CUSTOM_BASHPROFILE,~/.config/bash_profile)
 	$(call comment_line,$(BASHPROFILE),CUSTOM_BASHPROFILE,$(INSTALL_RC))
 
@@ -265,7 +257,7 @@ bashprofile:          ## non-login shell config
 .PHONY: alacritty.yml
 alacritty.yml: |      ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/alacritty,$(ALACRITTY_CFG_DIR))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/alacritty $(ALACRITTY_CFG_DIR)
 
 
 .PHONY: alacritty
@@ -278,7 +270,7 @@ alacritty:            ## compile alacritty terminal
 virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
 	$(call check_pkgs,"python3-pip")
-	$(call update_link,$(ROOT_DIR)/python_venv,~/.config/python_venv)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/python_venv ~/.config/python_venv
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
 	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
 	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
@@ -302,11 +294,12 @@ ranger:               ## ranger configuration
 rxvt.conf:            ## rxvt configuration
 	$(call log_info,updating $@...)
 	@# needs apt packages: rxvt-unicode xsel
-	$(call update_link,$(ROOT_DIR)/Xresources,$(RXVT_CONF))
-	$(call update_link,$(ROOT_DIR)/Xresources.d,$(RXVT_CONF_D))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources $(RXVT_CONF)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources.d $(RXVT_CONF_D)
 	xrdb -merge $(RXVT_CONF)
 
 
+# TODO remove in favor of backing up on a per target basis, and using update_symlink.bash to backup
 # NB -u: update if newer, --backup=t: number the backups
 .PHONY: backup
 backup:               ## backup dotfiles
@@ -322,7 +315,7 @@ backup:               ## backup dotfiles
 .PHONY: functions
 functions:            ## bash helper functions
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/bash-functions,~/.config/functions)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bash-functions ~/.config/functions
 	@$(call source_file,$(BASHRC),CUSTOM_FUNCTIONS,~/.config/functions)
 	@$(call comment_line,$(BASHRC),CUSTOM_FUNCTIONS,$(INSTALL_RC))
 
@@ -331,7 +324,7 @@ functions:            ## bash helper functions
 aliases:              ## bash aliases
 	$(call log_info,updating $@...)
 	@# Ubuntu sourcs ~/.bash_aliases by default
-	$(call update_link,$(ROOT_DIR)/bash_aliases,~/.bash_aliases)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bash_aliases ~/.bash_aliases
 
 
 .PHONY: fzf
@@ -396,7 +389,7 @@ git_config:           ## sensible git (install LFS, add credential helper)
 	@# just need to call once after installing `git-lfs` from apt
 	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
-	$(call update_link,$(ROOT_DIR)/tigrc,$(HOME)/.tigrc)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/tigrc $(HOME)/.tigrc
 
 
 .PHONY: host_alias
@@ -410,7 +403,7 @@ host_alias:           ## set the nickname for this machine
 zathura:             ## zathura pdf reader config
 	$(call log_info,updating $@...)
 	$(call check_pkgs,"zathura")
-	$(call update_link,$(ROOT_DIR)/zathura,~/.config/zathura)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/zathura ~/.config/zathura
 
 
 .PHONY: neovim
@@ -421,13 +414,13 @@ neovim:              ## compile neovim
 	rm -rf $(NVIM)/build
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
-	$(call update_link,$(NVIM)/bin/nvim,$(BIN_DIR)/nvim)
+	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
 
 
 .PHONY: neovimrc
 neovimrc:            ## neovim config
 	$(call log_info,updating $@...)
-	$(call update_link,$(ROOT_DIR)/nvim,$(NVIM_RC))
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
 
 
 .PHONY: fonts

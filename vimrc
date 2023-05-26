@@ -236,6 +236,7 @@ autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType make setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
+autocmd FileType sh,bash setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 
 augroup debianlatexfix
