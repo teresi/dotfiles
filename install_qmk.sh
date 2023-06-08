@@ -1,15 +1,27 @@
 #!/usr/bin/env sh
 
-# WIP download / compile QMK
+# setup QMK for flashing custom keyboards
+
+# TODO need to handle both keychron and corne
+
+
+# writing to the MCU will (likely) require access to /dev/tty*
+# which is owned by root/tty, so add yourself to that
+set -ex
+groups $USER | grep -q 'tty' || sudo adduser &USER tty
+
+
 
 git clone git@github.com:teresi/qmk_firmware.git ~/qmk_firmware
 
 cd ~/qmk_firmware && git remote add upstream https://github.com/qmk/qmk_firmware.git
-cd ~/qmk_firmware && git remote add keychron https://github.com/Keychron/qmk_firmware.git
 
 qmk setup  # NOTE this is interactive!
 
 
+# KEYCHRON
+# uses it's own fork b/c it has bluetooth
+cd ~/qmk_firmware && git remote add keychron https://github.com/Keychron/qmk_firmware.git
 # use virtualenv but you'll need to install manually
 
 # keychron K8 pro
