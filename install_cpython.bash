@@ -67,6 +67,6 @@ fi
 
 notify "compiling..."
 make -C $_cpy_src clean
-cd $_cpy_src && ./configure --prefix="$_cpy_pre" --enable-optimizations --with-lto
+cd $_cpy_src && ./configure --prefix="$_cpy_pre" --enable-optimizations --with-lto --with-ensurepip=upgrade
 make -C $_cpy_src all -j
 make -C $_cpy_src altinstall -j
