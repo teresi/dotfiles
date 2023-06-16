@@ -55,6 +55,8 @@ NVIM := $(HOME)/neovim
 NVIM_URL := https://github.com/neovim/neovim.git
 NVIM_RC := $(HOME)/.config/nvim
 FONTS := $(HOME)/.local/share/fonts
+GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
+GOGH_THEMES := $(HOME)/Gogh
 
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -357,6 +359,7 @@ cinnamon:             ## cinnamon desktop
 gnome:                ## gnome desktop
 	$(call log_info,updating $@...)
 	bash -i $(ROOT_DIR)/kb_shortcuts_gnome.bash
+
 	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 	# switch windows instead of applications w/ alt-tab
@@ -375,6 +378,10 @@ gnome:                ## gnome desktop
 	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
 	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
 	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
+
+	$(call update_repo,$(GOGH_THEMES_URL),$(GOGH_THEMES))
+	TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
+
 
 
 .PHONY: git_config
