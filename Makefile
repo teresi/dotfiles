@@ -258,6 +258,7 @@ bashprofile:          ## non-login shell config
 .PHONY: alacritty.yml
 alacritty.yml: |      ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
+	@mkdir -p $(ALACRITTY_CFG_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/alacritty $(ALACRITTY_CFG_DIR)
 
 
