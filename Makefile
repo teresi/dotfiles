@@ -417,6 +417,7 @@ neovim:              ## compile neovim
 	rm -rf $(NVIM)/build
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
+	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
 
 

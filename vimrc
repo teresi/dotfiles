@@ -213,6 +213,18 @@ autocmd BufEnter *.tex set conceallevel=0
 autocmd BufEnter *.md set conceallevel=0
 autocmd BufEnter *.json set conceallevel=0
 
+" indent line sometimes gets stuck as disabled
+" so enable it explicitly when we enter a window
+" you can use 'IndenLinesDisable' to turn off on 'WinLeave'
+:augroup linetoggle
+:  autocmd!
+:  autocmd WinEnter * :IndentLinesReset
+:  autocmd WinLeave * :IndentLinesDisable
+:augroup END
+
+" cycle w/ different 'character' per indent level, utf-8 only!
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
 autocmd FileType nerdtree setlocal relativenumber
