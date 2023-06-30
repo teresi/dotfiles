@@ -204,14 +204,24 @@ let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for
 "	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
 "augroup END
 
-" don't hide unicode / escape char
-let g:conceallevel = 0
 
 " indent line can reset conceallevel on load, so set explicitly
 "let g:indentLine_fileTypeExclude = ['tex', 'cls']  " optionally exclude it
 autocmd BufEnter *.tex set conceallevel=0
 autocmd BufEnter *.md set conceallevel=0
 autocmd BufEnter *.json set conceallevel=0
+
+
+" don't hide unicode / escape char
+" the unicode interferes with navigation and hides the actual code
+" some plugins (e.g. indent line) update this at runtime, so update at runtime
+let g:conceallevel = 0
+:augroup linetoggle
+:  autocmd!
+:  autocmd WinEnter,BufEnter * set conceallevel=0
+:  autocmd WinLeave,BufLeave * set conceallevel=0
+:augroup END
+
 
 " indent line sometimes gets stuck as disabled
 " so enable it explicitly when we enter a window
@@ -222,8 +232,10 @@ autocmd BufEnter *.json set conceallevel=0
 :  autocmd WinLeave * :IndentLinesDisable
 :augroup END
 
+
 " cycle w/ different 'character' per indent level, utf-8 only!
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
 
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
@@ -244,6 +256,7 @@ set hidden                       " allow buffer switch w/o save
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " LANGUAGES
 
+set tabstop=4
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
