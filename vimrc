@@ -204,38 +204,13 @@ let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for
 "	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
 "augroup END
 
-
-" indent line can reset conceallevel on load, so set explicitly
-"let g:indentLine_fileTypeExclude = ['tex', 'cls']  " optionally exclude it
-autocmd BufEnter *.tex set conceallevel=0
-autocmd BufEnter *.md set conceallevel=0
-autocmd BufEnter *.json set conceallevel=0
-
-
-" don't hide unicode / escape char
-" the unicode interferes with navigation and hides the actual code
-" some plugins (e.g. indent line) update this at runtime, so update at runtime
-let g:conceallevel = 0
-:augroup linetoggle
-:  autocmd!
-:  autocmd WinEnter,BufEnter * set conceallevel=0
-:  autocmd WinLeave,BufLeave * set conceallevel=0
-:augroup END
-
-
-" indent line sometimes gets stuck as disabled
-" so enable it explicitly when we enter a window
-" you can use 'IndenLinesDisable' to turn off on 'WinLeave'
-:augroup linetoggle
-:  autocmd!
-:  autocmd WinEnter * :IndentLinesReset
-:  autocmd WinLeave * :IndentLinesDisable
-:augroup END
-
-
-" cycle w/ different 'character' per indent level, utf-8 only!
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-
+" Yggdroot indentLine, display indentation level
+"let g:indentLine_fileTypeExclude = ['tex', 'cls']
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']  " utf-8 only, cycle different 'characters' per tab stop
+let g:conceallevel = 0  " conceallevel=1 causes issues b/c actual code is replaced with unicode 'characters'
+let g:indentLine_conceallevel=0  " disable for indentline b/c it turns it on at runtime
+" fix issue where indent line is turned off for some windows
+autocmd VimEnter,WinEnter,BufNewFile,BufRead,BufEnter,TabEnter * IndentLinesReset
 
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
