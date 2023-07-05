@@ -27,12 +27,12 @@ source_venvwrapper ()
 
 
 append_to_path() {
-    # append $1 to PATH if it is *not* already in the PATH
+		# append $1 to PATH if it is *not* already in the PATH
 		# SEE https://superuser.com/questions/39751/add-directory-to-path-if-its-not-already-there
 
-    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-        PATH+=:"$1"
-    fi
+	if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+		PATH+=:"$1"
+	fi
 }
 
 

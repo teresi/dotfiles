@@ -122,6 +122,16 @@ notify "installing alacritty to $INSTALL_DIR..."
 mkdir -p "$INSTALL_DIR"
 cp target/release/alacritty "$INSTALL_DIR"
 
+if [ -d "$INSTALL_DIR" ] && [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
+	warn "alacritty install dir is NOT in the PATH!"
+	notify "    INSTALL_DIR=$INSTALL_DIR"
+	notify "exporting for this session..."
+	export PATH+=:"$INSTALL_DIR"
+	notify "adding to bashrc..."
+	echo "export PATH+=:$INSTALL_DIR" >> "$HOME"/.bashrc
+fi
+
+
 # TODO add extras if a sudo flag is set
 # TODO install desktop entry
 #sudo cp target/release/alacritty /usr/local/bin # or anywhere else in $PATH

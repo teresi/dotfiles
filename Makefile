@@ -160,12 +160,11 @@ all:                  ## install programs and configs
 	$(MAKE) -ik fzf
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
-	$(MAKE) -ik fonts
 	$(MAKE) -ik exa
-	$(MAKE) -ik rust
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
-	$(MAKE) -ik alacritty
+	$(MAKE) -ik rust
+	$(MAKE) -ik alacritty  # includes fonts
 
 
 .PHONY: depends
@@ -267,6 +266,7 @@ alacritty:            ## compile alacritty terminal
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/install_alacritty.sh || echo -e "\e[91mERROR\t install failed; remember to close all Alacritty instances first \e[39m"
 	$(MAKE) -ik alacritty.yml
+	$(MAKE) -ik fonts
 
 
 # TODO install pip w/o apt (python3-pip)
