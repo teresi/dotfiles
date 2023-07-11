@@ -152,6 +152,7 @@ help:                 ## usage
 # NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
 all:                  ## install programs and configs
+	$(MAKE) -ik pip
 	$(MAKE) -ik vim
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
@@ -455,9 +456,16 @@ $(CARGO_INSTALL_ROOT)/bin/exa:
 	cargo install exa
 
 
+.PHONY: pip
+pip:                    ## install pip
+	$(call log_info,checking for $@...)
+	@#NOTE `ensurepip` is disabled in ubuntu so use get-pip
+	@which pip || { wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py --user; }
+
+
 .PHONY: cpython
 cpython:                ## compile cpython
-	$(call log_info,updating $@...)
+	$(call log_info,compiling $@...)
 	@$(ROOT_DIR)/install_cpython.bash
 
 
