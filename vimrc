@@ -204,13 +204,18 @@ let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for
 "	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
 "augroup END
 
-" Yggdroot indentLine, display indentation level
-"let g:indentLine_fileTypeExclude = ['tex', 'cls']
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']  " utf-8 only, cycle different 'characters' per tab stop
-let g:conceallevel = 0  " conceallevel=1 causes issues b/c actual code is replaced with unicode 'characters'
-let g:indentLine_conceallevel=0  " disable for indentline b/c it turns it on at runtime
-" fix issue where indent line is turned off for some windows
-autocmd VimEnter,WinEnter,BufNewFile,BufRead,BufEnter,TabEnter * IndentLinesReset
+" Yggdroot indentline, display indentation
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']  " cycle w/ different 'character' per indent level, utf-8 only!
+let g:conceallevel = 1                             " turn on conceal so the indentation displays
+let g:indentLine_conceallevel = 1                  " default conceal so it displays the indents
+
+" Yggdroot indentline, disable for filetypes that should not have the code concealed
+let g:indentLine_fileTypeExclude = ['tex', 'cls', 'md', 'json']
+autocmd BufEnter *.tex set conceallevel=0
+autocmd BufEnter *.cls set conceallevel=0
+autocmd BufEnter *.md set conceallevel=0
+autocmd BufEnter *.json set conceallevel=0
+
 
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
