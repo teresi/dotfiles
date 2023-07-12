@@ -10,7 +10,7 @@
 # using `mv` instead of `cp --backup` b/c the latter was nesting backups on repeated calls
 # using `mv` instead of `cp` b/c we don't want the original there when linking
 
-if [ ! -L ${2} ]
+if [ -e ${2} ] &&  [ ! -L ${2} ]
 then
 	mv ${2%/} ${2%/}.bak
 fi
