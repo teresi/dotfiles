@@ -256,10 +256,12 @@ bashprofile:          ## non-login shell config
 
 
 .PHONY: alacritty.yml
-alacritty.yml: |      ## configuration for alacritty terminal
+alacritty.yml:        ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
 	@mkdir -p $(ALACRITTY_CFG_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/alacritty $(ALACRITTY_CFG_DIR)
+	@mkdir -p $(BIN_DIR)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/fullscreen $(BIN_DIR)/fullscreen
 
 
 .PHONY: alacritty
@@ -268,13 +270,13 @@ alacritty:            ## compile alacritty terminal
 	@$(ROOT_DIR)/install_alacritty.sh || echo -e "\e[91mERROR\t install failed; remember to close all Alacritty instances first \e[39m"
 	$(MAKE) -ik alacritty.yml
 	$(MAKE) -ik fonts
+	$(call check_pkgs,wmctrl xdotool)
 
 
 # TODO install pip w/o apt (python3-pip)
 .PHONY: virtualenvwrapper
-virtualenvwrapper:    ## python virtual environments (virtualenvwrapper)
+virtualenvwrapper: pip   ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
-	$(call check_pkgs,"python3-pip")
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/python_venv ~/.config/python_venv
 	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
@@ -289,7 +291,7 @@ conda:                ## miniconda python distribution & package manager
 .PHONY: ranger
 ranger:               ## ranger configuration
 	$(call log_info,updating $@...)
-	$(call check_pkgs,"ranger")
+	$(call check_pkgs,ranger)
 	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
 	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
 	-sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
@@ -389,7 +391,7 @@ gnome:                ## gnome desktop
 .PHONY: git_config
 git_config:           ## sensible git (install LFS, add credential helper)
 	$(call log_info,updating $@...)
-	$(call check_pkgs,"git")
+	$(call check_pkgs,git)
 	@# just need to call once after installing `git-lfs` from apt
 	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper cache  # cache user/pass for 15 minutes
@@ -406,7 +408,7 @@ host_alias:           ## set the nickname for this machine
 .PHONY: zathura
 zathura:             ## zathura pdf reader config
 	$(call log_info,updating $@...)
-	$(call check_pkgs,"zathura")
+	$(call check_pkgs,zathura)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/zathura ~/.config/zathura
 
 
