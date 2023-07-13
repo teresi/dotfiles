@@ -278,7 +278,7 @@ alacritty:            ## compile alacritty terminal
 virtualenvwrapper: pip   ## python virtual environments (virtualenvwrapper)
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/python_venv ~/.config/python_venv
-	-bash -c "python3 -m pip install --user -U setuptools pip virtualenv virtualenvwrapper"
+	-bash -c "python3 -m pip install --user -UI setuptools pip virtualenv virtualenvwrapper"
 	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
 	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
 
