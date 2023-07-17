@@ -386,6 +386,7 @@ gnome:                ## gnome desktop
 	$(call update_repo,$(GOGH_THEMES_URL),$(GOGH_THEMES))
 	TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
 
+	@$(ROOT_DIR)/install_wintile.bash
 
 
 .PHONY: git_config
