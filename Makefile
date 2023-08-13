@@ -57,7 +57,7 @@ NVIM_RC := $(HOME)/.config/nvim
 FONTS := $(HOME)/.local/share/fonts
 GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
 GOGH_THEMES := $(HOME)/Gogh
-
+NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -476,3 +476,34 @@ cpython:                ## compile cpython
 rust:                   ## install rust compiler
 	$(call log_info,installing $@...)
 	@$(ROOT_DIR)/install_rust.sh
+
+
+.PHONY: nvm
+nvm:                    ## install Node Version Manager
+	$(call log_info,installing $@...)
+ifneq ($(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?),0)
+	@# (see https://github.com/nvm-sh/nvm)
+	@# uninstall via `rm -rf ~/.nvm`
+	@bash -l -c 'source ~/.bashrc && type -t nvm || \
+		{ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash; exit 0; }'
+else
+	@echo "nvm is already installed"
+endif
+
+
+.PHONY: npm
+npm: nvm                 ## install nvm and Node
+	$(call log_info,installing $@...)
+	@# uninstall via `rm -rf ~/.nvm`
+	@bash -l -c 'source ~/.bashrc && type -t npm 2>&1 >/dev/null && \
+		{ echo "node is already installed"; } || \
+		{ source ~/.nvm/nvm.sh && nvm install node; exit 0; }'
+
+
+.PHONY: mdpdf
+mdpdf: npm               ## install Markdown to PDF converter
+	$(call log_info,installing $@...)
+	@# see https://github.com/BlueHatbRit/mdpdf
+	@bash -l -c 'source ~/.bashrc && type -t mdpdf 2>&1 >/dev/null && \
+		{ echo "mdpdf is already installed"; } || \
+		{ source ~/.nvm/nvm.sh && npm install mdpdf -g; exit 0; }'
