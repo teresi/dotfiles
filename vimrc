@@ -63,7 +63,7 @@ Plugin 'vim-airline/vim-airline-themes'         " status bar colors
 
 " languages
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
-Plugin 'lervag/vimtex'                          " LaTeX syntax
+"Plugin 'lervag/vimtex'                          " LaTeX syntax
 Plugin 'rust-lang/rust.vim'                     " Rust basics: syntastic, :RustFmt, tagbar
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
@@ -266,6 +266,7 @@ augroup END
 
 " default LaTeX style
 let g:tex_flavor = 'latex'
+"let g:vimtex_view_general_viewer = 'zathura'
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
