@@ -161,7 +161,6 @@ all:                  ## install programs and configs
 	$(MAKE) -ik fzf
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
-	$(MAKE) -ik exa
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik rust
@@ -450,13 +449,6 @@ check_packages: SHELL:=/bin/sh
 check_packages:         ## warn if missing packages
 	$(call check_pkgs,$(DEPENDENCIES))
 	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
-
-
-exa: $(CARGO_INSTALL_ROOT)/bin/exa  ## improved `ls` command
-
-
-$(CARGO_INSTALL_ROOT)/bin/exa:
-	cargo install exa
 
 
 .PHONY: pip
