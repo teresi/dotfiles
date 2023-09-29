@@ -499,3 +499,12 @@ mdpdf: npm               ## install Markdown to PDF converter
 	@bash -l -c 'source ~/.bashrc && type -t mdpdf 2>&1 >/dev/null && \
 		{ echo "mdpdf is already installed"; } || \
 		{ source ~/.nvm/nvm.sh && npm install mdpdf -g; exit 0; }'
+
+
+.PHONY: pipx
+pipx:                    ## install pip extension 'pipx'
+	$(call log_info,installing $@...)
+	pip install --user --upgrade pipx
+	pipx ensurepath
+	pipx completions
+	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
