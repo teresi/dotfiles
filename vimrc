@@ -68,6 +68,7 @@ Plugin 'rust-lang/rust.vim'                     " Rust basics: syntastic, :RustF
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
+Plugin 'lambdalisue/vim-cython-syntax'          " cython highlighting
 Plugin 'elzr/vim-json'                          " json syntax highlighting
 Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
 Plugin '7erra/vim-sqf'                          " SQF syntax (Arma III)
