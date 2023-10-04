@@ -27,7 +27,7 @@ HOST_ALIAS ?= $(HOSTNAME)
 NO_SYMLINKS ?=
 export NO_SYMLINKS
 # use this branch when compiling cpython
-CPYTHON_VERSION ?= 3.11
+CPYTHON ?= 3.12
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -140,6 +140,8 @@ help:                 ## usage
 	@echo "    OPTIONS:"
 	@echo "        INSTALL_RC  (ON|OFF): un/install configuration/rc file (ON)"
 	@echo "        NO_SYMLINKS     (ON): copy configuration files instead of linking to this project"
+	@echo "        CPYTHON       ($(CPYTHON)): version of cpython to use"
+	@
 	@echo ""
 	@echo "    NOTE:"
 	@echo "        configurations are installed using symlinks"
@@ -461,7 +463,7 @@ pip:                    ## install pip
 .PHONY: cpython
 cpython:                ## compile cpython
 	$(call log_info,compiling $@...)
-	@$(ROOT_DIR)/install_cpython.bash
+	@$(ROOT_DIR)/install_cpython.bash -p $(CPYTHON)
 
 
 .PHONY: rust

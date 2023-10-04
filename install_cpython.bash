@@ -7,11 +7,10 @@
 
 _root_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $_root_dir/helpers.bash
-notify "compling cpython..."
 
 
 _dry_run=""
-_cpy_ver=3.11
+_cpy_ver=3.12
 _cpy_url=https://github.com/python/cpython.git
 _cpy_src="$HOME"/cpython
 _cpy_pre="$HOME"/.local
@@ -50,14 +49,16 @@ done
 
 
 notify "checking dependencies..."
+set -e
 are_packages_missing "${_cpy_dep[@]}"
 
-
-notify "updating cpython source..."
+notify "updating cpython to $_cpy_ver..."
+set -ex
 if [ ! -d $_cpy_src ]; then
-	git clone $_cpy_url $_cpy_src --branch $_cpy_ver --single-branch
+	git clone $_cpy_url $_cpy_src
 fi
-cd $_cpy_src && git fetch && git checkout $_cpy_ver && git reset --hard origin/$_cpy_ver
+cd $_cpy_src && git fetch && git checkout $_cpy_ver && git reset --hard origin/$_cpy_ver \
+	|| (error "could not checkout $_cpy_ver at $_cpy_src!" && error "please fix or delete your repo" && false)
 
 
 if [ -n "$_dry_run" ]; then
@@ -65,8 +66,12 @@ if [ -n "$_dry_run" ]; then
 	exit 0
 fi
 
-notify "compiling..."
-make -C $_cpy_src clean
+notify "clean..."
+# make clean may fail if not yet configured, this is ok
+make -C $_cpy_src clean || true
+notify "configure..."
 cd $_cpy_src && ./configure --prefix="$_cpy_pre" --enable-optimizations --with-lto --with-ensurepip=upgrade
+notify "compile..."
 make -C $_cpy_src all -j
+notify "install..."
 make -C $_cpy_src altinstall -j

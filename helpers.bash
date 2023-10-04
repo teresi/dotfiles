@@ -64,8 +64,8 @@ are_packages_missing () {
 		return 0
 	fi
 
-	warn "you are missing packages!"
-	warn "please install:"
+	error "you are missing packages!"
+	error "please install:"
 	echo ""
 	echo "  ${_missing[@]}"
 	echo ""
