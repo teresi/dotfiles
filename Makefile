@@ -15,6 +15,7 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 DEPENDENCIES := vim tmux python3-pip ranger curl htop ripgrep
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
 
 # OPTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -155,6 +156,7 @@ help:                 ## usage
 .PHONY: all
 all:                  ## install programs and configs
 	$(MAKE) -ik pip
+	$(MAKE) -ik pipx
 	$(MAKE) -ik vim
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
@@ -510,3 +512,9 @@ pipx:                    ## install pip extension 'pipx'
 	pipx ensurepath
 	pipx completions
 	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
+
+
+.PHONY: zephyr
+zephyr:                  ## zephyr RTOS SDK
+	$(call log_info,installing $@...)
+	@$(ROOT_DIR)/install_zephyr.bash
