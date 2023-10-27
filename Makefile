@@ -245,6 +245,7 @@ inputrc:              ## add command line config
 bashrc:               ## login shell config
 	$(call log_info,updating $@...)
 	@sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
+	@mkdir -p ~/.config
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bashrc ~/.config/bashrc
 	$(call source_file,$(BASHRC),CUSTOM_BASHRC,~/.config/bashrc)
 	$(call comment_line,$(BASHRC),CUSTOM_BASHRC,$(INSTALL_RC))
