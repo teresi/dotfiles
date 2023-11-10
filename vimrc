@@ -192,18 +192,19 @@ set tw=0            " do not automatically break lines at certain length
 :augroup END
 
 " highlight column limit on active window
-highlight ColorColumn ctermbg=DarkBlue
+highlight ColorColumn ctermbg=White
 let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for per project setting
-"function! HighlightColumn( LIMIT )
-"	let l:expr = '\%' . a:LIMIT . 'v.'
-"	call matchadd('ColorColumn', l:expr, 100)
-"endfunc
-"augroup column_highlighting
-"	autocmd!
-"	let ft_to_ignore = ['floggraph']
-"	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
-"	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
-"augroup END
+function! HighlightColumn( LIMIT )
+	let l:expr = '\%' . a:LIMIT . 'v.'
+	call matchadd('ColorColumn', l:expr, 100)
+endfunc
+augroup column_highlighting
+	autocmd!
+	let ft_to_ignore = ['floggraph']
+	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
+	autocmd BufEnter,WinEnter,FocusGained * IndentLinesEnable
+	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
+augroup END
 
 " Yggdroot indentline, display indentation
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']  " cycle w/ different 'character' per indent level, utf-8 only!
