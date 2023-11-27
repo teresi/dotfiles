@@ -239,7 +239,7 @@ set hidden                       " allow buffer switch w/o save
 " LANGUAGES
 
 set tabstop=4
-autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4
+autocmd Filetype python,cython setlocal expandtab tabstop=4 shiftwidth=4
 autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
 autocmd FileType make setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
