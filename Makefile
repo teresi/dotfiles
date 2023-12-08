@@ -155,6 +155,7 @@ help:                 ## usage
 # NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
 all:                  ## install programs and configs
+	$(MAKE) -ik gnu_make
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
 	$(MAKE) -ik vim
@@ -504,6 +505,12 @@ mdpdf: npm               ## install Markdown to PDF converter
 	@bash -l -c 'source ~/.bashrc && type -t mdpdf 2>&1 >/dev/null && \
 		{ echo "mdpdf is already installed"; } || \
 		{ source ~/.nvm/nvm.sh && npm install mdpdf -g; exit 0; }'
+
+
+.PHONY: gnu_make
+gnu_make:                ## install make
+	$(call log_info,installing $@...)
+	@$(ROOT_DIR)/install_make.bash
 
 
 .PHONY: pipx
