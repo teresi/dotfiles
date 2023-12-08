@@ -206,6 +206,7 @@ vim_plugins: | vundle ## download vim plugins
 .PHONY: tmux
 tmux:                 ## add tmux config and plugins
 	$(call check_pkgs,tmux)
+	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
 	$(MAKE) -ik tmux_plugins
 
@@ -217,7 +218,7 @@ tmux.conf:            ## add tmux config file
 
 
 .PHONY: tmux_plugins
-tmux_plugins: | tpm   ## download tmux plugins
+tmux_plugins:         ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
 	python3 -m pip install --user psutil  # for tmux cpu info
