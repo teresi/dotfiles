@@ -425,6 +425,8 @@ neovim:              ## compile neovim
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	@# TODO check for dependencies:  ninja-build gettext libtool-bin cmake g++ pkg-config unzip curl
 	rm -rf $(NVIM)/build
+	make -C $(NVIM) clean
+	make -C $(NVIM) distclean
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
 	@mkdir -p $(BIN_DIR)
