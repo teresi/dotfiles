@@ -8,7 +8,6 @@ require("user.color-cfg")
 
 
 
-
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -137,14 +136,7 @@ require('lazy').setup({
   },
 
   { -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {
-      char = '¦',
-      show_trailing_blankline_indent = false,
-      show_current_context = true,
-    },
+    "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}
   },
 
   -- "gc" to comment visual regions/lines
@@ -522,6 +514,9 @@ require'nvim-tree'.setup {}
 -- relative numbers
 --vim.cmd([[highlight LineNr guibg=black]])
 --vim.cmd([[highlight CursorLineNr guifg=yellow]])
+vim.wo.number = true
+vim.wo.relativenumber = true
+
 
 -- barbar
 --vim.cmd([[highlight BufferCurrent guibg=green]])
@@ -563,6 +558,7 @@ require("bufferline").setup({
 })
 
 
+
 -- [[ Configure hlargs ]]
 -- highlight argument definitions
 -- https://github.com/m-demare/hlargs.nvim
@@ -587,3 +583,6 @@ require("nvim-semantic-tokens").setup {
   highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
 }
 
+require("ibl").setup {
+    indent = { char = "¦" },
+}
