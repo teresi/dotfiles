@@ -12,7 +12,6 @@ return {
       options = {
         theme = custom_onedark,
         icons_enabled = false,
-        theme = 'gruvbox',
         component_separators = '|',
         section_separators = '',
       },

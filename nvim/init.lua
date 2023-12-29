@@ -26,6 +26,19 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup("plugins")
 
+
+-- append $PWD to path on startup
+-- fix for issue where `:find` can't find files in $PWD
+local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = group_cdpwd,
+  pattern = "*",
+  callback = function()
+    vim.opt.path:append '**'
+  end,
+})
+
+
 --  {
 --    "nvim-neo-tree/neo-tree.nvim",
 --    dependencies = {
