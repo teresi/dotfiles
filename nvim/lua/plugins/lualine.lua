@@ -14,6 +14,10 @@ return {
         icons_enabled = false,
         component_separators = '|',
         section_separators = '',
+        disabled_filetypes = {
+          'packer',
+          'neo-tree',
+        },
       },
       sections = {
         lualine_x = {'filetype'},

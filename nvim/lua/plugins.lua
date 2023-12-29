@@ -5,13 +5,6 @@ return {
   {'rbgrouleff/bclose.vim'},
   -- Detect tabstop and shiftwidth automatically
   {'tpope/vim-sleuth'},
-  {
-      'nvim-tree/nvim-tree.lua',
-      lazy = true,
-      dependencies = {
-          'nvim-tree/nvim-web-devicons',
-      },
-  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -84,11 +77,6 @@ return {
   },
 
   {
-    'akinsho/bufferline.nvim',
-    version = "v3.*",
-  },
-
-  {
     'm-demare/hlargs.nvim',
   },
 
@@ -100,28 +88,7 @@ return {
     'sheerun/vim-polyglot'
   },
 
---  {'romgrk/barbar.nvim',
---    dependencies = 'nvim-tree/nvim-web-devicons',
---    opts = {
---      animation = false,
---      highlight_alternate = false,
---      icons = {
---        buffer_index = true,
---        filetype = {
---          enabled = false,
---          custom_colors = true,
---        },
---      },
---    },
---    version = '^1.0.0', -- optional: only update when a new 1.x version is released
---  },
---  {
---  'nvim-telescope/telescope.nvim', tag = '0.1.1',
---    dependencies = { 'nvim-lua/plenary.nvim' }
---  },
-
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
-
 }
 

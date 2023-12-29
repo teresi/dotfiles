@@ -50,4 +50,4 @@ Map("n", "<leader>rn", ":lua vim.lsp.buf.rename()<CR>")
 Map("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
 
 -- file tree
-Map('n', "<F2>", "<cmd>NvimTreeToggle<cr>")
+Map('n', "<F2>", "<cmd>Neotree toggle<CR>")

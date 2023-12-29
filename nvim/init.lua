@@ -4,13 +4,9 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.g.polyglot_disabled = { "autoindent", "sensible" }
 
-
 require("user.options")
 
 
--- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -54,9 +50,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 
 require("user.keymaps")
-require("user.nvim-tree-config")
+--require("user.nvim-tree-config")
 require("user.whichkey")
---require("user.bufferline")
 
 
 
@@ -112,16 +107,20 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
-	  'c', 'cpp', 'cmake',
-	  'gitattributes', 'gitcommit',
-	  'latex', 'lua', 'bibtex',
-	  'python',
-	  'rust',
-    'bash', 'make',
-    'markdown',
-	  'dockerfile',
-    'json', 'toml', 'yaml',
-	  'vim' },
+    'vim', 'vimdoc', 'lua',
+    'gitattributes', 'gitcommit', 'git_config', 'git_rebase', 'gitignore',
+    'bash',
+    'python',
+    'rust',
+    'c', 'cpp',
+    'make', 'cmake', 'meson', 'ninja',
+    'cuda',
+    'latex', 'bibtex',
+    'ssh_config',
+    'dockerfile',
+    'proto', 'regex',
+    'markdown', 'json', 'toml', 'yaml',
+  },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -336,10 +335,6 @@ mason_lspconfig.setup_handlers {
 
 
 -- settings to call after loading plugins
-
--- make the nvim tree commands available
-require'nvim-tree'.setup {}
-
 
 
 -- barbar
