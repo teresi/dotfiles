@@ -3,10 +3,17 @@
 
 -- SEE  https://github.com/LunarVim/nvim-basic-ide/blob/master/lua/options.lua
 
+vim.opt.termguicolors = true
 
-vim.opt.number = number          -- show line numbers
+vim.g.mapleader = ' '            -- <space> as leader key (set before lazy)
+vim.g.maplocalleader = ' '       -- <space> as leader key (set before lazy)
+
+vim.opt.number = true            -- show line numbers
 vim.opt.relativenumber = true    -- show line number relative to current line
 vim.opt.cursorline = true        -- highlight current line
+--vim.cmd([[highlight LineNr guibg=black]])
+--vim.cmd([[highlight CursorLineNr guifg=yellow]])
+
 
 
 vim.opt.titlestring = [[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr('$')})]]

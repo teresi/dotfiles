@@ -6,10 +6,6 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
--- set <space> as the leader key
--- see `:help mapleader`
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
 
 -- faster movement between windows
 Map("n", "<C-h>", "<C-w>h")

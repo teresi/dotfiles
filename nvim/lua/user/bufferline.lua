@@ -10,7 +10,8 @@ bufferline.setup({
         style = 'none',
     },
     color_icons = false,
-    modified_icon = "●",
+    --modified_icon = "●",
+    modified_icon = "+",
     buffer_close_icon = "",
     close_icon = "",
     left_trunc_marker = "",
@@ -18,7 +19,7 @@ bufferline.setup({
     numbers = none,
     max_name_length = 15,
     max_prefix_length = 6,
-    tab_size = 16,
+    tab_size = 12,
     diagnostics = "nvim_lsp",
     show_buffer_icons = false,
     show_buffer_close_icons = false,
@@ -31,10 +32,22 @@ bufferline.setup({
     end,
     },
     highlights = {
-            buffer_visible = {
-                fg = 'black',
-                bg = 'green',
-            },
-    },
+        fill = {
+            fg = '#100e23',
+            bg = '#1C1B1A'
+        },
+        buffer_selected = {
+            fg = '#100e23',
+            bg = '#87D787'
+        },
+        modified_selected = {
+            fg = '#100e23',
+            bg = '#00AFFF'
+        },
+        modified_visible = {
+            fg = '#100e23',
+            bg = '#00AFFF'
+        },
+    }
 })
 

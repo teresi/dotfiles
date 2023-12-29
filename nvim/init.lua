@@ -1,19 +1,11 @@
-require("user.keymaps")
-require("user.options")
-require("user.nvim-tree-config")
-require("user.whichkey")
-require("user.color-cfg")
-
-
-
-
-
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- 
 vim.g.polyglot_disabled = { "autoindent", "sensible" }
+
+
+require("user.options")
 
 
 -- Install package manager
@@ -21,39 +13,19 @@ vim.g.polyglot_disabled = { "autoindent", "sensible" }
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+  vim.fn.system({
     'git',
     'clone',
     '--filter=blob:none',
     'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
+    '--branch=stable',
     lazypath,
-  }
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
+require('lazy').setup("plugins")
 
-
-require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
-
-  -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
-
-  -- Close using :Bclose or <leader>bd
-  'rbgrouleff/bclose.vim',
-
-  -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
-
-  {
-      'nvim-tree/nvim-tree.lua',
-      lazy = true,
-      dependencies = {
-          'nvim-tree/nvim-web-devicons',
-      },
-  },
 --  {
 --    "nvim-neo-tree/neo-tree.nvim",
 --    dependencies = {
@@ -67,148 +39,13 @@ require('lazy').setup({
 --      end,
 --  },
 
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
-  { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
 
-      -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
-
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
-    },
-  },
-
-  { -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
-  },
-
-  -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
-  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
+require("user.keymaps")
+require("user.nvim-tree-config")
+require("user.whichkey")
+--require("user.bufferline")
 
 
-  {
-    'petobens/colorish',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'heraldish'
-      vim.cmd.highlight 'cursorline guibg=#000000'
-      vim.cmd.highlight 'LineNR guibg=#000000'
-      vim.cmd.highlight 'CursorLineNr guifg=yellow'
-      vim.cmd.hi        'Comment ctermfg=243 guifg=#626262'
-    end,
-  },
-  {
-    "norcalli/nvim-colorizer.lua",
-  },
-
-  { -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'gruvbox',
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
-  },
-
-  { -- Add indentation guides even on blank lines
-    "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}
-  },
-
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-
-  -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', version = '*', dependencies = { 'nvim-lua/plenary.nvim' } },
-
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-  -- Only load if `make` is available. Make sure you have the system
-  -- requirements installed.
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'make',
-    cond = function()
-      return vim.fn.executable 'make' == 1
-    end,
-  },
-
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-    },
-    config = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
-    end,
-  },
-
-  {
-    'akinsho/bufferline.nvim',
-    version = "v3.*",
-  },
-
-  {
-    'm-demare/hlargs.nvim',
-  },
-
-  {
-    'theHamsta/nvim-semantic-tokens',
-  },
-
-  {
-    'sheerun/vim-polyglot'
-  },
-
---  {'romgrk/barbar.nvim',
---    dependencies = 'nvim-tree/nvim-web-devicons',
---    opts = {
---      animation = false,
---      highlight_alternate = false,
---      icons = {
---        buffer_index = true,
---        filetype = {
---          enabled = false,
---          custom_colors = true,
---        },
---      },
---    },
---    version = '^1.0.0', -- optional: only update when a new 1.x version is released
---  },
---  {
---  'nvim-telescope/telescope.nvim', tag = '0.1.1',
---    dependencies = { 'nvim-lua/plenary.nvim' }
---  },
-
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
-
-}, {})
 
 
 -- [[ Highlight on yank ]]
@@ -413,8 +250,8 @@ require'colorizer'.setup()
 require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+--local capabilities = vim.lsp.protocol.make_client_capabilities()
+--capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Setup mason so it can manage external tooling
 require('mason').setup()
@@ -437,71 +274,52 @@ mason_lspconfig.setup_handlers {
 }
 
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+--local cmp = require 'cmp'
+--local luasnip = require 'luasnip'
+--luasnip.config.setup {}
 
-luasnip.config.setup {}
-
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Down>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<Up>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-}
+--cmp.setup {
+--  snippet = {
+--    expand = function(args)
+--      luasnip.lsp_expand(args.body)
+--    end,
+--  },
+--  mapping = cmp.mapping.preset.insert {
+--    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+--    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--    ['<C-Space>'] = cmp.mapping.complete {},
+--    ['<CR>'] = cmp.mapping.confirm {
+--      behavior = cmp.ConfirmBehavior.Replace,
+--      select = true,
+--    },
+--    ['<Down>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_next_item()
+--      elseif luasnip.expand_or_jumpable() then
+--        luasnip.expand_or_jump()
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
+--    ['<Up>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_prev_item()
+--      elseif luasnip.jumpable(-1) then
+--        luasnip.jump(-1)
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
+--  },
+--  sources = {
+--    { name = 'nvim_lsp' },
+--    { name = 'luasnip' },
+--  },
+--}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
-
-local custom_onedark = require'lualine.themes.onedark'
-custom_onedark.normal.c.bg = '#1C1B1A'
-custom_onedark.normal.a.bg = '#87D787'
-custom_onedark.insert.a.bg = '#00AFFF'
-custom_onedark.visual.a.bg = '#D75FD7'
-
-require('lualine').setup {
-  options = {
-    theme = custom_onedark,
-  },
-  sections = {
-    lualine_x = {'filetype'},
-  },
-  inactive_sections = {
-    lualine_x = {'encoding', 'fileformat'},
-  },
-}
 
 
 -- settings to call after loading plugins
@@ -511,51 +329,12 @@ require'nvim-tree'.setup {}
 
 
 
--- relative numbers
---vim.cmd([[highlight LineNr guibg=black]])
---vim.cmd([[highlight CursorLineNr guifg=yellow]])
-vim.wo.number = true
-vim.wo.relativenumber = true
-
-
 -- barbar
 --vim.cmd([[highlight BufferCurrent guibg=green]])
 --vim.cmd([[highlight BufferCurrentIcon guibg=green]])
 
 
 
--- [[ Configure Bufferline ]]
---require("user.bufferline_cfg")
-require("bufferline").setup({
-    options ={
-        modified_icon = '+',
-        show_buffer_icons = false,
-        show_buffer_close_icons = false,
-        tab_size = 12,
-        indicator = {
-            icon = '▎', -- this should be omitted if indicator style is not 'icon'
-            style = 'icon',
-        },
-    },
-    highlights = {
-        fill = {
-            fg = '#100e23',
-            bg = '#1C1B1A'
-        },
-        buffer_selected = {
-            fg = '#100e23',
-            bg = '#87D787'
-        },
-        modified_selected = {
-            fg = '#100e23',
-            bg = '#00AFFF'
-        },
-        modified_visible = {
-            fg = '#100e23',
-            bg = '#00AFFF'
-        },
-    }
-})
 
 
 
@@ -583,6 +362,3 @@ require("nvim-semantic-tokens").setup {
   highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
 }
 
-require("ibl").setup {
-    indent = { char = "¦" },
-}
