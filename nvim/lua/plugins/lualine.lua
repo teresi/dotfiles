@@ -12,6 +12,7 @@ return {
       options = {
         theme = custom_onedark,
         icons_enabled = false,
+        padding = 1,
         component_separators = '|',
         section_separators = '',
         disabled_filetypes = {
@@ -20,7 +21,17 @@ return {
         },
       },
       sections = {
+        lualine_a = {'mode'},
+        lualine_b = {},
+        lualine_c = {
+          {
+            'filename',
+            color = { fg = '#87D787' },
+          }
+        },
         lualine_x = {'filetype'},
+        lualine_y = {'diff', 'diagnostics'},
+        lualine_z = {'progress', 'location'},
       },
       inactive_sections = {
         lualine_x = {'encoding', 'fileformat'},
