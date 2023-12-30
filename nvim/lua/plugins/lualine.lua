@@ -1,5 +1,6 @@
--- Set lualine as statusline
--- See `:help lualine.txt`
+-- SEE the nvim port 'heraldish' from petobens/colorish
+--     the colors here are from the original herald, and heraldish
+--     the colors are also from older vim airline themes
 return {
   'nvim-lualine/lualine.nvim',
   config = function()

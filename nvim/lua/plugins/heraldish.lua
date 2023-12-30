@@ -1,5 +1,8 @@
+-- NOTE petobens/colorish uses #1C1B1A as 'gray' backgroud
+--      _but_ herald uses #1C1C1C
 return {
   'petobens/colorish',
+
   priority = 1000,
   config = function()
     vim.cmd.colorscheme 'heraldish'

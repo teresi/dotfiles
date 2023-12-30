@@ -16,6 +16,20 @@ vim.opt.ignorecase = true          -- ignorecase when searching
 vim.opt.smartcase = true           -- override ignorecase if pattern has uppercase
 vim.opt.signcolumn = 'yes'         -- show lint/debug signs on left hand side
 vim.opt.titlestring = [[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr('$')})]]
+vim.opt.fillchars = {              -- window separators
+    horiz = '─',
+    horizup = '┴',
+    horizdown = '┬',
+    vert = '|',
+    vertleft = '┤',
+    vertright = '├',
+    verthoriz = '┼',
+}
+vim.api.nvim_set_hl(               -- window separator color
+    0,
+    'WinSeparator',
+    { fg = '#FFFF5F'}
+)
 
 
 -- [[ tabs vs spaces ]]
