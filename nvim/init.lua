@@ -1,12 +1,26 @@
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+--     s                                          .x+=:.      .
+--    :8                                         z`    ^%    @88>
+--   .88                  .u    .                   .   <k   %8P
+--  :888ooo      .u     .d88B :@8c       .u       .@8Ned8"    .
+---*8888888   ud8888.  ="8888f8888r   ud8888.   .@^%8888"   .@88u
+--  8888    :888'8888.   4888>'88"  :888'8888. x88:  `)8b. ''888E`
+--  8888    d888 '88%"   4888> '    d888 '88%" 8888N=*8888   888E
+--  8888    8888.+"      4888>      8888.+"     %8"    R88   888E
+-- .8888Lu= 8888L       .d888L .+   8888L        @8Wou 9%    888E
+-- ^%888*   '8888c. .+  ^"8888*"    '8888c. .+ .888888P`     888&
+--   'Y"     '88888%       'Y'       '88888%   `   ^"F       R888"
+--             'YP'                    'YP'                   ''
 
-vim.g.polyglot_disabled = { "autoindent", "sensible" }
 
-require("user.options")
+vim.g.loaded_netrw = 1             -- NB disable netrw at start of init.lua
+vim.g.loaded_netrwPlugin = 1       -- NB disable netrw at start of init.lua
+
+require("user.options")            -- my settings
+require("user.keymaps")            -- my mappings
 
 
+-- [[ lazy package manager ]]
+-- installs plugins at: plugins.lua, plugins/*.lua
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -20,11 +34,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup("plugins")  -- initialize plugins
-require("user.keymaps")           -- custom mappings
+require('lazy').setup("plugins")   -- initialize plugins
 
 
--- append $PWD to path on startup
+-- [[ append $PWD to path on startup ]]
 -- fix for issue where `:find` can't find files in $PWD
 local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })
 vim.api.nvim_create_autocmd("VimEnter", {
@@ -34,6 +47,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.opt.path:append '**'
   end,
 })
+
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -47,82 +61,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
-
--- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
-
----- LSP settings.
-----  This function gets run when an LSP connects to a particular buffer.
---local on_attach = function(_, bufnr)
---  -- NOTE: Remember that lua is a real programming language, and as such it is possible
---  -- to define small helper and utility functions so you don't have to repeat yourself
---  -- many times.
---  --
---  -- In this case, we create a function that lets us more easily define mappings specific
---  -- for LSP related items. It sets the mode, buffer and description for us each time.
---  local nmap = function(keys, func, desc)
---    if desc then
---      desc = 'LSP: ' .. desc
---    end
---
---    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
---  end
---
---  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
---  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
---
---  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
---  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
---  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
---  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
---  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
---  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
---
---  -- See `:help K` for why this keymap
---  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
---  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
---
---  -- Lesser used LSP functionality
---  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
---  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
---  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
---  nmap('<leader>wl', function()
---    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
---  end, '[W]orkspace [L]ist Folders')
---
---  -- Create a command `:Format` local to the LSP buffer
---  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
---    vim.lsp.buf.format()
---  end, { desc = 'Format current buffer with LSP' })
---end
---
----- Enable the following language servers
-----  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-----
-----  Add any additional override configuration in the following tables. They will be passed to
-----  the `settings` field of the server config. You must look up that documentation yourself.
---local servers = {
---  -- clangd = {},
---  -- gopls = {},
---  -- pyright = {},
---  -- rust_analyzer = {},
---  -- tsserver = {},
---
---  lua_ls = {
---    Lua = {
---      workspace = { checkThirdParty = false },
---      telemetry = { enable = false },
---    },
---  },
---}
-
-require'colorizer'.setup()
-
--- Setup neovim lua configuration
-require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 --local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -188,17 +126,4 @@ require('neodev').setup()
 --    { name = 'luasnip' },
 --  },
 --}
-
-
-
-
-require("nvim-semantic-tokens").setup {
-  preset = "default",
-  -- highlighters is a list of modules following the interface of nvim-semantic-tokens.table-highlighter or 
-  -- function with the signature: highlight_token(ctx, token, highlight) where 
-  --        ctx (as defined in :h lsp-handler)
-  --        token  (as defined in :h vim.lsp.semantic_tokens.on_full())
-  --        highlight (a helper function that you can call (also multiple times) with the determined highlight group(s) as the only parameter)
-  highlighters = { require 'nvim-semantic-tokens.table-highlighter'}
-}
 

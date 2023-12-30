@@ -6,7 +6,6 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
-
 -- faster movement between windows
 Map("n", "<C-h>", "<C-w>h")
 Map("n", "<C-j>", "<C-w>j")
@@ -31,23 +30,6 @@ Map("v", ">", ">gv")
 Map("n", "<TAB>", ":bn<CR>")
 Map("n", "<S-TAB>", ":bp<CR>")
 Map("n", "<leader>bd", ":bd<CR>") -- from Doom Emacs
-
--- telescope
---Mac("n", "<leader>ff", "<cmd> Telescope find_files <CR>")
---Map("n", "<leader>fa", "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>")
---Map("n", "<leader>fe", "<cmd> Telescope file_browser <CR>")
---Map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>")
---Map("n", "<leader>fb", "<cmd> Telescope buffers <CR>")
---Map("n", "<leader>fh", "<cmd> Telescope help_tags <CR>")
---Map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
---Map("n", "<leader>fc", "<cmd> Telescope colorschemes <CR>")
-
--- lsp
-Map("n", "<leader>gd", ":lua vim.lsp.buf.definition()<CR>")
-Map("n", "<leader>gi", ":lua vim.lsp.buf.implementation()<CR>")
-Map("n", "K", ":lua vim.lsp.buf.hover()<CR>")
-Map("n", "<leader>rn", ":lua vim.lsp.buf.rename()<CR>")
-Map("n", "<leader>gr", ":lua vim.lsp.buf.references()<CR>")
 
 -- file tree
 Map('n', "<F2>", "<cmd>Neotree toggle<CR>")
