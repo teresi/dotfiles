@@ -6,7 +6,7 @@ return { -- Add indentation guides even on blank lines
   config = function()
     require("ibl").setup {
       indent = {
-        char = {'¦', '┆', '┊'},
+        char = {'|', '¦', '┆', '┊'},
       },
       scope = {
         enabled = true,

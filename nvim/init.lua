@@ -15,8 +15,8 @@
 vim.g.loaded_netrw = 1             -- NB disable netrw at start of init.lua
 vim.g.loaded_netrwPlugin = 1       -- NB disable netrw at start of init.lua
 
-require("user.options")            -- my settings
-require("user.keymaps")            -- my mappings
+require("user.options")            -- sundry vim.opt calls
+require("user.keymaps")            -- sundry vim.keymap calls
 
 
 -- [[ lazy package manager ]]
@@ -33,7 +33,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
 require('lazy').setup("plugins")   -- initialize plugins
 
 
@@ -50,7 +49,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 
 -- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
+-- see `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
@@ -59,71 +58,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
-
-
-
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
---local capabilities = vim.lsp.protocol.make_client_capabilities()
---capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Ensure the servers above are installed
---local mason_lspconfig = require 'mason-lspconfig'
---
---mason_lspconfig.setup {
---  ensure_installed = vim.tbl_keys(servers),
---}
---
---mason_lspconfig.setup_handlers {
---  function(server_name)
---    require('lspconfig')[server_name].setup {
---      capabilities = capabilities,
---      on_attach = on_attach,
---      settings = servers[server_name],
---    }
---  end,
---}
-
--- nvim-cmp setup
---local cmp = require 'cmp'
---local luasnip = require 'luasnip'
---luasnip.config.setup {}
-
---cmp.setup {
---  snippet = {
---    expand = function(args)
---      luasnip.lsp_expand(args.body)
---    end,
---  },
---  mapping = cmp.mapping.preset.insert {
---    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
---    ['<C-f>'] = cmp.mapping.scroll_docs(4),
---    ['<C-Space>'] = cmp.mapping.complete {},
---    ['<CR>'] = cmp.mapping.confirm {
---      behavior = cmp.ConfirmBehavior.Replace,
---      select = true,
---    },
---    ['<Down>'] = cmp.mapping(function(fallback)
---      if cmp.visible() then
---        cmp.select_next_item()
---      elseif luasnip.expand_or_jumpable() then
---        luasnip.expand_or_jump()
---      else
---        fallback()
---      end
---    end, { 'i', 's' }),
---    ['<Up>'] = cmp.mapping(function(fallback)
---      if cmp.visible() then
---        cmp.select_prev_item()
---      elseif luasnip.jumpable(-1) then
---        luasnip.jump(-1)
---      else
---        fallback()
---      end
---    end, { 'i', 's' }),
---  },
---  sources = {
---    { name = 'nvim_lsp' },
---    { name = 'luasnip' },
---  },
---}
-

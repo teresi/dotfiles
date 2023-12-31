@@ -27,7 +27,7 @@ return {
       ---@type nil | string | fun(buffer: Buffer): string
       fg = function(buffer)
         local hlgroups = require("cokeline.hlgroups")
-        return buffer.is_focused and hlgroups.get_hl_attr("ColorColumn", "bg")
+        return buffer.is_focused and '#262626'
           or not buffer.is_modified and '#87D787'
           or '#AFAFAF'
       end,

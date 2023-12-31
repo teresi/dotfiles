@@ -11,6 +11,9 @@ return {
   -- lua lsp and nvim dev
   {"folke/neodev.nvim", opts = {} },
 
+  -- display and remove trailing whitespace
+  --{'johnfrankmorgan/whitespace.nvim'},
+  --
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 }
