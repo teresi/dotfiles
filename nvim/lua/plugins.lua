@@ -14,6 +14,9 @@ return {
   -- profile startup
   {"dstein64/vim-startuptime"},
 
+  -- :Rename, :Trash, :Move, etc functions
+  {"chrisgrieser/nvim-genghis", dependencies = "stevearc/dressing.nvim"},
+
   -- display and remove trailing whitespace
   --{'johnfrankmorgan/whitespace.nvim'},
   --
