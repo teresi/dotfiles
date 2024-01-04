@@ -16,10 +16,12 @@ vim.opt.ignorecase = true          -- ignorecase when searching
 vim.opt.smartcase = true           -- override ignorecase if pattern has uppercase
 vim.opt.signcolumn = 'yes'         -- show lint/debug signs on left hand side
 vim.opt.list = true                -- visualize trailing whitespace
-vim.opt.listchars["trail"] = "·"
-vim.opt.listchars["tab"] = "¦ "
-vim.opt.listchars["precedes"] = "«"
-vim.opt.listchars["extends"] = "»"
+vim.opt.listchars = {
+    trail = '·',
+    tab = '¦ ',
+    precedes = '«',
+    extends = '»',
+}
 vim.opt.fillchars = {              -- window separators
     horiz = '─',
     horizup = '┴',

@@ -11,6 +11,9 @@ return {
   -- lua lsp and nvim dev
   {"folke/neodev.nvim", opts = {} },
 
+  -- profile startup
+  {"dstein64/vim-startuptime"},
+
   -- display and remove trailing whitespace
   --{'johnfrankmorgan/whitespace.nvim'},
   --

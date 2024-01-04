@@ -14,6 +14,8 @@
 
 vim.g.loaded_netrw = 1             -- NB disable netrw at start of init.lua
 vim.g.loaded_netrwPlugin = 1       -- NB disable netrw at start of init.lua
+vim.opt.termguicolors = true       -- true color support (24bit)
+
 
 require("user.options")            -- sundry vim.opt calls
 require("user.keymaps")            -- sundry vim.keymap calls
@@ -34,6 +36,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require('lazy').setup("plugins")   -- initialize plugins
+
+
+--vim.opt.clipboard = require('deferred-clipboard')  -- sync clipboard between OS and nvim
+vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
+
 
 
 -- [[ append $PWD to path on startup ]]
