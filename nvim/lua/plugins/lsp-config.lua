@@ -19,6 +19,10 @@ return {
           "ltex",         -- LaTeX
           "autotools_ls", -- Make
           "taplo",        -- TOML
+          "yamlls",
+          "jsonls",
+          "dockerls",
+          "docker_compose_language_service",
         },
       })
     end
@@ -33,7 +37,14 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.pyright.setup({})
       lspconfig.rust_analyzer.setup({})
+      lspconfig.bashls.setup({})
+      lspconfig.ltex.setup({})
       lspconfig.autotools_ls.setup({})
+      lspconfig.taplo.setup({})
+      lspconfig.yamlls.setup({})
+      lspconfig.jsonls.setup({})
+      lspconfig.dockerls.setup({})
+      lspconfig.docker_compose_language_service.setup({})
       require'lspconfig'.lua_ls.setup {
         on_init = function(client)
           local path = client.workspace_folders[1].name
