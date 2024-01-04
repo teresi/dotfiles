@@ -2,7 +2,7 @@ return {
   -- snippet engine
   {
     "L3MON4D3/LuaSnip",
-    lazy = false,
+    lazy = true,
     dependencies = {
       "rafamadriz/friendly-snippets",
       "saadparwaiz1/cmp_luasnip",
@@ -14,13 +14,13 @@ return {
   -- parses completion suggestions from lsp
   {
     "hrsh7th/cmp-nvim-lsp",
-    lazy = false,
+    lazy = true,
     config = true,
   },
   -- completion engine
   {
     "hrsh7th/nvim-cmp",
-    lazy = false,
+    lazy = true,
     config = function()
       local cmp = require("cmp")
       cmp.setup({
