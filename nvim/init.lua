@@ -16,6 +16,8 @@ vim.g.loaded_netrw = 1             -- NB disable netrw at start of init.lua
 vim.g.loaded_netrwPlugin = 1       -- NB disable netrw at start of init.lua
 vim.opt.termguicolors = true       -- true color support (24bit)
 
+vim.filetype.add({ extension = { pyx = 'python' } })  -- cython files are mis-identified as pyrex
+
 
 require("user.options")            -- sundry vim.opt calls
 require("user.keymaps")            -- sundry vim.keymap calls
