@@ -17,7 +17,6 @@ return {
           "rust_analyzer",
           "bashls",       -- BASH
           "ltex",         -- LaTeX
-          "autotools_ls", -- Make
           "taplo",        -- TOML
           "yamlls",
           "jsonls",
@@ -39,7 +38,6 @@ return {
       lspconfig.rust_analyzer.setup({})
       lspconfig.bashls.setup({})
       lspconfig.ltex.setup({})
-      lspconfig.autotools_ls.setup({})
       lspconfig.taplo.setup({})
       lspconfig.yamlls.setup({})
       lspconfig.jsonls.setup({})
