@@ -9,11 +9,18 @@
 
 # FUTURE add dependency checker:  golang-go luarocks xsel git make cargo node
 
+# TODO specify by path to binary: nvim, lua, during calls
+#      b/c we can't depend on having ~/.local/bin in the PATH
+# TODO move from using `which <program>` to using `command -v <program>` to test
+#      if a binary exists
+# TODO add something to test or ensure lua (or another binary) is in the path
+
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
-DEPENDENCIES := vim tmux python3-pip ranger curl htop ripgrep
+DEPENDENCIES := vim tmux python3-pip python3-dev ranger curl htop ripgrep screen autoconf
+DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
@@ -436,7 +443,7 @@ nvim:                ## alias for neovim, neovimrc, download plugins
 neovim: | lua        ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
-	@# TODO check for dependencies:  ninja-build gettext libtool-bin cmake g++ pkg-config unzip curl
+	$(call check_pkgs,$(DEPENDENCIES_NVIM))
 	rm -rf $(NVIM)/build
 	make -C $(NVIM) clean
 	make -C $(NVIM) distclean
@@ -447,11 +454,15 @@ neovim: | lua        ## compile neovim
 
 
 .PHONY: neovimrc
-neovimrc:            ## neovim config and plugins
+neovimrc: | lua      ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
 	$(call log_info,updating plugins...)
-	@nvim +"lua require('lazy').restore({wait=true})" +qa
+	@bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
+		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
+		{ echo "missing nvim! please call:  make neovim"; }'
+
+
 
 
 .PHONY: fonts
