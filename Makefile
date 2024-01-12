@@ -419,8 +419,21 @@ zathura:             ## zathura pdf reader config
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/zathura ~/.config/zathura
 
 
+.PHONY: lua
+lua:                 ## install Lua
+	$(call log_info,installing $@...)
+	@$(ROOT_DIR)/install_lua.bash
+
+
+.PHONY: nvim
+nvim:                ## alias for neovim, neovimrc, download plugins
+	$(call log_info,updating $@...)
+	$(MAKE) -ik neovim
+	$(MAKE) -ik neovimrc
+
+
 .PHONY: neovim
-neovim:              ## compile neovim
+neovim: | lua        ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	@# TODO check for dependencies:  ninja-build gettext libtool-bin cmake g++ pkg-config unzip curl
@@ -434,9 +447,11 @@ neovim:              ## compile neovim
 
 
 .PHONY: neovimrc
-neovimrc:            ## neovim config
+neovimrc:            ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
+	$(call log_info,updating plugins...)
+	@nvim +"lua require('lazy').restore({wait=true})" +qa
 
 
 .PHONY: fonts
@@ -479,8 +494,8 @@ rust:                   ## install rust compiler
 	@$(ROOT_DIR)/install_rust.sh
 
 
-.PHONY: nvm
-nvm:                    ## install Node Version Manager
+.PHONY: node_version_manager
+node_version_manager:   ## install Node Version Manager
 	$(call log_info,installing $@...)
 ifneq ($(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?),0)
 	@# (see https://github.com/nvm-sh/nvm)
@@ -493,7 +508,7 @@ endif
 
 
 .PHONY: npm
-npm: nvm                 ## install nvm and Node
+npm: node_version_manager ## install nvm and Node
 	$(call log_info,installing $@...)
 	@# uninstall via `rm -rf ~/.nvm`
 	@bash -l -c 'source ~/.bashrc && type -t npm 2>&1 >/dev/null && \
