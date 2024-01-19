@@ -555,3 +555,11 @@ pipx:                    ## install pip extension 'pipx'
 zephyr:                  ## zephyr RTOS SDK
 	$(call log_info,installing $@...)
 	@$(ROOT_DIR)/install_zephyr.bash
+
+
+.PHONY: image
+image:                   ## docker image for testing
+	docker build \
+		-f Dockerfile \
+		--progress=plain \
+		.
