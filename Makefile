@@ -20,7 +20,7 @@ SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 DEPENDENCIES := vim tmux python3-pip python3-dev ranger curl htop ripgrep screen autoconf
-DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl
+DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
@@ -132,7 +132,7 @@ endef
 
 define check_pkgs
 	@for pkg in $(1); do \
-		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || echo -e "\033[;33mWARN  missing package:  $$pkg\033[0m"; \
+		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || (echo -e "\033[;91mERROR  missing package:  $$pkg\033[0m"; sleep 3;) \
 	done
 endef
 
