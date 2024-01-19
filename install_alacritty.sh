@@ -39,9 +39,10 @@ check_pkgs () {
 	_success="true"
 	for pkg in "${_dependencies[@]}"
 	do
-		$(is_installed "$pkg") || warn "missing package! $pkg" _success="false"
+		$(is_installed "$pkg") || error "missing package!    $pkg"; _success="false"
 	done
 	if [ "false" = "$_success" ]; then
+		sleep 3;
 		return 1
 	else
 		return 0
@@ -92,7 +93,8 @@ if [ "$INSTALL" = 1 ]; then
 	sudo apt install "${DEPENDS[@]}"
 	set +x
 fi
-check_pkgs "${DEPENDS[@]}" || error "missing dependencies... exit" usage exit 1
+check_pkgs "${DEPENDS[@]}" || (echo ""; error "missing dependencies... attempt to build anyways..."; sleep 3)
+
 
 notify "installing / updating rust..."
 install_rust

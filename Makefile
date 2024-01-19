@@ -82,10 +82,12 @@ define log_error
 endef
 
 # git clone (if not exist)
+# NB handles case where folder exists but does not container the repo
 #	1    git url
 #	2    directory
 define git_clone
 	@if [ ! -d $(2) ]; then git clone $(1) $(2); fi;
+	@(git status $(2) 2>/dev/null) && git clone $(1) $(2) || true
 endef
 
 # git pull
@@ -171,12 +173,13 @@ all:                  ## install programs and configs
 	$(MAKE) -ik git_config
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
+	$(MAKE) -ik rust
+	$(MAKE) -ik alacritty  # includes fonts
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
-	$(MAKE) -ik rust
-	$(MAKE) -ik alacritty  # includes fonts
+	@#TODO check packages, check PATH,
 
 
 .PHONY: depends
@@ -200,14 +203,23 @@ vimrc:                ## vim config
 .PHONY: vundle
 vundle:               ## vim package manager
 	$(call log_info,updating $@...)
+	@#cloning vundle requires caq-certificates (apt) or manually adding the cert
+	@#adding GIT_SSL_NO_VERIFY=1 doesn't seem to be a workaround
+	$(call check_pkgs,ca-certificates)
 	$(call update_repo,$(VUNDLE_URL),$(VUNDLE))
 
 
+# TODO install pipx first and use that instead of pip
+# FUTURE consider parallel vundle installer?
+# https://github.com/jdevera/parallel-vundle-installer
 .PHONY: vim_plugins
 vim_plugins: | vundle ## download vim plugins
 	$(call log_info,updating $@...)
-	vim --noplugin +PluginInstall +qall
-	python3 -m pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
+	curl -kfLo $(HOME)/.vim/autoload/plug.vim --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	$(call log_info,updating $@... please wait while plugins are downloaded...)
+	vim +'PluginInstall' +qall +'--sync' &>/dev/null
+	$(BIN_DIR)/pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
 .PHONY: tmux
@@ -228,13 +240,14 @@ tmux.conf:            ## add tmux config file
 tmux_plugins:         ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
-	python3 -m pip install --user psutil  # for tmux cpu info
+	$(BIN_DIR)/pip install --user psutil  # for tmux cpu info
 
 
 .PHONY: tpm
 tpm:                  ## tmux plugin manager
 	$(call log_info,updating $@...)
 	$(call update_repo,$(TPM_URL),$(TPM))
+
 
 .PHONY: bash
 bash:                 ## bash: bashrc, inputrc, bashrprofile, functions, aliases
@@ -243,6 +256,7 @@ bash:                 ## bash: bashrc, inputrc, bashrprofile, functions, aliases
 	$(MAKE) -ik bashprofile
 	$(MAKE) -ik functions
 	$(MAKE) -ik aliases
+
 
 .PHONY: inputrc
 inputrc:              ## add command line config
@@ -439,8 +453,9 @@ nvim:                ## alias for neovim, neovimrc, download plugins
 	$(MAKE) -ik neovimrc
 
 
+# TODO neovim needs ripgrep
 .PHONY: neovim
-neovim: | lua        ## compile neovim
+neovim: | lua npm    ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
@@ -461,8 +476,6 @@ neovimrc: | lua      ## neovim config and plugins
 	@bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
 		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
 		{ echo "missing nvim! please call:  make neovim"; }'
-
-
 
 
 .PHONY: fonts
@@ -542,10 +555,12 @@ gnu_make:                ## install make
 	@$(ROOT_DIR)/install_make.bash
 
 
+# TODO pipx needs pip first
+# TODO need to use $(BIN_DIR)/pipx
 .PHONY: pipx
 pipx:                    ## install pip extension 'pipx'
 	$(call log_info,installing $@...)
-	pip install --user --upgrade pipx
+	$(BIN_DIR)/pip install --user --upgrade pipx
 	pipx ensurepath
 	pipx completions
 	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
@@ -559,7 +574,26 @@ zephyr:                  ## zephyr RTOS SDK
 
 .PHONY: image
 image:                   ## docker image for testing
+	$(call log_info,testing dotfiles with docker image...)
 	docker build \
 		-f Dockerfile \
 		--progress=plain \
+		--target test \
+		--tag dotfiles \
 		.
+
+
+.PHONY: container
+container:               ## run docker image for testing interactively
+	$(call log_info,building intermediate image w/ apt dependencies...)
+	docker build \
+		-f Dockerfile \
+		--progress=plain \
+		--target base \
+		--tag dotfiles-test \
+		.
+	$(call log_info,running container interactively for testing...)
+	docker run -it --rm \
+		-e TZ=$(cat /etc/timezone) \
+		--volume .:/root/dotfiles \
+		dotfiles-test

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:22.04
+FROM ubuntu:22.04 as base
 
 RUN --mount=type=cache,target=/var/cache/apt \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
@@ -16,6 +16,10 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 RUN git-lfs install
 
-WORKDIR /dotfiles
+WORKDIR /root/dotfiles
+
+FROM base as test
+
 COPY * .
+RUN make vim
 RUN make all
