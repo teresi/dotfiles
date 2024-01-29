@@ -39,7 +39,7 @@ check_pkgs () {
 	_success="true"
 	for pkg in "${_dependencies[@]}"
 	do
-		$(is_installed "$pkg") || error "missing package!    $pkg"; _success="false"
+		$(is_installed "$pkg") || (error "missing package!    $pkg"; _success="false")
 	done
 	if [ "false" = "$_success" ]; then
 		sleep 3;
