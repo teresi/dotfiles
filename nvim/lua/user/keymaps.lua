@@ -33,3 +33,6 @@ Map("n", "<leader>bd", ":bd<CR>") -- from Doom Emacs
 
 -- file tree
 Map('n', "<F2>", "<cmd>Neotree toggle<CR>")
+
+-- substitute current word
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])

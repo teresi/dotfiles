@@ -37,6 +37,7 @@ export NO_SYMLINKS
 # use this branch when compiling cpython
 CPYTHON ?= 3.12
 
+
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 # TODO take user input for install dir, e.g. install to /data/.local/bin
@@ -66,6 +67,10 @@ FONTS := $(HOME)/.local/share/fonts
 GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
 GOGH_THEMES := $(HOME)/Gogh
 NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
+
+CARGO_HOME := $(HOME)/.cargo
+CARGO_BIN := $(HOME)/.cargo/bin
+RIPGREP_BIN := $(CARGO_BIN)/rg
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -224,7 +229,7 @@ vim_plugins: | vundle ## download vim plugins
 
 .PHONY: tmux
 tmux:                 ## add tmux config and plugins
-	$(call check_pkgs,tmux)
+	$(call check_pkgs,tmux xsel xclip)
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
 	$(MAKE) -ik tmux_plugins
@@ -453,9 +458,8 @@ nvim:                ## alias for neovim, neovimrc, download plugins
 	$(MAKE) -ik neovimrc
 
 
-# TODO neovim needs ripgrep
 .PHONY: neovim
-neovim: | lua npm    ## compile neovim
+neovim: | lua npm rg   ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
@@ -469,7 +473,7 @@ neovim: | lua npm    ## compile neovim
 
 
 .PHONY: neovimrc
-neovimrc: | lua      ## neovim config and plugins
+neovimrc:              ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
 	$(call log_info,updating plugins...)
@@ -512,10 +516,21 @@ cpython:                ## compile cpython
 	@$(ROOT_DIR)/install_cpython.bash -p $(CPYTHON)
 
 
+# TODO needs curl
 .PHONY: rust
 rust:                   ## install rust compiler
 	$(call log_info,installing $@...)
 	@$(ROOT_DIR)/install_rust.sh
+
+
+.PHONY: rg
+rg: $(RIPGREP_BIN)
+
+
+.PHONY: $(RIPGREP_BIN)  # phony b/c cargo manages the version
+$(RIPGREP_BIN): | rust
+	$(call log_info,installing $@...)
+	cargo install ripgrep
 
 
 .PHONY: node_version_manager
