@@ -19,7 +19,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
-DEPENDENCIES := vim tmux python3-pip python3-dev ranger curl htop ripgrep screen autoconf
+DEPENDENCIES := vim tmux ranger curl htop ripgrep screen autoconf
 DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -75,15 +75,15 @@ RIPGREP_BIN := $(CARGO_BIN)/rg
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 define log_info
-	@echo -e "\e[32mINFO\t$1\e[39m"
+	@echo "\e[32mINFO\t$1\e[39m"
 endef
 
 define log_warn
-	@echo -e "\e[33mWARN\t$1\e[39m"
+	@echo "\e[33mWARN\t$1\e[39m"
 endef
 
 define log_error
-	@echo -e "\e[91mERROR\t$1\e[39m"
+	@echo "\e[91mERROR\t$1\e[39m"
 endef
 
 # git clone (if not exist)
@@ -169,6 +169,7 @@ help:                 ## usage
 # NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
 all:                  ## install programs and configs
+	$(MAKE) -ik check_packages
 	$(MAKE) -ik gnu_make
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -501,8 +502,10 @@ fonts:               ## install fonts
 .PHONY: check_packages
 check_packages: SHELL:=/bin/sh
 check_packages:         ## warn if missing packages
-	$(call check_pkgs,$(DEPENDENCIES))
-	$(call check_pkgs,$(DEPENDENCIES_ALACRITTY))
+	$(call log_info,$@...)
+	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES)'
+	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_NVIM)'
+	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_ALACRITTY)'
 
 
 .PHONY: pip
