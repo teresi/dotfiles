@@ -69,5 +69,6 @@ are_packages_missing () {
 	echo ""
 	echo "  ${_missing[@]}"
 	echo ""
+	sleep 1
 	return 1
 }
