@@ -19,11 +19,14 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
-DEPENDENCIES := vim tmux ranger curl htop ripgrep screen autoconf
+# include call changes MAKEFILE_LIST, so capture this before include
+MY_TARGETS := $(MAKEFILE_LIST)
+DEPENDENCIES := vim tmux ranger curl htop screen autoconf make bison git git-lfs
 DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
+include ./helpers.mk
 
 # OPTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -72,43 +75,17 @@ CARGO_HOME := $(HOME)/.cargo
 CARGO_BIN := $(HOME)/.cargo/bin
 RIPGREP_BIN := $(CARGO_BIN)/rg
 
+# export our bin dir so rules that require a target from a predecessor can execute it
+export PATH := $(BIN_DIR):$(PATH)
+
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-define log_info
-	@echo "\e[32mINFO\t$1\e[39m"
-endef
-
-define log_warn
-	@echo "\e[33mWARN\t$1\e[39m"
-endef
-
-define log_error
-	@echo "\e[91mERROR\t$1\e[39m"
-endef
-
-# git clone (if not exist)
-# NB handles case where folder exists but does not container the repo
-#	1    git url
-#	2    directory
-define git_clone
-	@if [ ! -d $(2) ]; then git clone $(1) $(2); fi;
-	@(git status $(2) 2>/dev/null) && git clone $(1) $(2) || true
-endef
-
+# TODO replace use of git_master with helpers.mk -> git_reset
 # git pull
 #	Fetch and reset to origin/master
 #	1    directory
 define git_master
 	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
-endef
-
-# clone or fetch/merge master
-#	1    git url
-#	2    directory
-define update_repo
-	$(call log_info,updating $(1) -> $(2))
-	$(call git_clone,$(1), $(2))
-	$(call git_master,$(2))
 endef
 
 # update a file at $2 with contents of $1
@@ -163,7 +140,7 @@ help:                 ## usage
 	@echo "        so the configurations will be removed if this repo is deleted;"
 	@echo "        to opt out of this use NO_SYMLINMKS:=ON flag"
 	@echo ""
-	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MY_TARGETS) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
 # NB not installing alacritty here b/c it's not used on remote logins
@@ -225,7 +202,7 @@ vim_plugins: | vundle ## download vim plugins
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	$(call log_info,updating $@... please wait while plugins are downloaded...)
 	vim +'PluginInstall' +qall +'--sync' &>/dev/null
-	$(BIN_DIR)/pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
+	pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
 .PHONY: tmux
@@ -248,7 +225,7 @@ tmux_plugins:         ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
 	-@$(HOME)/.tmux/plugins/tpm/scripts/update_plugin.sh
-	$(BIN_DIR)/pip install --user psutil  # for tmux cpu info
+	pip install --user psutil  # for tmux cpu info
 
 
 .PHONY: tpm
@@ -580,7 +557,7 @@ gnu_make:                ## install make
 .PHONY: pipx
 pipx:                    ## install pip extension 'pipx'
 	$(call log_info,installing $@...)
-	$(BIN_DIR)/pip install --user --upgrade pipx
+	pip install --user --upgrade pipx
 	pipx ensurepath
 	pipx completions
 	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
@@ -617,3 +594,9 @@ container:               ## run docker image for testing interactively
 		-e TZ=$(cat /etc/timezone) \
 		--volume .:/root/dotfiles \
 		dotfiles-test
+
+
+.PHONY: cmake
+cmake:                  ## compile CMake
+	$(call log_info,installing $@...)
+	$(MAKE) -ik -C ./cmake
