@@ -162,6 +162,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik cinnamon
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
+	$(MAKE) -ik docker  # checks group membership, needs sudo
 	@#TODO check packages, check PATH,
 
 
@@ -567,6 +568,12 @@ pipx:                    ## install pip extension 'pipx'
 zephyr:                  ## zephyr RTOS SDK
 	$(call log_info,installing $@...)
 	@$(ROOT_DIR)/install_zephyr.bash
+
+
+.PHONY: docker
+docker:                  ## enable docker w/o sudo
+	$(call log_info,setup $@...)
+	./setup_docker.bash
 
 
 .PHONY: image
