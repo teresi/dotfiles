@@ -151,6 +151,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
 	$(MAKE) -ik vim
+	$(MAKE) -ik nvim
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
 	$(MAKE) -ik git_config
