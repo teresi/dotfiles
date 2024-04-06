@@ -54,3 +54,48 @@ define update_repo
 	$(call git_clone,$(1),$(2))
 	$(call git_reset,$(2),$(3))
 endef
+
+
+#	Fetch and reset to origin/master
+#	1    directory
+define git_master
+	@git -C $(1) fetch && git -C $(1) checkout master && git -C $(1) reset --hard origin/master
+endef
+
+
+# update a file at $2 with contents of $1
+#	Copy if source is newer or the files differ, so repeated backup calls don't create duplicates
+#	1    source
+#	2    destination
+define update_file
+	@if [ $(1) -nt $(2) ]; then cp $(1) $(2); else cmp --silent $(1) $(2) || cp $(1) $(2); fi
+endef
+
+
+# uncomment a line in a file given a pattern if flag is ON, comment out else
+#	1   filepath
+#	2   pattern
+#	3   flag (ON|OFF)
+define comment_line
+	@if [ "$3" == "ON" ]; then sed -i '/$(2)/s/^#*\s*//g' $(1); else sed -i '/$(2)/s/^#*/#/g' $(1); fi
+endef
+
+# append a 'source $3' call to a file $1
+#      Appends the line if it does *not* exist
+#      Uses the magic keyword as a comment (# delimited) to test if the call exists
+#      1    filepath to append to
+#      2    magic keyword
+#      3    filepath to source
+define source_file
+	grep -q $(2) $(1) || echo "[ -r $(3) ] && source $(3)  # $(2)" >> $(1)
+endef
+
+
+# check if any deb packages are not installed using dpkg
+#	print error if any aren ot installed, wait 3 sec
+#	1	list of deb packages
+define check_pkgs
+	@for pkg in $(1); do \
+		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || (echo -e "\033[;91mERROR  missing package:  $$pkg\033[0m"; sleep 3;) \
+	done
+endef
