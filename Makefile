@@ -100,7 +100,7 @@ help:                 ## usage
 	@echo "        so the configurations will be removed if this repo is deleted;"
 	@echo "        to opt out of this use NO_SYMLINMKS:=ON flag"
 	@echo ""
-	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MY_TARGETS) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MY_TARGETS) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
 # NB not installing alacritty here b/c it's not used on remote logins
@@ -474,7 +474,7 @@ rg: $(RIPGREP_BIN)
 .PHONY: $(RIPGREP_BIN)  # phony b/c cargo manages the version
 $(RIPGREP_BIN): | rust
 	$(call log_info,installing $@...)
-	cargo install ripgrep
+	which rustc || . $(CARGO_HOME)/env && cargo install ripgrep
 
 
 .PHONY: node_version_manager
