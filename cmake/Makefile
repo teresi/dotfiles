@@ -14,13 +14,28 @@ _BRANCH := release
 _BIN := $(PREFIX)/bin/cmake
 
 
-$(_BIN): | repo
+.PHONY: all
+all: $(_BUILD)/bin/cmake
+
+
+.PHONY: install
+install:
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $(_BUILD) -j install
+	$(call log_info,updating $@...    COMPLETE!)
+
+
+.PHONY: uninstall
+uninstall:
+	$(MAKE) -ik -C $(_BUILD) uninstall
+
+
+$(_BUILD)/bin/cmake: $(_DIR)/.git | repo
 	$(call log_info,updating $@...)
 	mkdir -p $(_BUILD) && cd $(_BUILD) \
 		&& ../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
 	@# NB using a low core count b/c cmake uses a lot of ram per core
 	$(MAKE) -ik -C $(_BUILD) -j 2
-	$(MAKE) -ik -C $(_BUILD) -j install
 	$(call log_info,updating $@...    COMPLETE!)
 
 
@@ -31,9 +46,5 @@ clean:
 
 .PHONY: repo
 repo:
-	$(call update_repo,$(_URL),$(_DIR),$(_BRANCH))
+	$(call git_clone_fetch_reset,$(_URL),$(_DIR),$(_BRANCH))
 
-
-.PHONY: uninstall
-uninstall:
-	$(MAKE) -ik -C $(_BUILD) uninstall

@@ -2,6 +2,8 @@
 
 # sundry Make functions
 
+ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+
 
 # print in green w/ INFO\t prefix
 define log_info
@@ -42,6 +44,12 @@ define git_reset
 	git -C $(1) fetch \
 		&& git -C $(1) checkout $(if $(2),$(2),master) \
 		&& git -C $(1) reset --hard origin/$(if $(2),$(2),master)
+endef
+
+
+# safe git fetch/reset, no changes if up to date
+define git_clone_fetch_reset
+	$(ROOT_DIR)/git_reset.bash $(1) $(2) $(3)
 endef
 
 

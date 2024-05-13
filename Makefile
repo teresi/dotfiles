@@ -75,11 +75,13 @@ NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 CARGO_HOME := $(HOME)/.cargo
 CARGO_BIN := $(HOME)/.cargo/bin
 RIPGREP_BIN := $(CARGO_BIN)/rg
+NINJA_BIN := $(BIN_DIR)/ninja
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 
 # RECIPES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -567,4 +569,10 @@ container:               ## run docker image for testing interactively
 .PHONY: cmake
 cmake:                  ## compile CMake
 	$(call log_info,installing $@...)
-	$(MAKE) -ik -C ./cmake
+	$(MAKE) -ik -C ./cmake all install
+
+
+.PHONY: ninja
+ninja: | cmake          ## compile ninja-build
+	$(call log_info,installing $@...)
+	$(MAKE) -ik -C ./ninja
