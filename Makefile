@@ -95,7 +95,6 @@ help:                 ## usage
 	@echo "        INSTALL_RC  (ON|OFF): un/install configuration/rc file (ON)"
 	@echo "        NO_SYMLINKS     (ON): copy configuration files instead of linking to this project"
 	@echo "        CPYTHON       ($(CPYTHON)): version of cpython to use"
-	@
 	@echo ""
 	@echo "    NOTE:"
 	@echo "        configurations are installed using symlinks"
@@ -126,7 +125,8 @@ all:                  ## install programs and configs
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
-	@#TODO check packages, check PATH,
+	$(MAKE) -ik check_packages
+	@#TODO check PATH,
 
 
 .PHONY: depends
@@ -150,7 +150,7 @@ vimrc:                ## vim config
 .PHONY: vundle
 vundle:               ## vim package manager
 	$(call log_info,updating $@...)
-	@#cloning vundle requires caq-certificates (apt) or manually adding the cert
+	@#cloning vundle requires ca-certificates (apt) or manually adding the cert
 	@#adding GIT_SSL_NO_VERIFY=1 doesn't seem to be a workaround
 	$(call check_pkgs,ca-certificates)
 	$(call update_repo,$(VUNDLE_URL),$(VUNDLE))
@@ -170,7 +170,7 @@ vim_plugins: | vundle ## download vim plugins
 
 
 .PHONY: tmux
-tmux:                 ## add tmux config and plugins
+tmux: | bison         ## add tmux config and plugins
 	$(call check_pkgs,tmux xsel xclip)
 	$(MAKE) -ik -C ./tmux
 	$(MAKE) -ik tpm
@@ -576,3 +576,9 @@ cmake:                  ## compile CMake
 ninja: | cmake          ## compile ninja-build
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C ./ninja
+
+
+.PHONY: bison
+bison:                  ## compile bison
+	$(call log_info,installing $@...)
+	$(MAKE) -ik -C ./bison

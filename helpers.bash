@@ -22,20 +22,56 @@ error () {
 }
 
 
+# TODO candidate for deletion
+#update_repo_to_master () {
+#	# pull master on a repo, clone if necessary
+#	# NB use with care, do you really want to merge?
+#	local _REPO="$1"
+#	local _DIR="$2"
+#	notify "updating $_REPO"
+#	if [[ ! -d $_DIR ]]; then
+#		notify "\tgit clone $_REPO $_DIR"
+#		git clone $_REPO $_DIR
+#	fi
+#	notify "\tgit checkout master -C $_DIR"
+#	git -C "$_DIR" checkout master
+#	notify "\tgit pull origin master -C $_DIR"
+#	git -C "$_DIR" pull origin master
+#}
+
 update_repo_to_master () {
-	# pull master on a repo, clone if necessary
-	# NB use with care, do you really want to merge?
-	local _REPO="$1"
-	local _DIR="$2"
-	notify "updating $_REPO"
-	if [[ ! -d $_DIR ]]; then
-		notify "\tgit clone $_REPO $_DIR"
-		git clone $_REPO $_DIR
+	# clone | fetch | reset to bring a git repo up to date
+	#
+	#	1	repo url
+	#	2	target directory
+	#	3	branch (master)
+	#
+	# NB only call reset if it's not up to date,
+	#    so that we can use the .git dir timestamp in Makefile rules,
+	#    since the timestamp will change when git reset is called
+
+	local _url=$1
+	local _dest=$2
+	local _branch=$3
+
+	[ -z "$_branch" ] && _branch=master
+	[ -w "$_dest" ] || (error "cannot write to $_dest"; exit 1)
+
+	notify "updating $_url -> $_dest"
+	if [ ! -d "$_dest" ]; then git clone $_url $_dest; fi;
+	git -C $_dest status 2>/dev/null || git clone $_url $_dest || true
+
+	# fetch, checkout, reset if necessary
+	notify "updating to $_branch for repo at $_dest"
+	git -C $_dest fetch
+	git -C $_dest checkout $_branch
+
+	_local=$(git -C $_dest rev-parse @)
+	_remote=$(git -C $_dest rev-parse @{u})
+	if [ "$_local" != "$_remote" ]; then
+		notify "resetting to origin/$_branch for repo at $_dest"
+		git -C $_dest reset --hard origin/$_branch
 	fi
-	notify "\tgit checkout master -C $_DIR"
-	git -C "$_DIR" checkout master
-	notify "\tgit pull origin master -C $_DIR"
-	git -C "$_DIR" pull origin master
 }
 
 

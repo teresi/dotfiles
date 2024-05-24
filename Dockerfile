@@ -8,7 +8,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         build-essential cmake \
-        ninja-build bison autoconf \
+        dconf-editor \
+        autoconf \
         git git-lfs \
         libevent-dev libncurses-dev gettext screen \
         pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \

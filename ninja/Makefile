@@ -2,6 +2,9 @@
 
 # compile ninja
 
+# ninja is yet another build system
+# ninja is similar to CMAKE
+
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -24,4 +27,3 @@ clean:
 
 $(NINJA_BIN):
 	$(ROOT_DIR)/ninja.bash $(PREFIX)
-

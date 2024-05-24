@@ -19,21 +19,4 @@ _url=$1
 _dest=$2
 _branch=$3
 
-[ -z "$_branch" ] && _branch=master
-[ -w "$_dest" ] || error "cannot write to $_dest"
-
-notify "updating $_url -> $_dest"
-if [ ! -d "$_dest" ]; then git clone $_url $_dest; fi;
-git -C $_dest status 2>/dev/null || git clone $_url $_dest || true
-
-# fetch, checkout, reset if necessary
-notify "updating to $_branch for repo at $_dest"
-git -C $_dest fetch
-git -C $_dest checkout $_branch
-
-_local=$(git -C $_dest rev-parse @)
-_remote=$(git -C $_dest rev-parse @{u})
-if [ "$_local" != "$_remote" ]; then
-	notify "resetting to origin/$_branch for repo at $_dest"
-	git -C $_dest reset --hard origin/$_branch
-fi
+update_repo_to_master $_url $_dest $_branch
