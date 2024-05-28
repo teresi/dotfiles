@@ -20,13 +20,17 @@ fi
 [ -d /data/ ] && export CARGO_INSTALL_ROOT=/data/.cargo
 [ -d /data/ ] && export PATH+=:/data/.cargo/bin
 
+
 ################################################################################
 # KEYBOARD  ####################################################################
 
-# Remap the CapsLock key to a Control key for X Window system
-if type setxkbmap >/dev/null 2>&1; then
-        setxkbmap -layout us -option ctrl:nocaps 2>/dev/null
-fi
+# remap the CapsLock key to a Control key for X Window system
+ctrl_no_caps ()
+{
+	if type setxkbmap >/dev/null 2>&1; then
+		setxkbmap -layout us -option ctrl:nocaps 2>/dev/null
+	fi
+}
 
 # turn off CapsLock if it's set
 caps_off ()
@@ -36,7 +40,12 @@ caps_off ()
 		xdotool key Caps_Lock
 	fi
 }
-caps_off
+
+# an ssh session may not have X
+if [ -z "$SSH_CLIENT" ] || [ -z "$SSH_TTY" ] || [ -z "$SSH_CONNECTION" ]; then
+	caps_off
+	ctrl_no_caps
+fi
 
 
 ################################################################################
