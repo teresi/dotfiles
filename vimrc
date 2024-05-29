@@ -171,8 +171,8 @@ let g:airline_theme='deus'
 "set listchars=trail:\uB7,nbsp:~,eol:\u23CE
 "set list lcs=trail:\uB7,tab:\uBB\uB7
 "set list lcs=trail:\uB7,tab:»·
-"set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\ 
-"set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\ 
+"set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
+"set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\
 "set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
 set list lcs=tab:¦\ ,trail:·,precedes:«,extends:»
 " match indentline colors
@@ -182,6 +182,13 @@ set hlsearch        " show highlighted search
 set title           " show title in window bar
 set cursorline      " highlight current line
 set tw=0            " do not automatically break lines at certain length
+
+" fix colors for showing current line and line numbers
+" 234 matches the grey background
+" see https://vim.fandom.com/wiki/Xterm256_color_names_for_console_Vim
+highlight CursorLine ctermbg=232
+highlight CursorLineNr ctermbg=232
+highlight LineNr ctermbg=232
 
 " show relative numbers on active window
 :set number relativenumber
