@@ -58,18 +58,21 @@ update_repo_to_master () {
 
 	notify "updating $_url -> $_dest"
 	if [ ! -d "$_dest" ]; then git clone $_url $_dest; fi;
-	git -C $_dest status 2>/dev/null || git clone $_url $_dest || true
+	# NB `git status` updates the .git folder for some reason,
+	#    so don't call it here or else it will update even if there are not changes
 
 	# fetch, checkout, reset if necessary
-	notify "updating to $_branch for repo at $_dest"
+	notify "updating to $_branch for repo at $_dest..."
 	git -C $_dest fetch
-	git -C $_dest checkout $_branch
 
 	_local=$(git -C $_dest rev-parse @)
 	_remote=$(git -C $_dest rev-parse @{u})
 	if [ "$_local" != "$_remote" ]; then
-		notify "resetting to origin/$_branch for repo at $_dest"
+		notify "updating to $_branch for repo at $_dest... reset to origin/$_branch"
+		git -C $_dest checkout $_branch
 		git -C $_dest reset --hard origin/$_branch
+	else
+		notify "updating to $_branch for repo at $_dest... already up to date"
 	fi
 }
 

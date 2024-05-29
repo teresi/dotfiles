@@ -21,8 +21,8 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
-DEPENDENCIES := vim tmux ranger curl htop screen autoconf make bison git git-lfs
-DEPENDENCIES_NVIM := ninja-build gettext cmake unzip curl build-essential
+DEPENDENCIES := vim ranger curl htop screen autoconf autotools-dev make git git-lfs libncurses-dev lm-sensors
+DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
@@ -532,7 +532,7 @@ pipx:                    ## install pip extension 'pipx'
 
 
 .PHONY: zephyr
-zephyr:                  ## zephyr RTOS SDK
+zephyr: | ninja          ## zephyr RTOS SDK
 	$(call log_info,installing $@...)
 	@$(ROOT_DIR)/install_zephyr.bash
 
@@ -585,8 +585,11 @@ ninja: | cmake          ## compile ninja-build
 .PHONY: bison
 bison:                  ## compile bison
 	$(call log_info,installing $@...)
+ifeq ($(BIN_DIR)/bison, $(shell command -v bison))
 	$(MAKE) -ik -C ./bison
-
+else
+	command -v htop &> /dev/null && echo "bison is already installed" || $(MAKE) -ik -C ./bison
+endif
 
 .PHONY: htop
 htop:                   ## compile htop

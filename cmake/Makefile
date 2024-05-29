@@ -18,7 +18,10 @@ all: $(_BUILD)/bin/cmake
 
 
 .PHONY: install
-install:
+install: $(_BIN)
+
+
+$(_BIN): $(_DIR)/.git
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_BUILD) -j install
 	$(call log_info,updating $@...    COMPLETE!)
