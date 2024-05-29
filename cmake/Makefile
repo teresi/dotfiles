@@ -4,8 +4,7 @@
 
 
 include ../helpers.mk
-
-PREFIX := $(HOME)/.local
+PREFIX ?= $(HOME)/.local
 
 _URL := https://github.com/Kitware/CMake.git
 _DIR := ./cmake

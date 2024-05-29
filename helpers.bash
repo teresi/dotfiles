@@ -55,7 +55,6 @@ update_repo_to_master () {
 	local _branch=$3
 
 	[ -z "$_branch" ] && _branch=master
-	[ -w "$_dest" ] || (error "cannot write to $_dest"; exit 1)
 
 	notify "updating $_url -> $_dest"
 	if [ ! -d "$_dest" ]; then git clone $_url $_dest; fi;

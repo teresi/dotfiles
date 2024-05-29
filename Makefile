@@ -46,7 +46,7 @@ CPYTHON ?= 3.12
 
 # TODO take user input for install dir, e.g. install to /data/.local/bin
 # TODO add recipe to make install dir
-BIN_DIR := $(HOME)/.local/bin/
+BIN_DIR := $(HOME)/.local/bin
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 HOST_ALIAS_RC := $(HOME)/.config/host_alias
@@ -213,8 +213,12 @@ inputrc:              ## add command line config
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/inputrc $(INPUTRC)
 
 
+$(BASHRC):
+	touch $(BASHRC)
+
+
 .PHONY: bashrc
-bashrc:               ## login shell config
+bashrc: | $(BASHRC)   ## login shell config
 	$(call log_info,updating $@...)
 	@sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/' $(BASHRC)
 	@mkdir -p ~/.config
@@ -582,3 +586,14 @@ ninja: | cmake          ## compile ninja-build
 bison:                  ## compile bison
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C ./bison
+
+
+.PHONY: htop
+htop:                   ## compile htop
+	$(call log_info,installing $@...)
+	@# we don't need this version of htop, so skip if exists
+ifeq ($(BIN_DIR)/htop, $(shell command -v htop))
+	$(MAKE) -C htop -ik all install
+else
+	command -v htop &> /dev/null && echo "htop is already installed" || $(MAKE) -C htop -ik all install
+endif
