@@ -39,7 +39,7 @@ HOST_ALIAS ?= $(HOSTNAME)
 NO_SYMLINKS ?=
 export NO_SYMLINKS
 # use this branch when compiling cpython
-CPYTHON ?= 3.12
+CPYTHON ?= 3.13
 
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
