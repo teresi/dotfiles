@@ -274,7 +274,7 @@ ranger:               ## ranger configuration
 	$(call check_pkgs,ranger)
 	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
 	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
-	-sed -i 's/set\ preview_images_method\ w3m/set\ preview_images_method\ urxvt/' $(RC_CONF)
+	-sed -i 's/set\ preview_images_method\ .*/set\ preview_images_method\ w3m/' $(RC_CONF)
 
 
 .PHONY: rxvt.conf
