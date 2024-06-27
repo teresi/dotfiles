@@ -185,7 +185,7 @@ tmux.conf:            ## add tmux config file
 
 
 .PHONY: tmux_plugins
-tmux_plugins:         ## download tmux plugins
+tmux_plugins: | pip   ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
 	-@$(HOME)/.tmux/plugins/tpm/scripts/update_plugin.sh
