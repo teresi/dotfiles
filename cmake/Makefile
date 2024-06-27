@@ -32,7 +32,7 @@ uninstall:
 	$(MAKE) -ik -C $(_BUILD) uninstall
 
 
-$(_BUILD)/bin/cmake: $(_DIR)/.git | repo
+$(_BUILD)/bin/cmake: $(_DIR)/.git
 	$(call log_info,updating $@...)
 	mkdir -p $(_BUILD) && cd $(_BUILD) \
 		&& ../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
@@ -50,3 +50,5 @@ clean:
 repo:
 	$(call git_clone_fetch_reset,$(_URL),$(_DIR),$(_BRANCH))
 
+
+$(_DIR)/.git: | repo
