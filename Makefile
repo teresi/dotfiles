@@ -338,6 +338,9 @@ cinnamon:             ## cinnamon desktop
 	gsettings set org.cinnamon.muffin unredirect-fullscreen-windows true
 	gsettings set org.cinnamon.muffin desktop-effects false
 
+	# don't create clicks that aren't actually pressed
+	gsettings set org.cinnamon.settings-daemon.peripherals.mouse middle-button-enabled false
+
 
 .PHONY: gnome
 gnome:                ## gnome desktop
@@ -362,6 +365,9 @@ gnome:                ## gnome desktop
 	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
 	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
 	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
+
+	# don't create clicks that aren't actually pressed
+	gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation false
 
 	$(call update_repo,$(GOGH_THEMES_URL),$(GOGH_THEMES))
 	TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
