@@ -424,6 +424,7 @@ neovim: | lua npm rg   ## compile neovim
 	make -C $(NVIM) install
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
+	npm install -g tree-sitter tree-sitter-cli
 
 
 .PHONY: neovimrc
