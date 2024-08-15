@@ -26,3 +26,7 @@ style = "Regular"
 [scrolling]
 history = 100000
 multiplier = 3
+
+[window]
+# false causes alacritty to not use the system theme in some cases (?)
+dynamic_title = true
