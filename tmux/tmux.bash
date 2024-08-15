@@ -19,7 +19,7 @@ _url=https://github.com/tmux/tmux.git
 _dst=$_root_dir/tmux
 
 
-are_packages_missing "bison libevent-dev libncurses-dev"
+source ~/.bashrc && are_packages_missing "bison libevent-dev libncurses-dev autotools-dev aclocal"
 
 notify "updating tmux..."
 

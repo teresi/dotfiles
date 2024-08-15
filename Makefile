@@ -21,7 +21,7 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
-DEPENDENCIES := vim ranger curl htop screen autoconf autotools-dev make git git-lfs libncurses-dev lm-sensors
+DEPENDENCIES := vim ranger curl htop screen autoconf autotools-dev make git git-lfs libncurses-dev lm-sensors autotools-dev aclocal
 DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -417,14 +417,20 @@ neovim: | lua npm rg   ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
-	rm -rf $(NVIM)/build
-	make -C $(NVIM) clean
-	make -C $(NVIM) distclean
+	@# TODO move this to it's own makefile / bash script nad only update
+	#rm -rf $(NVIM)/build
+	#make -C $(NVIM) clean
+	#make -C $(NVIM) distclean
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
 	make -C $(NVIM) install
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
-	npm install -g tree-sitter tree-sitter-cli
+	$(call log_info,updating tree sitter...)
+	bash -l -c 'source ~/.bashrc && npm install -g tree-sitter tree-sitter-cli; exit 0;'
+	$(call log_info,updating plugins...)
+	bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
+		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
+		{ echo "missing nvim! please call:  make neovim"; }'
 
 
 .PHONY: neovimrc

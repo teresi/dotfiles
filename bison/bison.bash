@@ -27,7 +27,7 @@ source $_root_dir/../helpers.bash
 _prefix="$HOME"/.local
 _overwrite="false"
 _dst=$_root_dir/bison
-_depends="autoconf automake autopoint flex gperf graphviz help2man texinfo valgrind"
+_depends="autoconf automake autopoint flex gperf graphviz help2man texinfo valgrind gnupg"
 _url=https://git.savannah.gnu.org/git/bison.git
 
 _release_ver=3.8.2

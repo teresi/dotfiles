@@ -7,9 +7,10 @@ RUN --mount=type=cache,target=/var/cache/apt \
     && apt-get update -y \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        gnupg \
         build-essential cmake \
         dconf-editor \
-        autoconf \
+        autoconf autotools-dev aclocal \
         git git-lfs \
         libevent-dev libncurses-dev gettext screen \
         pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \

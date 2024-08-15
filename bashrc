@@ -6,19 +6,19 @@
 
 # MAGIC $HOME/.local/bin is a standard location for binaries
 # NB prepend the location so we prefer our builds
-if [ -r "$HOME"/.local/bin ]; then
+if [ -w "$HOME"/.local/bin ]; then
 	export PATH="$HOME"/.local/bin:$PATH
 fi
 
 # MAGIC /data/ is our preferred disk
 # NB prepend the location so we prefer our builds
-if [ -r "/data/.local/bin" ]; then
+if [ -w "/data/.local/bin" ]; then
 	export PATH=/data/.local/bin:$PATH
 fi
 
 #export PATH=/data/.local/bin:$PATH  # FUTURE also support /data/.local/bin if it exists
-[ -d /data/ ] && export CARGO_INSTALL_ROOT=/data/.cargo
-[ -d /data/ ] && export PATH+=:/data/.cargo/bin
+[ -w /data/ ] && export CARGO_INSTALL_ROOT=/data/.cargo
+[ -w /data/ ] && export PATH+=:/data/.cargo/bin
 
 
 ################################################################################

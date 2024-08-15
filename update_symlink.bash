@@ -18,6 +18,7 @@ fi
 if [ -z "${NO_SYMLINKS}" ]
 then
 	echo -e "\e[32mINFO\tlinking $1 --> $2\e[39m"
+	mkdir -p $(dirname ${2})
 	ln -sfn ${1} ${2}
 else
 	echo -e "\e[32mINFO\tcopying $1 --> $2\e[39m"
