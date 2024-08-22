@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
         gnupg \
         build-essential cmake \
         dconf-editor \
-        autoconf autotools-dev aclocal \
+        autoconf autotools-dev \
         git git-lfs \
         libevent-dev libncurses-dev gettext screen \
         pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \

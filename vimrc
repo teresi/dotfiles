@@ -447,3 +447,9 @@ function! LLocToggle()
     let g:loclist_win = bufnr("$")
   endif
 endfunction
+
+
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" FIXES
+
+set nocompatible              " needed at the end to re-enable arrows in insert mode
