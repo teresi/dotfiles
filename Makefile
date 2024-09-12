@@ -601,7 +601,7 @@ bison:                  ## compile bison
 ifeq ($(BIN_DIR)/bison, $(shell command -v bison))
 	$(MAKE) -ik -C ./bison
 else
-	command -v htop &> /dev/null && echo "bison is already installed" || $(MAKE) -ik -C ./bison
+	command -v bison &> /dev/null && echo "bison is already installed" || $(MAKE) -ik -C ./bison
 endif
 
 .PHONY: htop
