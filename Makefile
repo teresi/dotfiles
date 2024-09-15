@@ -417,6 +417,8 @@ neovim: | lua npm rg   ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
+	$(call log_info,updating tree sitter...)
+	bash -l -c 'source ~/.bashrc && npm install -g tree-sitter tree-sitter-cli; exit 0;'
 	@# TODO move this to it's own makefile / bash script nad only update
 	#rm -rf $(NVIM)/build
 	#make -C $(NVIM) clean
@@ -425,8 +427,6 @@ neovim: | lua npm rg   ## compile neovim
 	make -C $(NVIM) install
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
-	$(call log_info,updating tree sitter...)
-	bash -l -c 'source ~/.bashrc && npm install -g tree-sitter tree-sitter-cli; exit 0;'
 	$(call log_info,updating plugins...)
 	bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
 		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
