@@ -46,6 +46,7 @@ CPYTHON ?= 3.13
 
 # TODO take user input for install dir, e.g. install to /data/.local/bin
 # TODO add recipe to make install dir
+# TODO use PREFIX instead of BIN_DIR and pass PREFIX to subsequent installers
 BIN_DIR := $(HOME)/.local/bin
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
@@ -132,6 +133,11 @@ all:                  ## install programs and configs
 .PHONY: depends
 depends:              ## install system dependencies
 	$(ROOT_DIR)/install_dependencies.sh
+
+
+.PHONY: m4
+m4:                   ## GNU M4 macro processor
+	$(MAKE) -ik -C ./m4 all install
 
 
 .PHONY: vim
