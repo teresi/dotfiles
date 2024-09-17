@@ -140,6 +140,11 @@ m4:                   ## GNU M4 macro processor
 	$(MAKE) -ik -C ./m4 all install
 
 
+.PHONY: autoconf
+autoconf:             ## M4 macros to configure sources
+	$(MAKE) -ik -C ./autoconf all install
+
+
 .PHONY: vim
 vim:                  ## vim config and plugins
 	$(call check_pkgs,"vim git")
