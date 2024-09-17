@@ -64,6 +64,9 @@ $(_release_tar):
 
 
 $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
+	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
+		| grep 'RSA' | awk '{print $$5}' \
+		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
 		|| (echo "invalid autoconf sig"; exit $?)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
