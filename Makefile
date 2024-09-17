@@ -21,7 +21,12 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
-DEPENDENCIES := vim ranger curl htop screen autoconf autotools-dev make git git-lfs libncurses-dev lm-sensors autotools-dev
+# TODO gradually reducing required dependencies
+# gcc: for compiling
+# curl: for downloading releases
+# gpg: for verifying releases
+# make: invoking the rules
+DEPENDENCIES := vim ranger curl screen autotools-dev make git git-lfs libncurses-dev lm-sensors autotools-dev
 DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -137,12 +142,12 @@ depends:              ## install system dependencies
 
 .PHONY: m4
 m4:                   ## GNU M4 macro processor
-	$(MAKE) -ik -C ./m4 all install
+	$(MAKE) -k -C ./m4 all install
 
 
 .PHONY: autoconf
 autoconf:             ## M4 macros to configure sources
-	$(MAKE) -ik -C ./autoconf all install
+	$(MAKE) -k -C ./autoconf all install
 
 
 .PHONY: vim
