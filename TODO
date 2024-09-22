@@ -1,4 +1,7 @@
-- handle input for install path of binaries
-	- [ ] alacritty
-	- [ ] fzf
-
+- add gcc
+- add automake
+    + https://www.gnu.org/software/automake/
+- add libiconv (for gettext if missing glibc)
+    + https://www.gnu.org/software/libiconv/
+- add option for local/bin to another dir (e.g. data)
+- separate download/verify from compile to remove wget/curl dependency
