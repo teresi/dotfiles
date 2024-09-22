@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := gcc curl perl make git git-lfs vim ranger screen autotools-dev libncurses-dev lm-sensors autotools-dev
+DEPENDENCIES := gcc gpg curl perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev
 DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -115,6 +115,9 @@ help:                 ## usage
 .PHONY: all
 all:                  ## install programs and configs
 	$(MAKE) -ik check_packages
+	$(MAKE) -ik m4
+	$(MAKE) -ik autoconf
+	$(MAKE) -ik gettext
 	$(MAKE) -ik gnu_make
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -149,6 +152,11 @@ m4:                   ## GNU M4 macro processor
 .PHONY: autoconf
 autoconf:             ## M4 macros to configure sources
 	$(MAKE) -k -C ./autoconf all install
+
+
+.PHONY: gettet
+gettext:             ## tools to translate human languages
+	$(MAKE) -k -C ./gettext all install
 
 
 .PHONY: vim

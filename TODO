@@ -1,7 +1,11 @@
 - add gcc
+- add gpg
+    + https://ftp.gnu.org/pub/gnu/gettext/gettext-0.22.5.tar.gz.sig
 - add automake
     + https://www.gnu.org/software/automake/
 - add libiconv (for gettext if missing glibc)
     + https://www.gnu.org/software/libiconv/
 - add option for local/bin to another dir (e.g. data)
 - separate download/verify from compile to remove wget/curl dependency
+- add screen
+- separate libevent & ncurses from tmux

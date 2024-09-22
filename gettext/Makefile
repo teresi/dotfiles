@@ -19,7 +19,7 @@ PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _dir := $(_root_dir)/gettext
-_bin := $(_dir)/bin/gettext
+_bin := $(_dir)/gettext-runtime/src/gettext
 _install := $(PREFIX)/bin/gettext
 
 _gpg_key := gnu-keyring.gpg
@@ -74,7 +74,7 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
 
 
-$(_bin): $(_dir)
+$(_bin): | $(_dir)
 	cd $(_dir) && ./configure --prefix=$(PREFIX) && make -j
 	@#not calling make check b/c 1.4.19 has a bug, fixed in 1.4.20? see https://bugs.gentoo.org/808749
 
