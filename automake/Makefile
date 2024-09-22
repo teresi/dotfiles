@@ -1,24 +1,29 @@
 #!/usr/bin/make -f
 
-# compile gettext
+# compile automake
 
-# gettext provides tools for internationalization and localization
+# tools for generating Makefiles for use w/ autoconf
+#
+# provides `automake` and `aclocal`
+# provides
+# aclocal:   generate aclocal.m4 from configure.in
+# automake:  generate Makefile.in from Makefile.am
 
 
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-_dir := $(_root_dir)/gettext
-_bin := $(_dir)/gettext-runtime/src/gettext
-_install := $(PREFIX)/bin/gettext
+_dir := $(_root_dir)/automake
+_bin := $(_dir)/bin/automake
+_install := $(PREFIX)/bin/automake
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 0.22.5
-_release_tar := gettext-$(_release_ver).tar.gz
+_release_ver := 1.16.5
+_release_tar := automake-$(_release_ver).tar.gz
 _release_sig := $(_release_tar).sig
-_release_tar_url := https://ftp.gnu.org/pub/gnu/gettext/$(_release_tar)
+_release_tar_url := https://mirrors.ocf.berkeley.edu/gnu/automake/$(_release_tar)
 _release_sig_url := $(_release_tar_url).sig
 
 
@@ -47,7 +52,7 @@ $(_gpg_key):
 
 
 $(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
+	curl -o $(_release_sig) $(_release_sig_url)
 
 
 $(_release_tar):

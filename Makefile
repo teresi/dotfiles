@@ -117,6 +117,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik check_packages
 	$(MAKE) -ik m4
 	$(MAKE) -ik autoconf
+	$(MAKE) -ik automake
 	$(MAKE) -ik gettext
 	$(MAKE) -ik gnu_make
 	$(MAKE) -ik pip
@@ -154,7 +155,12 @@ autoconf:             ## M4 macros to configure sources
 	$(MAKE) -k -C ./autoconf all install
 
 
-.PHONY: gettet
+.PHONY: autoconf
+automake:             ## generates Makefiles for use with autoconf (aclocal, automake)
+	$(MAKE) -k -C ./automake all install
+
+
+.PHONY: gettext
 gettext:             ## tools to translate human languages
 	$(MAKE) -k -C ./gettext all install
 
@@ -196,7 +202,7 @@ vim_plugins: | vundle ## download vim plugins
 
 .PHONY: tmux
 tmux: | bison         ## add tmux config and plugins
-	$(call check_pkgs,tmux xsel xclip)
+	$(call check_pkgs,xsel xclip)
 	$(MAKE) -ik -C ./tmux
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf

@@ -1,3 +1,5 @@
+- remove need for pip as prereq for tmux by replacing psutil w/
+- update bison Makefile
 - add gcc
 - add gpg
     + https://ftp.gnu.org/pub/gnu/gettext/gettext-0.22.5.tar.gz.sig
@@ -8,4 +10,19 @@
 - add option for local/bin to another dir (e.g. data)
 - separate download/verify from compile to remove wget/curl dependency
 - add screen
-- separate libevent & ncurses from tmux
+- refactor TMUX
+    - separate libevent & ncurses from tmux
+    - enable libevent compile
+    - enable ncurses compile
+- add fc-cache
+- add wmctrl
+- add xdotool
+- add xsel
+     + https://github.com/kfish/xsel
+- add xclip
+- add sysstat
+    + https://github.com/sysstat/sysstat
+- move from psutil to sysstat / mpstat in tmux cpu info
+    + mpstat -P ALL  # show usage per core
+    + https://github.com/sysstat/sysstat
+
