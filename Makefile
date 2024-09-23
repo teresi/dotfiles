@@ -119,6 +119,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik autoconf
 	$(MAKE) -ik automake
 	$(MAKE) -ik gettext
+	$(MAKE) -ik libtool
 	$(MAKE) -ik gnu_make
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -151,18 +152,23 @@ m4:                   ## GNU M4 macro processor
 
 
 .PHONY: autoconf
-autoconf:             ## M4 macros to configure sources
+autoconf:             ## M4 macros to configure sources (part of autotools-dev)
 	$(MAKE) -k -C ./autoconf all install
 
 
 .PHONY: automake
-automake:             ## generates Makefiles for use with autoconf (aclocal, automake)
+automake:             ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
 	$(MAKE) -k -C ./automake all install
 
 
 .PHONY: gettext
-gettext:             ## tools to translate human languages
+gettext:             ## tools to translate human languages (part of autotools-dev)
 	$(MAKE) -k -C ./gettext all install
+
+
+.PHONY: libtool
+libtool:             ## makefile commands for handling shared libraries (part of autotools-dev)
+	$(MAKE) -k -C ./libtool all install
 
 
 .PHONY: vim
