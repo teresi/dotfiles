@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := gcc gpg curl perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev
+DEPENDENCIES := gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip
 DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -155,7 +155,7 @@ autoconf:             ## M4 macros to configure sources
 	$(MAKE) -k -C ./autoconf all install
 
 
-.PHONY: autoconf
+.PHONY: automake
 automake:             ## generates Makefiles for use with autoconf (aclocal, automake)
 	$(MAKE) -k -C ./automake all install
 
@@ -191,7 +191,7 @@ vundle:               ## vim package manager
 # FUTURE consider parallel vundle installer?
 # https://github.com/jdevera/parallel-vundle-installer
 .PHONY: vim_plugins
-vim_plugins: | vundle ## download vim plugins
+vim_plugins: | vundle pip  ## download vim plugins
 	$(call log_info,updating $@...)
 	curl -kfLo $(HOME)/.vim/autoload/plug.vim --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -444,7 +444,7 @@ nvim:                ## alias for neovim, neovimrc, download plugins
 
 
 .PHONY: neovim
-neovim: | lua npm rg   ## compile neovim
+neovim: | lua npm rg cmake gettext ninja ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))

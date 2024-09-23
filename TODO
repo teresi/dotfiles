@@ -1,10 +1,11 @@
-- remove need for pip as prereq for tmux by replacing psutil w/
+- add libtool, remove autotools-dev as dependency
 - update bison Makefile
+- improve npm detection,
+    + npm might be installed but can't be detected b/c bashrc hasn't run
+    + this also might happen somehow where bashrc is sourced but still can't be detected b/c nvm.sh is missing?
 - add gcc
 - add gpg
     + https://ftp.gnu.org/pub/gnu/gettext/gettext-0.22.5.tar.gz.sig
-- add automake
-    + https://www.gnu.org/software/automake/
 - add libiconv (for gettext if missing glibc)
     + https://www.gnu.org/software/libiconv/
 - add option for local/bin to another dir (e.g. data)
@@ -25,4 +26,9 @@
 - move from psutil to sysstat / mpstat in tmux cpu info
     + mpstat -P ALL  # show usage per core
     + https://github.com/sysstat/sysstat
-
+    + remove need for pip as prereq for tmux (no longer need psutil)
+- add libssl
+    + does compiling this also install headers/libs so we dont' need libssl-dev?
+- remove requirement for libssl-dev for cmake
+    + ./configure -DCMAKE_USE_OPENSSL=OFF
+    + actually neovim needs tls/ssl support in cmake...

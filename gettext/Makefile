@@ -67,7 +67,6 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 
 $(_bin): | $(_dir)
 	cd $(_dir) && ./configure --prefix=$(PREFIX) && make -j
-	@#not calling make check b/c 1.4.19 has a bug, fixed in 1.4.20? see https://bugs.gentoo.org/808749
 
 
 $(_install): $(_bin)
