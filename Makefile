@@ -442,15 +442,15 @@ lua:                 ## install Lua
 	@$(ROOT_DIR)/install_lua.bash
 
 
-.PHONY: nvim
-nvim:                ## alias for neovim, neovimrc, download plugins
-	$(call log_info,updating $@...)
-	$(MAKE) -ik neovim
-	$(MAKE) -ik neovimrc
-
-
 .PHONY: neovim
-neovim: | lua npm rg cmake gettext ninja ## compile neovim
+neovim:                ## compile neovim, install config, download plugins
+	$(call log_info,updating $@...)
+	$(MAKE) -ik nvim
+	$(MAKE) -ik nvimrc
+
+
+.PHONY: nvim
+nvim: | lua npm rg cmake gettext ninja  ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
@@ -461,17 +461,14 @@ neovim: | lua npm rg cmake gettext ninja ## compile neovim
 	#make -C $(NVIM) clean
 	#make -C $(NVIM) distclean
 	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
-	make -C $(NVIM) install
+	make -C $(NVIM) install || \
+		(make -C $(NVIM) clean && make -C $(NVIM) distclean)
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
-	$(call log_info,updating plugins...)
-	bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
-		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
-		{ echo "missing nvim! please call:  make neovim"; }'
 
 
-.PHONY: neovimrc
-neovimrc:              ## neovim config and plugins
+.PHONY: nvimrc
+nvimrc:              ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
 	$(call log_info,updating plugins...)
