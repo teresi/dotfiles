@@ -1,4 +1,4 @@
-import = ["~/.config/alacritty/hyper.toml"]
+general.import = ["~/.config/alacritty/hyper.toml"]
 
 [[keyboard.bindings]]
 key = "F11"
