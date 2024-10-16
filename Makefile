@@ -137,6 +137,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
+	$(MAKE) -ik tig
 	$(MAKE) -ik check_packages
 	@#TODO check PATH,
 
@@ -638,6 +639,7 @@ else
 	command -v bison &> /dev/null && echo "bison is already installed" || $(MAKE) -ik -C ./bison
 endif
 
+
 .PHONY: htop
 htop:                   ## compile htop
 	$(call log_info,installing $@...)
@@ -646,4 +648,14 @@ ifeq ($(BIN_DIR)/htop, $(shell command -v htop))
 	$(MAKE) -C htop -ik all install
 else
 	command -v htop &> /dev/null && echo "htop is already installed" || $(MAKE) -C htop -ik all install
+endif
+
+
+.PHONY: tig
+tig:
+	$(call log_info,installing $@...)
+ifeq ($(BIN_DIR)/tig, $(shell command -v tig))
+	$(MAKE) -C tig -ik all install
+else
+	command -v tig &> /dev/null && echo "tig is already installed" || $(MAKE) -C tig -ik all install
 endif
