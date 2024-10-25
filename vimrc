@@ -277,6 +277,18 @@ augroup END
 let g:tex_flavor = 'latex'
 "let g:vimtex_view_general_viewer = 'zathura'
 
+" remove trailing whitespace
+function TrimWhiteSpace()
+	%s/\s*$//
+	''
+endfunction
+
+set list listchars=trail:.,extends:>
+autocmd FileWritePre * call TrimWhiteSpace()
+autocmd FileAppendPre * call TrimWhiteSpace()
+autocmd FilterWritePre * call TrimWhiteSpace()
+autocmd BufWritePre * call TrimWhiteSpace()
+
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " VIM DISPATCH / QUICKFIX
