@@ -27,10 +27,10 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip
-DEPENDENCIES_NVIM := gettext cmake unzip curl build-essential
-DEPENDENCIES_ALACRITTY :=  cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-DEPENDENCIES_ZEPHYR := git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip dconf-editor dconf-cli
+DEPENDENCIES_NVIM := unzip curl build-essential
+DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 
 # NG this 'imports' many of the Make functions used below
 include ./helpers.mk
@@ -621,7 +621,18 @@ container:               ## run docker image for testing interactively
 .PHONY: cmake
 cmake:                  ## compile CMake
 	$(call log_info,installing $@...)
+	@# FUTURE make this into a function that takes the target (e.g. cmake) and does all this
+ifeq (,$(shell which cmake))
+	$(call check_pkgs,libssl-dev)
 	$(MAKE) -ik -C ./cmake all install
+else
+ifeq ($(PREFIX)/.bin/cmake,$(shell which cmake))
+	$(MAKE) -ik -C ./cmake all install
+else
+	@echo "    cmake is already installed to $(shell which cmake)"
+	@echo "    to compile locally anyways:  cd cmake && make all install"
+endif
+endif
 
 
 .PHONY: ninja

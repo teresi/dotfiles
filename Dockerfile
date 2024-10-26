@@ -8,8 +8,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         gnupg \
-        build-essential cmake \
-        dconf-editor \
+        build-essential \
+        dconf-editor dconf-cli \
+        libssl-dev \
         autoconf autotools-dev \
         git git-lfs \
         libevent-dev libncurses-dev gettext screen \

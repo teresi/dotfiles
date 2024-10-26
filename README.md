@@ -8,6 +8,7 @@ e.g.
 - gnome settings
 
 
+----
 ## USAGE
 
 ```
@@ -23,3 +24,9 @@ HOST_ALIAS=(<str>):         # user's nickname for their computer
 NO_SYMLINKS=ON              # copy config directly instead of linking to files here
                             # useful if you delete this repo after install
 ```
+
+
+----
+## TODO
+
+- refactor ninja, double check it pulls/rebuilds
