@@ -644,29 +644,44 @@ ninja: | cmake          ## compile ninja-build
 .PHONY: bison
 bison:                  ## compile bison
 	$(call log_info,installing $@...)
-ifeq ($(BIN_DIR)/bison, $(shell command -v bison))
-	$(MAKE) -ik -C ./bison
+ifeq (,$(shell which $@))
+	$(MAKE) -ik -C $@ all
 else
-	command -v bison &> /dev/null && echo "bison is already installed" || $(MAKE) -ik -C ./bison
+ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
+	$(MAKE) -ik -C $@ all
+else
+	@echo "    $@ is already installed to $(shell which $@)"
+	@echo "    to compile locally anyways:  cd $@ && make all"
 endif
+endif
+
 
 
 .PHONY: htop
 htop:                   ## compile htop
 	$(call log_info,installing $@...)
-	@# we don't need this version of htop, so skip if exists
-ifeq ($(BIN_DIR)/htop, $(shell command -v htop))
-	$(MAKE) -C htop -ik all install
+ifeq (,$(shell which $@))
+	$(MAKE) -ik -C $@ all install
 else
-	command -v htop &> /dev/null && echo "htop is already installed" || $(MAKE) -C htop -ik all install
+ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
+	$(MAKE) -ik -C $@ all install
+else
+	@echo "    $@ is already installed to $(shell which $@)"
+	@echo "    to compile locally anyways:  cd $@ && make all install"
+endif
 endif
 
 
 .PHONY: tig
 tig:
 	$(call log_info,installing $@...)
-ifeq ($(BIN_DIR)/tig, $(shell command -v tig))
-	$(MAKE) -C tig -ik all install
+ifeq (,$(shell which $@))
+	$(MAKE) -ik -C $@ all install
 else
-	command -v tig &> /dev/null && echo "tig is already installed" || $(MAKE) -C tig -ik all install
+ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
+	$(MAKE) -ik -C $@ all install
+else
+	@echo "    $@ is already installed to $(shell which $@)"
+	@echo "    to compile locally anyways:  cd $@ && make all install"
+endif
 endif

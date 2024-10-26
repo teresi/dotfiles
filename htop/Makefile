@@ -11,10 +11,15 @@ _SRC := $(ROOT_DIR)/htop/htop
 #_BIN := $(or $(shell command -v htop), $(PREFIX)/bin/htop)
 _BIN := $(_SRC)/htop
 _BRANCH := main
+_INSTALL := $(PREFIX)/bin/htop
 
 
 .PHONY: all
 all: $(_BIN)
+
+
+.PHONY: install
+install: $(_INSTALL)
 
 
 .PHONY: clean
@@ -27,12 +32,9 @@ uninstall:
 	$(MAKE) -ik -C $(_SRC) uninstall
 
 
-.PHONY: install
-install:
+$(_INSTALL): $(_BIN)
+	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_SRC) install
-
-
-$(PREFIX)/bin/htop: install
 
 
 $(_BIN): $(_SRC)/.git | $(_SRC)
