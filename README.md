@@ -28,5 +28,11 @@ NO_SYMLINKS=ON              # copy config directly instead of linking to files h
 
 ----
 ## TODO
-
+- add xsel
+- add xclip
+- add wmctrl
+- add xdootool
+- add ranger
+- add curl|wget?
 - refactor ninja, double check it pulls/rebuilds
+- refactor old scripts, e.g. move from bash scripts to sub dir w/ Makefile

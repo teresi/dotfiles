@@ -86,6 +86,7 @@ NINJA_BIN := $(BIN_DIR)/ninja
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
+export PREFIX := $(HOME)/.local
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -111,7 +112,6 @@ help:                 ## usage
 	@grep -E '^[a-z_A-Z0-9^.(]+:.*?## .*$$' $(MY_TARGETS) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-# NB not installing alacritty here b/c it's not used on remote logins
 .PHONY: all
 all:                  ## install programs and configs
 	$(MAKE) -ik check_packages
@@ -134,12 +134,11 @@ all:                  ## install programs and configs
 	$(MAKE) -ik alacritty  # includes fonts
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
-	$(MAKE) -ik ranger
+	$(MAKE) -ik rangerrc
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
 	$(MAKE) -ik tig
 	$(MAKE) -ik check_packages
-	@#TODO check PATH,
 
 
 .PHONY: depends
@@ -306,8 +305,8 @@ conda:                ## miniconda python distribution & package manager
 	@$(ROOT_DIR)/install_miniconda.sh
 
 
-.PHONY: ranger
-ranger:               ## ranger configuration
+.PHONY: rangerrc
+rangerrc:               ## ranger configuration
 	$(call log_info,updating $@...)
 	$(call check_pkgs,ranger)
 	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
@@ -621,18 +620,7 @@ container:               ## run docker image for testing interactively
 .PHONY: cmake
 cmake:                  ## compile CMake
 	$(call log_info,installing $@...)
-	@# FUTURE make this into a function that takes the target (e.g. cmake) and does all this
-ifeq (,$(shell which cmake))
-	$(call check_pkgs,libssl-dev)
-	$(MAKE) -ik -C ./cmake all install
-else
-ifeq ($(PREFIX)/.bin/cmake,$(shell which cmake))
-	$(MAKE) -ik -C ./cmake all install
-else
-	@echo "    cmake is already installed to $(shell which cmake)"
-	@echo "    to compile locally anyways:  cd cmake && make all install"
-endif
-endif
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: ninja
@@ -644,44 +632,16 @@ ninja: | cmake          ## compile ninja-build
 .PHONY: bison
 bison:                  ## compile bison
 	$(call log_info,installing $@...)
-ifeq (,$(shell which $@))
-	$(MAKE) -ik -C $@ all
-else
-ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
-	$(MAKE) -ik -C $@ all
-else
-	@echo "    $@ is already installed to $(shell which $@)"
-	@echo "    to compile locally anyways:  cd $@ && make all"
-endif
-endif
-
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: htop
 htop:                   ## compile htop
 	$(call log_info,installing $@...)
-ifeq (,$(shell which $@))
-	$(MAKE) -ik -C $@ all install
-else
-ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
-	$(MAKE) -ik -C $@ all install
-else
-	@echo "    $@ is already installed to $(shell which $@)"
-	@echo "    to compile locally anyways:  cd $@ && make all install"
-endif
-endif
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: tig
 tig:
 	$(call log_info,installing $@...)
-ifeq (,$(shell which $@))
-	$(MAKE) -ik -C $@ all install
-else
-ifeq ($(PREFIX)/.bin/$@,$(shell which $@))
-	$(MAKE) -ik -C $@ all install
-else
-	@echo "    $@ is already installed to $(shell which $@)"
-	@echo "    to compile locally anyways:  cd $@ && make all install"
-endif
-endif
+	$(call make_all_install_if_not_on_host,$@)

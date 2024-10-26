@@ -107,3 +107,21 @@ define check_pkgs
 		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || (echo -e "\033[;91mERROR  missing package:  $$pkg\033[0m"; sleep 3;) \
 	done
 endef
+
+
+# call `make all install` on $1
+#	if the host system doesn't have a program named $1, compile
+#	if the program exists, but it's at PREFIX/.local, compile
+#	else, don't compile
+#
+#	1 the program name / makefile directory
+define make_all_install_if_not_on_host
+	@if [[ "" == $(shell which $(1)) || $(PREFIX)/bin/$(1) == $(shell which $(1)) ]]; then\
+		$(MAKE) -ik -C $(1) all install;\
+	else \
+		echo -e "\e[32m"\
+				"\t$(1) is already installed to $(shell which $(1))\n"\
+				"\tto compile locally anyways:  cd $(1) && make all install"\
+				"\e[39m";\
+	fi
+endef
