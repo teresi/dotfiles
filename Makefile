@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip dconf-editor dconf-cli
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip dconf-editor dconf-cli gawk
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -163,6 +163,7 @@ automake:             ## generates Makefiles for use with autoconf (aclocal, aut
 
 .PHONY: gettext
 gettext:             ## tools to translate human languages (part of autotools-dev)
+	@#TODO gettext needs gawk
 	$(MAKE) -k -C ./gettext all install
 
 
@@ -447,15 +448,16 @@ neovim:                ## compile neovim, install config, download plugins
 	$(call log_info,updating $@...)
 	$(MAKE) -ik nvim
 	$(MAKE) -ik nvimrc
+	$(call log_info,updating $@... DONE! Please source bashrc for nvim packages to work)
 
 
 .PHONY: nvim
-nvim: | lua npm rg cmake gettext ninja  ## compile neovim
+nvim: | lua npm rg cmake gettext ninja cmake ## compile neovim
 	$(call log_info,updating $@...)
 	$(call update_repo,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
 	$(call log_info,updating tree sitter...)
-	bash -l -c 'source ~/.bashrc && npm install -g tree-sitter tree-sitter-cli; exit 0;'
+	bash -l -c 'source ~/.bashrc && unset PREFIX; source $(HOME)/.nvm/nvm.sh && npm install -g tree-sitter tree-sitter-cli; exit 0;'
 	@# TODO move this to it's own makefile / bash script nad only update
 	#rm -rf $(NVIM)/build
 	#make -C $(NVIM) clean
@@ -547,7 +549,7 @@ endif
 npm: node_version_manager ## install nvm and Node
 	$(call log_info,installing $@...)
 	@# uninstall via `rm -rf ~/.nvm`
-	@bash -l -c 'source ~/.bashrc && type -t npm 2>&1 >/dev/null && \
+	@bash -l -c 'unset PREFIX; source ~/.bashrc && type -t npm 2>&1 >/dev/null && \
 		{ echo "node is already installed"; } || \
 		{ source ~/.nvm/nvm.sh && nvm install node; exit 0; }'
 
