@@ -17,9 +17,9 @@ _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
 _release_ver := 0.22.5
 _release_tar := gettext-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
+_release_sig := gettext-$(_release_ver).tar.gz.sig
 _release_tar_url := https://ftp.gnu.org/pub/gnu/gettext/$(_release_tar)
-_release_sig_url := $(_release_tar_url).sig
+_release_sig_url := https://ftp.gnu.org/pub/gnu/gettext/$(_release_tar).sig
 
 
 .PHONY: all

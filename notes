@@ -5,3 +5,9 @@ https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
 https://effective-shell.com/part-5-building-your-toolkit/managing-your-dotfiles/
 
 https://gitlab.com/tukusejssirs/lnx_scripts/-/blob/master/bash/functions/gshort.sh
+
+add script to update keyring?
+    _gnu_pub_url=https://ftp.gnu.org/gnu/gnu-keyring.gpg
+    _gnu_pub=/tmp/gnu-keyring.gpg
+    curl -C - -o $_gnu_pub $_gnu_pub_url
+    gpg --import $_gnu_pub
