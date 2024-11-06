@@ -116,7 +116,7 @@ endef
 #
 #	1 the program name / makefile directory
 define make_all_install_if_not_on_host
-	@if [[ "" == $(shell which $(1)) || $(PREFIX)/bin/$(1) == $(shell which $(1)) ]]; then\
+	@if [[ "" == "$(shell which $(1))" || "$(PREFIX)/bin/$(1)" == "$(shell which $(1))" ]]; then\
 		$(MAKE) -ik -C $(1) all install;\
 	else \
 		echo -e "\e[32m"\
