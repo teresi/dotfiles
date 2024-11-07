@@ -5,6 +5,7 @@
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
+export PATH := $(PREFIX)/bin:$(PATH)
 
 _URL := https://github.com/libevent/libevent.git
 _DIR := ./libevent
@@ -12,6 +13,7 @@ _BUILD := $(_DIR)/build
 _BRANCH := release
 _BIN := $(_BUILD)/lib/libevent.so
 _INSTALL := $(PREFIX)/lib/libevent.so
+_depends := cmake
 
 
 .PHONY: all
@@ -25,6 +27,12 @@ install: $(_INSTALL)
 .PHONY: uninstall
 uninstall:
 	$(MAKE) -ik -C $(_BUILD) uninstall
+	rm -rf $(DIR)
+
+
+.PHONY: check
+check:
+	$(foreach prog,$(_depends),type -t $(prog) 2>&1 >/dev/null || (echo "dependency not in PATH: $(prog)"; exit 1);)
 
 
 $(_BIN): $(_DIR)/.git

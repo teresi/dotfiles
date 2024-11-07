@@ -12,6 +12,7 @@
 
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
+export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _dir := $(_root_dir)/automake
@@ -52,7 +53,7 @@ $(_gpg_key):
 
 
 $(_release_sig):
-	curl -o $(_release_sig) $(_release_sig_url)
+	curl -C - -o $(_release_sig) $(_release_sig_url)
 
 
 $(_release_tar):
@@ -64,9 +65,9 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid autoconf sig"; exit 1)
+		|| (echo "invalid automake sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid autoconf tar"; exit 1) \
+		|| (echo "invalid automake tar"; exit 1) \
 		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
 
 

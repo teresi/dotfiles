@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen libncurses-dev lm-sensors autotools-dev libssl-dev unzip dconf-editor dconf-cli gawk
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -146,8 +146,13 @@ depends:              ## install system dependencies
 	$(ROOT_DIR)/install_dependencies.sh
 
 
+.PHONY: gawk
+gawk:
+	$(call make_all_install_if_not_on_host,$@)
+
+
 .PHONY: m4
-m4:                   ## GNU M4 macro processor
+m4: gawk              ## GNU M4 macro processor
 	$(MAKE) -k -C ./m4 all install
 
 
@@ -163,7 +168,6 @@ automake:             ## generates Makefiles for use with autoconf (aclocal, aut
 
 .PHONY: gettext
 gettext:             ## tools to translate human languages (part of autotools-dev)
-	@#TODO gettext needs gawk
 	$(MAKE) -k -C ./gettext all install
 
 
@@ -207,12 +211,22 @@ vim_plugins: | vundle pip  ## download vim plugins
 	pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
+.PHONY: pkgconf
+pkgconf:
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C ./pkgconf
+
+
 .PHONY: tmux
-tmux: | bison         ## add tmux config and plugins
+tmux: | bison cmake pkgconf      ## add tmux config and plugins
 	$(call check_pkgs,xsel xclip)
+	@# TODO move libevent / libncurses out of tmux folder
+	@# TODO fix libevent / libncurses when compiling locally
+	@# see https://github.com/tmux/tmux/wiki/Installing
 	$(MAKE) -ik -C ./tmux
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
+	@# TODO you have to have tmux in the path to call tmux plugins
 	$(MAKE) -ik tmux_plugins
 
 

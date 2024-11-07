@@ -24,7 +24,11 @@ update_repo_to_master $_url $_dst
 
 notify "ncurses configure..."
 cd $_dst
-./configure --prefix="$_prefix"
+./configure --prefix="$_prefix" \
+	--with-shared \
+	--with-termlib \
+	--enable-pc-files \
+	--with-pkg-config-libdir=$_prefix/lib/pkgconfig
 
 
 notify "ncurses compile..."

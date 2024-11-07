@@ -11,7 +11,8 @@
 
 
 SHELL := /bin/bash
-PREFIX ?= $(HOME)/.local/bin
+PREFIX ?= $(HOME)/.local/
+export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _dir := $(_root_dir)/bison
@@ -38,14 +39,14 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(BISON_DIR) clean
 	rm $(_release_sig)
 	rm $(_release_tar)
+	$(MAKE) -ik -C $(_dir) clean
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(BISON_DIR) uninstall
+	$(MAKE) -ik -C $(_dir) uninstall
 
 
 $(_gpg_key):
@@ -61,13 +62,14 @@ $(_release_tar):
 
 
 $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
+	gpg --import $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid autoconf sig"; exit 1)
+		|| (echo "invalid bison sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid autoconf tar"; exit 1) \
+		|| (echo "invalid bison tar"; exit 1) \
 		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
 
 

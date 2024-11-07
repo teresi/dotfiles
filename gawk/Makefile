@@ -1,9 +1,8 @@
 #!/usr/bin/make -f
 
-# compile pkgconf
+# compile Gnu Awk
 
-# tools for path handling during the configure step
-# successor to pkg-config
+# text processor
 
 
 SHELL := /bin/bash
@@ -11,14 +10,14 @@ PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-_dir := $(_root_dir)/pkgconf
-_bin := $(_dir)/pkgconf
-_install := $(PREFIX)/bin/pkgconf
+_dir := $(_root_dir)/gawk
+_bin := $(_dir)/gawk
+_install := $(PREFIX)/bin/gawk
 
-_release_ver := 2.1.1
-_release_tar := pkgconf-$(_release_ver).tar.xz
-_release_tar_url := https://distfiles.ariadne.space/pkgconf/pkgconf-2.1.1.tar.xz
-_md5_sum := bc29d74c2483197deb9f1f3b414b7918
+_release_ver := 5.3.1
+_release_tar := gawk-$(_release_ver).tar.xz
+_release_tar_url := https://ftp.gnu.org/gnu/gawk/gawk-5.3.1.tar.xz
+_md5_sum := 4e9292a06b43694500e0620851762eec
 
 
 .PHONY: all
@@ -54,7 +53,6 @@ $(_dir):  $(_release_tar)
 
 $(_bin): | $(_dir)
 	cd $(_dir) \
-		&& ./autogen.sh \
 		&& ./configure \
 			--prefix=$(PREFIX) \
 		&& make -j

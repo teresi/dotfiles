@@ -30,7 +30,12 @@ update_repo_to_master $_url $_dst
 
 notify "tmux configure..."
 cd $_dst
+# TODO handle libraries in prefix for libevent / libncurses
+# see https://unix.stackexchange.com/questions/459671/how-do-i-build-tmux-from-source-without-root-access-with-a-custom-built-libevent
+# https://github.com/tmux/tmux/wiki/Installing
+export PKG_CONFIG_PATH+=:${_prefix}/lib/pkgconfig
 sh autogen.sh
+pkg-config --cflags --libs libevent --libs ncurses
 ./configure --prefix="$_prefix"
 
 # NOTE can compile w/ our custom ncurses and libevent:

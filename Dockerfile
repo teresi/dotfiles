@@ -2,6 +2,7 @@
 
 FROM ubuntu:22.04 as base
 
+WORKDIR /root/dotfiles
 RUN --mount=type=cache,target=/var/cache/apt \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt-get update -y \
@@ -11,12 +12,11 @@ RUN --mount=type=cache,target=/var/cache/apt \
         build-essential \
         dconf-editor dconf-cli \
         libssl-dev \
-        autoconf autotools-dev \
         git git-lfs \
-        libevent-dev libncurses-dev gettext screen \
-        pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \
+        screen \
+        libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \
         curl wget zip unzip \
-        tmux vim ranger \
+        vim ranger \
         python3 \
         xsel xclip wmctrl xdotool \
         gconf2 gnome-shell-extensions

@@ -14,6 +14,7 @@ _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _dir := $(_root_dir)/m4
 _bin := $(_dir)/src/m4
 _install := $(PREFIX)/bin/m4
+_depends := gawk
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
@@ -25,7 +26,7 @@ _release_sig_url := $(_release_tar_url).sig
 
 
 .PHONY: all
-all: $(_bin)
+all: check $(_bin)
 
 
 .PHONY: install
@@ -37,6 +38,11 @@ clean:
 	$(MAKE) -ik -C $(_dir) clean
 	rm $(_release_sig)
 	rm $(_release_tar)
+
+
+.PHONY: check
+check:
+	@$(foreach prog,$(_depends),type -t $(prog) 2>&1 >/dev/null || (echo "depedency not in PATH: $(prog)"; exit 1);)
 
 
 .PHONY: uninstall
