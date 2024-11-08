@@ -10,10 +10,11 @@ RUN --mount=type=cache,target=/var/cache/apt \
         ca-certificates \
         gnupg \
         build-essential \
-        dconf-editor dconf-cli \
+        libncurses-dev\
         libssl-dev \
-        git git-lfs \
         screen \
+        dconf-editor dconf-cli \
+        git git-lfs \
         libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \
         curl wget zip unzip \
         vim ranger \

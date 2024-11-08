@@ -43,7 +43,7 @@ $(_BUILD)/bin/cmake: $(_DIR)/.git
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_BUILD) clean
+	$(MAKE) -ik -C $(_BUILD) clean || rm -rf $(_DIR)
 
 
 .PHONY: repo

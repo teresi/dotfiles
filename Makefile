@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -148,31 +148,37 @@ depends:              ## install system dependencies
 
 .PHONY: gawk
 gawk:
+	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: m4
 m4: gawk              ## GNU M4 macro processor
+	$(call log_info,updating $@...)
 	$(MAKE) -k -C ./m4 all install
 
 
 .PHONY: autoconf
 autoconf:             ## M4 macros to configure sources (part of autotools-dev)
+	$(call log_info,updating $@...)
 	$(MAKE) -k -C ./autoconf all install
 
 
 .PHONY: automake
 automake:             ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
+	$(call log_info,updating $@...)
 	$(MAKE) -k -C ./automake all install
 
 
 .PHONY: gettext
 gettext:             ## tools to translate human languages (part of autotools-dev)
+	$(call log_info,updating $@...)
 	$(MAKE) -k -C ./gettext all install
 
 
 .PHONY: libtool
 libtool:             ## makefile commands for handling shared libraries (part of autotools-dev)
+	$(call log_info,updating $@...)
 	$(MAKE) -k -C ./libtool all install
 
 
@@ -212,17 +218,24 @@ vim_plugins: | vundle pip  ## download vim plugins
 
 
 .PHONY: pkgconf
-pkgconf:
+pkgconf: m4
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C ./pkgconf
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: libevent
+libevent: cmake
+	$(call log_info,updating $@...)
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: tmux
-tmux: | bison cmake pkgconf      ## add tmux config and plugins
+tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent  ## add tmux config and plugins
 	$(call check_pkgs,xsel xclip)
 	@# TODO move libevent / libncurses out of tmux folder
 	@# TODO fix libevent / libncurses when compiling locally
 	@# see https://github.com/tmux/tmux/wiki/Installing
+
 	$(MAKE) -ik -C ./tmux
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
@@ -239,8 +252,8 @@ tmux.conf:            ## add tmux config file
 .PHONY: tmux_plugins
 tmux_plugins: | pip   ## download tmux plugins
 	$(call log_info,updating $@...)
-	-@$(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
-	-@$(HOME)/.tmux/plugins/tpm/scripts/update_plugin.sh
+	-@LD_LIBRARY_PATH+=:$(PREFIX)/lib $(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
+	-@LD_LIBRARY_PATH+=:$(PREFIX)/lib $(HOME)/.tmux/plugins/tpm/scripts/update_plugin.sh
 	pip install --user psutil  # for tmux cpu info
 
 
@@ -646,7 +659,7 @@ ninja: | cmake          ## compile ninja-build
 
 
 .PHONY: bison
-bison:                  ## compile bison
+bison: gawk gettext            ## compile bison
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 

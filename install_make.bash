@@ -22,7 +22,7 @@ if [[ $? == 0 ]]; then
 fi
 
 
-notify "compling gnu/make $version to $prefix..."
+notify "compiling gnu/make $version to $prefix..."
 notify "    updating from $make_version to $version"
 
 set -ex
@@ -56,4 +56,4 @@ make -j
 make install
 
 
-notify "compling gnu/make $version to $prefix...    COMPLETE!"
+notify "compiling gnu/make $version to $prefix...    COMPLETE!"

@@ -40,8 +40,10 @@ $(LIBEVENT_LIB):
 	$(ROOT_DIR)/libevent.bash $(PREFIX)
 
 
-# not compiling libevent/ncurses for now, see note in tmux script
-#$(TMUX_BIN): | $(LIBEVENT_LIB) $(NCURSES_LIB)
+# we compile libevent now in the top level makefile
+# skipping ncurses compile b/c I get a warning for
+# libtinfo.so.6 no version information available
+# every time it's used
 $(TMUX_BIN):
 	$(ROOT_DIR)/tmux.bash $(PREFIX)
 

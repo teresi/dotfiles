@@ -9,6 +9,9 @@
 if [ -w "$HOME"/.local/bin ]; then
 	export PATH="$HOME"/.local/bin:$PATH
 fi
+if [ -w "$HOME"/.local/lib ]; then
+	export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
+fi
 
 # MAGIC /data/ is our preferred disk
 # NB prepend the location so we prefer our builds

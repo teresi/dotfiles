@@ -2,3 +2,4 @@
 **/*.swo
 **/*.orig
 **/*.pdf
+get-pip.py*
