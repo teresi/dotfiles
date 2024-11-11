@@ -155,31 +155,49 @@ gawk:
 .PHONY: m4
 m4: gawk              ## GNU M4 macro processor
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C ./m4 all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: autoconf
 autoconf:             ## M4 macros to configure sources (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C ./autoconf all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: automake
 automake:             ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C ./automake all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: gettext
 gettext:             ## tools to translate human languages (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C ./gettext all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libtool
 libtool:             ## makefile commands for handling shared libraries (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C ./libtool all install
+	$(MAKE) -k -C $@ all install
+
+
+.PHONY: pkgconf
+pkgconf: m4
+	$(call log_info,updating $@...)
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: libevent
+libevent: cmake
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: libncurses
+libncurses: pkgconf
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
 
 
 .PHONY: vim
@@ -217,25 +235,13 @@ vim_plugins: | vundle pip  ## download vim plugins
 	pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
-.PHONY: pkgconf
-pkgconf: m4
-	$(call log_info,updating $@...)
-	$(call make_all_install_if_not_on_host,$@)
-
-
-.PHONY: libevent
-libevent: cmake
-	$(call log_info,updating $@...)
-	$(call make_all_install_if_not_on_host,$@)
-
-
 .PHONY: tmux
 tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent  ## add tmux config and plugins
 	$(call check_pkgs,xsel xclip)
-	@# TODO move libevent / libncurses out of tmux folder
-	@# TODO fix libevent / libncurses when compiling locally
 	@# see https://github.com/tmux/tmux/wiki/Installing
-
+	@# FUTURE try static build for tmux?
+	@# BUG not using custom libncurses right now, getting warnings for
+	@# libtinfo.so.6 no version information available
 	$(MAKE) -ik -C ./tmux
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
@@ -653,7 +659,7 @@ cmake:                  ## compile CMake
 
 
 .PHONY: ninja
-ninja: | cmake          ## compile ninja-build
+ninja: cmake          ## compile ninja-build
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C ./ninja
 

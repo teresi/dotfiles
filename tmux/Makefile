@@ -2,6 +2,8 @@
 
 # compile tmux
 
+# requires pkgconf, libncurses, libevent
+
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -24,20 +26,12 @@ all: $(TMUX_BIN)
 
 .PHONY: clean
 clean:
-	rm -f $(NCURSES_LIB)
-	$(MAKE) -ik clean -C $(NCURSES_DIR)
-	rm -f $(LIBEVENT_LIB)
-	$(MAKE) -ik clean -C $(LIBEVENT_DIR)/build
-	rm -f $(TMUX_BIN)
 	$(MAKE) -ik clean -C $(TMUX_DIR)
 
 
-$(NCURSES_LIB):
-	$(ROOT_DIR)/ncurses.bash $(PREFIX)
-
-
-$(LIBEVENT_LIB):
-	$(ROOT_DIR)/libevent.bash $(PREFIX)
+.PHONY: uninstall
+uninstall:
+	$(MAKE) -ik -C $(TMUX_DIR) uninstall
 
 
 # we compile libevent now in the top level makefile

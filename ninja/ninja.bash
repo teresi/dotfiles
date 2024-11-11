@@ -31,7 +31,7 @@ cmake --build build-cmake -j
 
 
 if [ ! -d "$_prefix" ]; then
-	error "cannot install ncurses, prefix DNE:  $_prefix"
+	error "cannot install ninja, prefix DNE:  $_prefix"
 	sleep 3
 	exit 1
 fi

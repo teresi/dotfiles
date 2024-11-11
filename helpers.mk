@@ -109,7 +109,7 @@ define check_pkgs
 endef
 
 
-# call `make all install` on $1
+# call `make all install` on $1 for a specific executable
 #	if the host system doesn't have a program named $1, compile
 #	if the program exists, but it's at PREFIX/.local, compile
 #	else, don't compile
@@ -125,3 +125,5 @@ define make_all_install_if_not_on_host
 				"\e[39m";\
 	fi
 endef
+
+#@ FUTURE add make_all_install_lib_if_not_on_host
