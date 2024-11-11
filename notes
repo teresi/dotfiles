@@ -1,8 +1,17 @@
+
+- add a 'download' option, download / fetch the release,
+  so the project can be rsync-ed to another machine,
+  update clean rules to forgo deletion of the release
+- add libx11-dev
+  see https://packages.debian.org/sid/libx11-dev
+  see https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file
+- add wmctrl
+- update ninja makefile / remove bash
+- update tmux makefile / remove bash
+
+
 was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
 
-update ninja makefile
-
-update tmux makefile
 
 start ssh agent on login, useful for ssh where the agent doesn't always get started
 try the systemd solution

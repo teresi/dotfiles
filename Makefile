@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -165,7 +165,7 @@ autoconf:             ## M4 macros to configure sources (part of autotools-dev)
 
 
 .PHONY: automake
-automake:             ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
+automake: gawk        ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -680,3 +680,11 @@ htop:                   ## compile htop
 tig:
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: xsel
+xsel: pkgconf autoconf automake libtool m4
+	$(call log_info,installing $@...)
+	@# TODO xsel requires x11 library
+	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
+	$(MAKE) -k -C $@ all install
