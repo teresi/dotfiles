@@ -21,7 +21,7 @@ _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
 _release_ver := 1.4.19
 _release_tar := m4-$(_release_ver).tar.gz
 _release_sig := $(_release_tar).sig
-_release_tar_url := https://mirrors.ibiblio.org/gnu/m4/m4-$(_release_ver).tar.gz
+_release_tar_url := https://mirrors.dotsrc.org/gnu/m4/m4-$(_release_ver).tar.gz
 _release_sig_url := $(_release_tar_url).sig
 
 
