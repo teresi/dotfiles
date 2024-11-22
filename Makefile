@@ -121,6 +121,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik gettext
 	$(MAKE) -ik libtool
 	$(MAKE) -ik gnu_make
+	$(MAKE) -ik tree
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
 	$(MAKE) -ik vim
@@ -688,3 +689,9 @@ xsel: pkgconf autoconf automake libtool m4
 	@# TODO xsel requires x11 library
 	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
 	$(MAKE) -k -C $@ all install
+
+
+.PHONY: tree
+tree:                   ## compile tree
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
