@@ -7,9 +7,7 @@
     see https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file
 - add function to check if library is available
 - add wmctrl
-- add tree,  see https://www.linuxfromscratch.org/blfs/view/svn/general/tree.html
 - add screen,  see https://www.linuxfromscratch.org/blfs/view/svn/general/screen.html
-- update ninja makefile / remove bash
 - update tmux makefile / remove bash
 - add wget,  see https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
 

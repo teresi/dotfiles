@@ -6,24 +6,49 @@
 # ninja is similar to CMAKE
 
 
-SHELL := /bin/bash
-ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-MAKEFLAGS += --no-print-directory
-PREFIX := $(HOME)/.local/bin
+include ../helpers.mk
+PREFIX ?= $(HOME)/.local
+_install := $(PREFIX)/bin/ninja
 
-NINJA_DIR := $(ROOT_DIR)/ninja
-NINJA_BIN := $(PREFIX)/ninja
+_url := https://github.com/ninja-build/ninja.git
+_branch := master
+
+_src := ninja
+_build := build
+_bin := $(_src)/$(_build)/ninja
 
 
 .PHONY: all
-all: $(NINJA_BIN)
+all: $(_bin)
+
+
+.PHONY: install
+install: $(_install)
 
 
 .PHONY: clean
 clean:
-	rm -f $(NINJA_BIN)
-	cmake --build $(NINJA_DIR)/build-cmake/ --target clean
+	cd $(_src) && cmake --build $(_build) --target clean
 
 
-$(NINJA_BIN):
-	$(ROOT_DIR)/ninja.bash $(PREFIX)
+.PHONY: uninstall
+uninstall:
+	xargs rm -f < $(_src)/$(_build)/install_manifest.txt
+
+
+$(_install): $(_bin)
+	$(call log_info,updating $@...)
+	cd $(_src) && cmake --build $(_build) --target install -- --no-print-directory
+
+
+$(_bin): $(_src)/.git | $(_src)
+	$(call log_info,updating $@...)
+	$(call check_pkgs, cmake)
+	cd $(_src) \
+		&& cmake -B$(_build) --install-prefix=$(PREFIX) \
+		&& cmake --build $(_build) -j
+
+
+.PHONY: $(_src)
+$(_src):
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
