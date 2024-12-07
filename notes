@@ -16,8 +16,6 @@
 
 - add wmctrl
 
-- add screen,  see https://www.linuxfromscratch.org/blfs/view/svn/general/screen.html
-
 - update tmux makefile / remove bash
 
 - add wget,  see https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
