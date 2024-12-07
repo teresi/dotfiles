@@ -120,8 +120,8 @@ all:                  ## install programs and configs
 	$(MAKE) -ik m4
 	$(MAKE) -ik autoconf
 	$(MAKE) -ik automake
-	$(MAKE) -ik gettext
 	$(MAKE) -ik libtool
+	$(MAKE) -ik gettext
 	$(MAKE) -ik gnu_make
 	$(MAKE) -ik tree
 	$(MAKE) -ik pip
@@ -180,7 +180,7 @@ gettext:             ## tools to translate human languages (part of autotools-de
 
 
 .PHONY: libtool
-libtool:             ## makefile commands for handling shared libraries (part of autotools-dev)
+libtool: gawk m4        ## makefile commands for handling shared libraries (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -651,7 +651,6 @@ container:               ## run docker image for testing interactively
 	$(call log_info,running container interactively for testing...)
 	docker run -it --rm \
 		-e TZ=$(cat /etc/timezone) \
-		--volume .:/root/dotfiles \
 		dotfiles-test
 
 
