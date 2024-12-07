@@ -1,10 +1,14 @@
-
 - add a 'download' option, download / fetch the release,
     so the project can be rsync-ed to another machine,
     update clean rules to forgo deletion of the release
+
 - add libx11-dev
     see https://packages.debian.org/sid/libx11-dev
     see https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file
+
+- add Xorg libraries, for xsel, xclip (?)
+    see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
+
 - add function to check if library is available
 - add wmctrl
 - add screen,  see https://www.linuxfromscratch.org/blfs/view/svn/general/screen.html

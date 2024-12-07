@@ -27,7 +27,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -237,8 +237,8 @@ vim_plugins: | vundle pip  ## download vim plugins
 
 
 .PHONY: tmux
-tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent  ## add tmux config and plugins
-	$(call check_pkgs,xsel xclip)
+tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent xsel xclip  ## add tmux config and plugins
+	$(call check_pkgs,screen)
 	@# see https://github.com/tmux/tmux/wiki/Installing
 	@# FUTURE try static build for tmux?
 	@# BUG not using custom libncurses right now, getting warnings for
@@ -350,9 +350,9 @@ rangerrc:               ## ranger configuration
 
 
 .PHONY: rxvt.conf
-rxvt.conf:            ## rxvt configuration
+rxvt.conf: xsel            ## rxvt configuration
 	$(call log_info,updating $@...)
-	@# needs apt packages: rxvt-unicode xsel
+	$(call check_pkgs,rxcvt-unicode)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources $(RXVT_CONF)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources.d $(RXVT_CONF_D)
 	xrdb -merge $(RXVT_CONF)
@@ -662,7 +662,7 @@ cmake:                  ## compile CMake
 .PHONY: ninja
 ninja: cmake          ## compile ninja-build
 	$(call log_info,installing $@...)
-	$(MAKE) -ik -C ./ninja
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: bison
@@ -684,11 +684,19 @@ tig:
 
 
 .PHONY: xsel
-xsel: pkgconf autoconf automake libtool m4
+xsel: pkgconf autoconf automake libtool m4  # compile xsel
 	$(call log_info,installing $@...)
 	@# TODO xsel requires x11 library
 	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
-	$(MAKE) -k -C $@ all install
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: xclip
+xclip: pkgconf autoconf automake libtool m4  # compile xclip
+	$(call log_info,installing $@...)
+	@# TODO xclip requires x11 library
+	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: tree

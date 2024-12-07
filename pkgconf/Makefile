@@ -54,7 +54,6 @@ $(_dir):  $(_release_tar)
 
 $(_bin): | $(_dir)
 	cd $(_dir) \
-		&& ./autogen.sh \
 		&& ./configure \
 			--prefix=$(PREFIX) \
 		&& make -j

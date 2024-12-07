@@ -41,7 +41,7 @@ $(_install): $(_bin)
 	cd $(_src) && cmake --build $(_build) --target install -- --no-print-directory
 
 
-$(_bin): $(_src)/.git | $(_src)
+$(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
 	$(call check_pkgs, cmake)
 	cd $(_src) \
@@ -49,6 +49,10 @@ $(_bin): $(_src)/.git | $(_src)
 		&& cmake --build $(_build) -j
 
 
-.PHONY: $(_src)
-$(_src):
+.PHONY: repo
+repo:
+	$(call log_info,updating $@...)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+$(_src)/.git: | repo
