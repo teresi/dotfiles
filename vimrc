@@ -167,14 +167,6 @@ silent! colorscheme herald     " next color if downloaded
 " so use 'deus' since that one is consistent
 let g:airline_theme='deus'
 
-" show whitespace
-"set listchars=trail:\uB7,nbsp:~,eol:\u23CE
-"set list lcs=trail:\uB7,tab:\uBB\uB7
-"set list lcs=trail:\uB7,tab:»·
-"set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
-"set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\
-"set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
-set list lcs=tab:¦\ ,trail:·,precedes:«,extends:»
 " match indentline colors
 highlight SpecialKey ctermfg=239
 set number          " show line numbers
@@ -465,3 +457,15 @@ endfunction
 " FIXES
 
 set nocompatible              " needed at the end to re-enable arrows in insert mode
+
+" listchars were getting clobbered by something else
+" so add to the end
+"
+" show whitespace
+"set listchars=trail:\uB7,nbsp:~,eol:\u23CE
+"set list lcs=trail:\uB7,tab:\uBB\uB7
+"set list lcs=trail:\uB7,tab:»·
+"set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
+"set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\
+"set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
+set list lcs=tab:¦\ ,trail:·,precedes:«,extends:»

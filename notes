@@ -1,3 +1,6 @@
+- enable change in PREFIX
+    need to pass PREFIX to make_all_install function
+
 - add a 'download' option, download / fetch the release,
     so the project can be rsync-ed to another machine,
     update clean rules to forgo deletion of the release
@@ -10,14 +13,16 @@
     see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
 
 - add function to check if library is available
+
 - add wmctrl
+
 - add screen,  see https://www.linuxfromscratch.org/blfs/view/svn/general/screen.html
+
 - update tmux makefile / remove bash
+
 - add wget,  see https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
 
-
 was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
-
 
 start ssh agent on login, useful for ssh where the agent doesn't always get started
 try the systemd solution

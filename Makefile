@@ -19,6 +19,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 MAKEFLAGS += --no-print-directory
+PREFIX ?= $(HOME)/.local
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
 # FUTURE gradually reducing required dependencies
@@ -53,7 +54,8 @@ CPYTHON ?= 3.13
 # TODO take user input for install dir, e.g. install to /data/.local/bin
 # TODO add recipe to make install dir
 # TODO use PREFIX instead of BIN_DIR and pass PREFIX to subsequent installers
-BIN_DIR := $(HOME)/.local/bin
+
+BIN_DIR := $(PREFIX)/bin
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
 HOST_ALIAS_RC := $(HOME)/.config/host_alias
@@ -86,7 +88,7 @@ NINJA_BIN := $(BIN_DIR)/ninja
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
-export PREFIX := $(HOME)/.local
+export PREFIX := $(PREFIX)
 
 # FUNCTONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
