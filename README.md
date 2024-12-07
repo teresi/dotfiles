@@ -53,3 +53,5 @@ This is tested on Ubuntu, YMMV
 - the target installed but I can't run it!
     + PREFIX defaults to `$HOME/.local`, this will need to be in your `PATH`
     + see `make bash`
+- I got an error that said I'm missing packages!
+    + please install the listed packages to the host

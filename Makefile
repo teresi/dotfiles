@@ -28,7 +28,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev rxvt-unicode
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
@@ -176,7 +176,7 @@ automake: gawk        ## generates Makefiles for use with autoconf (aclocal, aut
 .PHONY: gettext
 gettext:             ## tools to translate human languages (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C $@ all install
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: libtool
@@ -354,7 +354,7 @@ rangerrc:               ## ranger configuration
 .PHONY: rxvt.conf
 rxvt.conf: xsel            ## rxvt configuration
 	$(call log_info,updating $@...)
-	$(call check_pkgs,rxcvt-unicode)
+	$(call check_pkgs,rxvt-unicode)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources $(RXVT_CONF)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources.d $(RXVT_CONF_D)
 	xrdb -merge $(RXVT_CONF)
