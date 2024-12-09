@@ -12,16 +12,17 @@ return {
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
+          "bashls",       -- BASH
+          "black",        -- python black
+          "docker_compose_language_service",
+          "dockerls",
+          "jsonls",
+          "ltex",         -- LaTeX
           "lua_ls",
           "pyright",
           "rust_analyzer",
-          "bashls",       -- BASH
-          "ltex",         -- LaTeX
           "taplo",        -- TOML
           "yamlls",
-          "jsonls",
-          "dockerls",
-          "docker_compose_language_service",
         },
       })
     end
