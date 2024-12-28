@@ -594,7 +594,7 @@ npm: node_version_manager ## install nvm and Node
 mdpdf: npm               ## install Markdown to PDF converter
 	$(call log_info,installing $@...)
 	@# see https://github.com/BlueHatbRit/mdpdf
-	@bash -l -c 'source ~/.bashrc && type -t mdpdf 2>&1 >/dev/null && \
+	@bash -l -c 'unset PREFIX; source ~/.bashrc && type -t mdpdf 2>&1 >/dev/null && \
 		{ echo "mdpdf is already installed"; } || \
 		{ source ~/.nvm/nvm.sh && npm install mdpdf -g; exit 0; }'
 
