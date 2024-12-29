@@ -32,6 +32,8 @@ DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim 
 DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
+# these packages will build but take a while
+DEPENDENCIES_LONGRUN := clang cmake
 
 # NG this 'imports' many of the Make functions used below
 include ./helpers.mk
@@ -530,12 +532,12 @@ fonts:               ## install fonts
 
 
 .PHONY: check_packages
-check_packages: SHELL:=/bin/sh
 check_packages:         ## warn if missing packages
 	$(call log_info,$@...)
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES)'
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_NVIM)'
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_ALACRITTY)'
+	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing_warn $(DEPENDENCIES_LONGRUN)'
 
 
 .PHONY: pip
@@ -667,25 +669,25 @@ ninja: cmake          ## compile ninja-build
 
 
 .PHONY: bison
-bison: gawk gettext            ## compile bison
+bison: gawk gettext   ## compile bison
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: htop
-htop:                   ## compile htop
+htop:                 ## compile htop
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: tig
-tig:
+tig:                  ## compile tig
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: xsel
-xsel: pkgconf autoconf automake libtool m4  # compile xsel
+xsel: pkgconf autoconf automake libtool m4  ## compile xsel
 	$(call log_info,installing $@...)
 	@# TODO xsel requires x11 library
 	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
@@ -693,7 +695,7 @@ xsel: pkgconf autoconf automake libtool m4  # compile xsel
 
 
 .PHONY: xclip
-xclip: pkgconf autoconf automake libtool m4  # compile xclip
+xclip: pkgconf autoconf automake libtool m4  ## compile xclip
 	$(call log_info,installing $@...)
 	@# TODO xclip requires x11 library
 	@# see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
@@ -701,6 +703,12 @@ xclip: pkgconf autoconf automake libtool m4  # compile xclip
 
 
 .PHONY: tree
-tree:                   ## compile tree
+tree:                 ## compile tree
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: clang
+clang: cmake ninja    ## compile clang via LLVM
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)

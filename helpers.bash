@@ -44,36 +44,62 @@ update_repo_to_master () {
 	#
 	#	1	repo url
 	#	2	target directory
-	#	3	branch (master)
+	#	3	branch or tag (master)
+	#	4	depth (all)
 	#
 	# NB only call reset if it's not up to date,
 	#    so that we can use the .git dir timestamp in Makefile rules,
 	#    since the timestamp will change when git reset is called
 
+	notify "updating repository..."
 	local _url=$1
 	local _dest=$2
 	local _branch=$3
+	local _depth=$4
 
 	[ -z "$_branch" ] && _branch=master
+	[ -n "$_depth" ] && _depth="--depth $_depth"
 
-	notify "updating $_url -> $_dest"
-	if [ ! -d "$_dest" ]; then git clone $_url $_dest; fi;
+	notify "    repo directory:  $_dest"
+	notify "    repo url:        $_url"
+	notify "    repo branch:     $_branch"
+	notify "    repo depth:      $_depth"
+
+	if [ ! -d "$_dest" ]; then notify "cloning $url to $_dest"; fi;
+	if [ ! -d "$_dest" ];
+		then git clone $_depth --branch $_branch $_url $_dest;
+	fi;
 	# NB `git status` updates the .git folder for some reason,
-	#    so don't call it here or else it will update even if there are not changes
+	#    so don't call it here or else it will update even if there are no changes!
 
+	notify "    fetching..."
 	# fetch, checkout, reset if necessary
-	notify "updating to $_branch for repo at $_dest..."
-	git -C $_dest fetch
+	# set the origin for the branch in case a shallow clone was used
+	# fetch the branch specifically in case a shallow clone was used
+	git -C $_dest fetch $_depth origin $_branch
 
-	_local=$(git -C $_dest rev-parse @)
-	_remote=$(git -C $_dest rev-parse @{u})
-	if [ "$_local" != "$_remote" ]; then
-		notify "updating to $_branch for repo at $_dest... reset to origin/$_branch"
-		git -C $_dest checkout $_branch
-		git -C $_dest reset --hard origin/$_branch
-	else
-		notify "updating to $_branch for repo at $_dest... already up to date"
+	notify "    updating to $_branch..."
+	_local=$(git -C $_dest rev-list -n 1 HEAD)
+	# use ls-remote b/c we need to handle tags AND branches
+	_remote=$(git -C $_dest ls-remote origin refs/heads/${_branch} | cut -f1)
+	if [ -z "$_remote" ]; then
+	# use ^{} b/c we need the OID of the commit associated w/ the tag, not the object ID of the tag itself
+		_remote=$(git -C $_dest ls-remote origin refs/tags/${_branch}^{} | cut -f1)
 	fi
+	notify "    local commit is at  $_local"
+	notify "    remote commit is at $_remote"
+	if [ "$_local" != "$_remote" ]; then
+		notify "    updating to $_branch... checkout"
+		git -C $_dest fetch $_depth origin $_branch
+		git -C $_dest fetch --tags
+		notify "    updating to $_branch... reset to origin"
+		git -C $_dest checkout $_branch
+		# @ means the current branch, {u} means upstream
+		git -C $_dest reset --hard @{u}
+	else
+		notify "    updating to $_branch... already up to date"
+	fi
+	echo ""
 }
 
 
@@ -104,6 +130,27 @@ are_packages_missing () {
 
 	error "you are missing packages!"
 	error "please install:"
+	echo ""
+	echo "  ${_missing[@]}"
+	echo ""
+	sleep 1
+	return 1
+}
+
+are_packages_missing_warn () {
+	# print warning if any package in array $1 is not installed
+
+	local _pkgs=( "$@" )
+	local _missing=()
+
+	for pkg in ${_pkgs[@]}; do \
+		dpkg -s $pkg 2>/dev/null | grep -q "install ok installed" || _missing+=("$pkg")
+	done
+	if [ ${#_missing[@]} -eq 0 ]; then
+		return 0
+	fi
+
+	warn "missing package, the following is recommended:"
 	echo ""
 	echo "  ${_missing[@]}"
 	echo ""
