@@ -83,8 +83,12 @@ update_repo_to_master () {
 	# use ls-remote b/c we need to handle tags AND branches
 	_remote=$(git -C $_dest ls-remote origin refs/heads/${_branch} | cut -f1)
 	if [ -z "$_remote" ]; then
-	# use ^{} b/c we need the OID of the commit associated w/ the tag, not the object ID of the tag itself
-		_remote=$(git -C $_dest ls-remote origin refs/tags/${_branch}^{} | cut -f1)
+	# dereference b/c we need the OID of the commit associated w/ the tag, not the object ID of the tag itself
+		_remote=$(git -C $_dest show-ref --hash --dereference refs/tags/${_branch})
+	fi
+	if [ -z "$_remote" ]; then
+		error "could not find commit for branch/tag: ${_branch}"
+		return 1
 	fi
 	notify "    local commit is at  $_local"
 	notify "    remote commit is at $_remote"
@@ -95,7 +99,7 @@ update_repo_to_master () {
 		notify "    updating to $_branch... reset to origin"
 		git -C $_dest checkout $_branch
 		# @ means the current branch, {u} means upstream
-		git -C $_dest reset --hard @{u}
+		git -C $_dest reset --hard $_remote
 	else
 		notify "    updating to $_branch... already up to date"
 	fi

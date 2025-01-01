@@ -712,3 +712,9 @@ tree:                 ## compile tree
 clang: cmake ninja    ## compile clang via LLVM
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: odin
+odin: cmake ninja    ## compile ODIN lang
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install
