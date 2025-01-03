@@ -315,7 +315,7 @@ bashprofile:          ## non-login shell config
 alacritty.yml:        ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
 	@mkdir -p $(ALACRITTY_CFG_DIR)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/alacritty $(ALACRITTY_CFG_DIR)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/alacritty $(ALACRITTY_CFG_DIR)
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/fullscreen $(BIN_DIR)/fullscreen
 
