@@ -718,3 +718,9 @@ clang: cmake ninja    ## compile clang via LLVM
 odin: cmake ninja    ## compile ODIN lang
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
+
+
+.PHONY: latex
+latex:               ## install LaTeX
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install
