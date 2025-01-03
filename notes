@@ -1,3 +1,13 @@
+- add a 'download' rule to git fetch / wget ALL sources
+
+- compile xdotool
+    https://github.com/jordansissel/xdotool
+
+    needs libxtst (if `libxtst-dev` isn't installed)
+    https://anonscm.debian.org/git/pkg-xorg/lib/libxtst.git
+
+- add wmctrl
+
 - enable change in PREFIX
     need to pass PREFIX to make_all_install function
 
@@ -13,8 +23,6 @@
     see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
 
 - add function to check if library is available
-
-- add wmctrl
 
 - update tmux makefile / remove bash
 

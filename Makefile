@@ -30,7 +30,6 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # make: invoking the rules
 DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev rxvt-unicode
 DEPENDENCIES_NVIM := unzip curl build-essential
-DEPENDENCIES_ALACRITTY :=  pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -315,15 +314,15 @@ bashprofile:          ## non-login shell config
 alacritty.yml:        ## configuration for alacritty terminal
 	$(call log_info,updating $@...)
 	@mkdir -p $(ALACRITTY_CFG_DIR)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/alacritty $(ALACRITTY_CFG_DIR)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/alacritty $(ALACRITTY_CFG_DIR)
 	@mkdir -p $(BIN_DIR)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/fullscreen $(BIN_DIR)/fullscreen
 
 
 .PHONY: alacritty
-alacritty:            ## compile alacritty terminal
+alacritty: rust       ## compile alacritty terminal
 	$(call log_info,updating $@...)
-	@$(ROOT_DIR)/install_alacritty.sh || echo -e "\e[91mERROR\t install failed; remember to close all Alacritty instances first \e[39m"
+	$(MAKE) -ik -C alacritty all install
 	$(MAKE) -ik alacritty.yml
 	$(MAKE) -ik fonts
 	$(call check_pkgs,wmctrl xdotool)
@@ -400,21 +399,27 @@ fzf:                  ## command-line fuzzy finder
 .PHONY: cinnamon
 cinnamon:             ## cinnamon desktop
 	$(call log_info,updating $@...)
-	bash -i $(ROOT_DIR)/kb_shortcuts_cinnamon.bash
+
+	@# default file explorer as nautilus, not nemo
+	sed -i "s%/inode/directory=.*%/inode/directory=org.gnome.Nautilus.desktop%" ~/.config/mimeapps.list
+
+	@# wallpapers
 	gsettings set org.cinnamon.desktop.background.slideshow image-source "directory://$(ROOT_DIR)/wallpapers"
 	gsettings set org.cinnamon.desktop.background.slideshow slideshow-enabled true
-	# theme
-	# TODO find out how to download themes automatically to change window borders (wm/preferences)
+
+	@# theme
 	gsettings set org.cinnamon.desktop.interface icon-theme "Yaru"
 	gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
-	# panel
+
+	@# panel
 	gsettings set org.cinnamon enabled-applets "['panel1:left:0:menu@cinnamon.org:0', 'panel1:right:5:systray@cinnamon.org:3', 'panel1:right:6:xapp-status@cinnamon.org:4', 'panel1:right:7:notifications@cinnamon.org:5', 'panel1:right:8:network@cinnamon.org:10', 'panel1:right:9:sound@cinnamon.org:11', 'panel1:right:10:calendar@cinnamon.org:13', 'panel1:left:3:window-list@cinnamon.org:14', 'panel1:right:0:temperature@fevimu:15', 'panel1:right:2:multicore-sys-monitor@ccadeptic23:16', 'panel1:right:3:sysmonitor@orcus:17', 'panel1:right:1:workspace-grid@hernejj:18']"
 	gsettings set org.cinnamon panels-height "['1:32']"
-	# improve performance for full screen GUIs
+
+	@# improve performance for full screen GUIs
 	gsettings set org.cinnamon.muffin unredirect-fullscreen-windows true
 	gsettings set org.cinnamon.muffin desktop-effects false
 
-	# don't create clicks that aren't actually pressed
+	@# don't create clicks that aren't actually pressed!
 	gsettings set org.cinnamon.settings-daemon.peripherals.mouse middle-button-enabled false
 
 
@@ -536,7 +541,6 @@ check_packages:         ## warn if missing packages
 	$(call log_info,$@...)
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES)'
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_NVIM)'
-	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing $(DEPENDENCIES_ALACRITTY)'
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing_warn $(DEPENDENCIES_LONGRUN)'
 
 

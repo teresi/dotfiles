@@ -19,6 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
         git git-lfs \
         libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev \
         libx11-dev libxmu-dev \
+        llvm clang \
         curl wget zip unzip \
         vim ranger \
         python3 \
