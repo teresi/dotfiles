@@ -145,11 +145,6 @@ all:                  ## install programs and configs
 	$(MAKE) -ik check_packages
 
 
-.PHONY: depends
-depends:              ## install system dependencies
-	$(ROOT_DIR)/install_dependencies.sh
-
-
 .PHONY: gawk
 gawk:
 	$(call log_info,updating $@...)
@@ -355,7 +350,7 @@ rangerrc:               ## ranger configuration
 .PHONY: rxvt.conf
 rxvt.conf: xsel            ## rxvt configuration
 	$(call log_info,updating $@...)
-	$(call check_pkgs,rxvt-unicode)
+	$(call check_pkgs,rxvt-unicode,libxext-dev,xsel,libx11-dev)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources $(RXVT_CONF)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources.d $(RXVT_CONF_D)
 	xrdb -merge $(RXVT_CONF)
