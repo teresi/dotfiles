@@ -39,7 +39,8 @@ $(_INSTALL): $(_BIN)
 
 $(_BIN): $(_SRC)/.git | $(_SRC)
 	$(call log_info,updating $@...)
-	$(call check_pkgs, autoconf automake autotools-dev libncurses-dev)
+	$(call check_binary, autoconf automake gettext libtool pkgconf)
+	$(call check_pkgs, libncurses-dev)
 	cd $(_SRC) && ./autogen.sh && ./configure --prefix=$(PREFIX)
 	$(MAKE) -ik -C $(_SRC)
 

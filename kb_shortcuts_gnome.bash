@@ -28,7 +28,7 @@ if [ -z `which alacritty` ]; then
 else
 	gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "[]"  # need to remove default shortcut first
 	$BEGINNING/custom1/ name "Alacritty"
-	$BEGINNING/custom1/ command "/$HOME/.local/bin/alacritty"
+	$BEGINNING/custom1/ command "alacritty"
 	$BEGINNING/custom1/ binding "<Primary><Alt>t"
 fi
 

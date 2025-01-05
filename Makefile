@@ -218,7 +218,7 @@ vundle:               ## vim package manager
 	@#cloning vundle requires ca-certificates (apt) or manually adding the cert
 	@#adding GIT_SSL_NO_VERIFY=1 doesn't seem to be a workaround
 	$(call check_pkgs,ca-certificates)
-	$(call update_repo,$(VUNDLE_URL),$(VUNDLE))
+	$(call git_clone_fetch_reset,$(VUNDLE_URL),$(VUNDLE))
 
 
 # TODO install pipx first and use that instead of pip
@@ -265,7 +265,7 @@ tmux_plugins: | pip   ## download tmux plugins
 .PHONY: tpm
 tpm:                  ## tmux plugin manager
 	$(call log_info,updating $@...)
-	$(call update_repo,$(TPM_URL),$(TPM))
+	$(call git_clone_fetch_reset,$(TPM_URL),$(TPM))
 
 
 .PHONY: bash
@@ -387,7 +387,7 @@ aliases:              ## bash aliases
 .PHONY: fzf
 fzf:                  ## command-line fuzzy finder
 	$(call log_info,updating $@...)
-	$(call update_repo,$(FZF_URL),$(FZF))
+	$(call git_clone_fetch_reset,$(FZF_URL),$(FZF))
 	$(FZF)/install --all
 
 
@@ -445,7 +445,7 @@ gnome:                ## gnome desktop
 	# don't create clicks that aren't actually pressed
 	gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation false
 
-	$(call update_repo,$(GOGH_THEMES_URL),$(GOGH_THEMES))
+	$(call git_clone_fetch_reset,$(GOGH_THEMES_URL),$(GOGH_THEMES))
 	TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
 
 	@$(ROOT_DIR)/install_wintile.bash
@@ -492,7 +492,7 @@ neovim:                ## compile neovim, install config, download plugins
 .PHONY: nvim
 nvim: | lua npm rg cmake gettext ninja cmake ## compile neovim
 	$(call log_info,updating $@...)
-	$(call update_repo,$(NVIM_URL),$(NVIM))
+	$(call git_clone_fetch_reset,$(NVIM_URL),$(NVIM))
 	$(call check_pkgs,$(DEPENDENCIES_NVIM))
 	$(call log_info,updating tree sitter...)
 	bash -l -c 'source ~/.bashrc && unset PREFIX; source $(HOME)/.nvm/nvm.sh && npm install -g tree-sitter tree-sitter-cli; exit 0;'
@@ -674,7 +674,9 @@ bison: gawk gettext   ## compile bison
 
 
 .PHONY: htop
-htop:                 ## compile htop
+htop: autoconf automake gettext libtool  ## compile htop
+	@# TODO compiling libncurses and using /usr/bin/htop may result
+	@# in a 'no version info available' b/c of a version mismatch (?)
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 

@@ -51,19 +51,22 @@ endef
 
 
 # safe git fetch/reset, no changes if up to date
+#	1	repo url
+#	2	target directory
+#	3	branch or tag (master)
+#	4	depth (all)
 define git_clone_fetch_reset
-	@$(ROOT_DIR)/git_reset.bash $(1) $(2) $(3) $(4)
+	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3) $(4)
 endef
 
 
-# safe git clone, fetch, merge
-#	clone 1 to dir 2, fetch, reset to 3
-#	1    git url
-#	2    directory
-#	3    branch (master)
-define update_repo
-	$(call git_clone,$(1),$(2))
-	$(call git_reset,$(2),$(3))
+# safe git fetch/reset, no changes if up to date
+#	1	repo url
+#	2	target directory
+#	3	branch or tag (master)
+#	4	depth (all)
+define update_repo_to_master
+	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3) $(4)
 endef
 
 

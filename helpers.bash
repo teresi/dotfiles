@@ -22,23 +22,6 @@ error () {
 }
 
 
-# TODO candidate for deletion
-#update_repo_to_master () {
-#	# pull master on a repo, clone if necessary
-#	# NB use with care, do you really want to merge?
-#	local _REPO="$1"
-#	local _DIR="$2"
-#	notify "updating $_REPO"
-#	if [[ ! -d $_DIR ]]; then
-#		notify "\tgit clone $_REPO $_DIR"
-#		git clone $_REPO $_DIR
-#	fi
-#	notify "\tgit checkout master -C $_DIR"
-#	git -C "$_DIR" checkout master
-#	notify "\tgit pull origin master -C $_DIR"
-#	git -C "$_DIR" pull origin master
-#}
-
 update_repo_to_master () {
 	# clone | fetch | reset to bring a git repo up to date
 	#

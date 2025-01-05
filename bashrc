@@ -13,15 +13,8 @@ if [ -w "$HOME"/.local/lib ]; then
 	export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
 fi
 
-# MAGIC /data/ is our preferred disk
-# NB prepend the location so we prefer our builds
-if [ -w "/data/.local/bin" ]; then
-	export PATH=/data/.local/bin:$PATH
-fi
-
-#export PATH=/data/.local/bin:$PATH  # FUTURE also support /data/.local/bin if it exists
-[ -w /data/ ] && export CARGO_INSTALL_ROOT=/data/.cargo
-[ -w /data/ ] && export PATH+=:/data/.cargo/bin
+# NB used to have /data/.local/bin in the PATH, but $HOME/.local is sufficient
+# NB used to have /data/.cargo/bin for CARGO_INSTALL_ROOT, but $HOME/.cargo is more simple
 
 
 ################################################################################

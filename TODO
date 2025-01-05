@@ -1,34 +1,86 @@
+- refactor nvim compile to a Makefile
+
+- refactor TMUX
+    + remove bash script
+    + separate libevent & ncurses from tmux
+    + enable libevent compile
+    + enable ncurses compile
+
+- add a 'download' option, download / fetch the release,
+    so the project can be rsync-ed to another machine,
+    update clean rules to forgo deletion of the release
+
+- add command to check for existence of a library
+
 - add libtool, remove autotools-dev as dependency
+
 - update bison Makefile
+    + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
+
 - improve npm detection,
     + npm might be installed but can't be detected b/c bashrc hasn't run
     + this also might happen somehow where bashrc is sourced but still can't be detected b/c nvm.sh is missing?
+
 - add gcc
+
 - add gpg
     + https://ftp.gnu.org/pub/gnu/gettext/gettext-0.22.5.tar.gz.sig
+
 - add libiconv (for gettext if missing glibc)
     + https://www.gnu.org/software/libiconv/
+
 - add option for local/bin to another dir (e.g. data)
-- separate download/verify from compile to remove wget/curl dependency
-- add screen
-- refactor TMUX
-    - separate libevent & ncurses from tmux
-    - enable libevent compile
-    - enable ncurses compile
+
+- add wget
+    + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
+
+- enable change in PREFIX
+    + need to pass PREFIX to make_all_install function
+
+- add script to update keyring?
+    _gnu_pub_url=https://ftp.gnu.org/gnu/gnu-keyring.gpg
+    _gnu_pub=/tmp/gnu-keyring.gpg
+    curl -C - -o $_gnu_pub $_gnu_pub_url
+    gpg --import $_gnu_pub
+
 - add fc-cache
+
+- start ssh agent on login
+    + https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
+
 - add wmctrl
+
 - add xdotool
+    https://github.com/jordansissel/xdotool
+
+    needs libxtst (if `libxtst-dev` isn't installed)
+    https://anonscm.debian.org/git/pkg-xorg/lib/libxtst.git
+
+- add libx11-dev
+    see https://packages.debian.org/sid/libx11-dev
+    see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
+    see https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file
+
 - add xsel
      + https://github.com/kfish/xsel
+
 - add xclip
+
 - add sysstat
     + https://github.com/sysstat/sysstat
+
 - move from psutil to sysstat / mpstat in tmux cpu info
     + mpstat -P ALL  # show usage per core
     + https://github.com/sysstat/sysstat
     + remove need for pip as prereq for tmux (no longer need psutil)
+
 - add libssl
     + does compiling this also install headers/libs so we dont' need libssl-dev?
+
 - remove requirement for libssl-dev for cmake
     + ./configure -DCMAKE_USE_OPENSSL=OFF
     + actually neovim needs tls/ssl support in cmake...
+
+- explore these bash scripts
+    + https://gitlab.com/tukusejssirs/lnx_scripts/-/blob/master/bash/functions/gshort.sh
+    + https://gitlab.com/tukusejssirs/lnx_scripts/-/blob/master/bash/functions/gshort.sh

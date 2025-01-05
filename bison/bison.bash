@@ -57,7 +57,7 @@ compile_from_source () {
 	are_packages_missing "$_depends"
 
 	notify "bison fetch..."
-	update_repo_to_master_2 $_url $_dst master
+	update_repo_to_master $_url $_dst master
 	notify "bison update submodules, please wait..."
 	cd $_dst
 	git submodule update --recursive --remote
