@@ -404,7 +404,7 @@ cinnamon:             ## cinnamon desktop
 	sed -i "s%/inode/directory=.*%/inode/directory=org.gnome.Nautilus.desktop%" ~/.config/mimeapps.list
 
 	@# wallpapers
-	gsettings set org.cinnamon.desktop.background.slideshow image-source "directory://$(ROOT_DIR)/wallpapers"
+	gsettings set org.cinnamon.desktop.background.slideshow image-source "directory://$(ROOT_DIR)/assets/wallpapers"
 	gsettings set org.cinnamon.desktop.background.slideshow slideshow-enabled true
 
 	@# theme
