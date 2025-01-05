@@ -1,5 +1,3 @@
-- refactor nvim compile to a Makefile
-
 - refactor TMUX
     + remove bash script
     + separate libevent & ncurses from tmux

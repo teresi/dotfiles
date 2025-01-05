@@ -77,3 +77,12 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
       vim.fn.setpos(".", save_cursor)
     end,
 })
+
+-- [[ update Mason from command line ]]
+-- nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'MasonUpdateAllComplete',
+    callback = function()
+        print('\nmason-update-all has finished\n\n')
+    end,
+})

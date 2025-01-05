@@ -9,7 +9,7 @@
 
 # FUTURE add dependency checker:  golang-go luarocks xsel git make cargo node
 
-# TODO specify by path to binary: nvim, lua, during calls
+# TODO specify by path to binary: lua, during calls
 #      b/c we can't depend on having ~/.local/bin in the PATH
 # TODO move from using `which <program>` to using `command -v <program>` to test
 #      if a binary exists
@@ -29,7 +29,6 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # gpg: for verifying releases
 # make: invoking the rules
 DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev rxvt-unicode
-DEPENDENCIES_NVIM := unzip curl build-essential
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -74,9 +73,6 @@ ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
 RXVT_CONF_D := $(HOME)/.Xresources.d
 RC_CONF := $(HOME)/.config/ranger/rc.conf
-NVIM := $(HOME)/neovim
-NVIM_URL := https://github.com/neovim/neovim.git
-NVIM_RC := $(HOME)/.config/nvim
 FONTS := $(HOME)/.local/share/fonts
 GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
 GOGH_THEMES := $(HOME)/Gogh
@@ -128,7 +124,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
 	$(MAKE) -ik vim
-	$(MAKE) -ik nvim
+	$(MAKE) -ik neovim
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
 	$(MAKE) -ik git_config
@@ -482,39 +478,25 @@ lua:                 ## install Lua
 
 
 .PHONY: neovim
-neovim:                ## compile neovim, install config, download plugins
+neovim: | lua npm rg cmake gettext ninja cmake  ## install neovim
 	$(call log_info,updating $@...)
-	$(MAKE) -ik nvim
+	$(MAKE) -ik -C neovim all install
 	$(MAKE) -ik nvimrc
-	$(call log_info,updating $@... DONE! Please source bashrc for nvim packages to work)
-
-
-.PHONY: nvim
-nvim: | lua npm rg cmake gettext ninja cmake ## compile neovim
-	$(call log_info,updating $@...)
-	$(call git_clone_fetch_reset,$(NVIM_URL),$(NVIM))
-	$(call check_pkgs,$(DEPENDENCIES_NVIM))
-	$(call log_info,updating tree sitter...)
-	bash -l -c 'source ~/.bashrc && unset PREFIX; source $(HOME)/.nvm/nvm.sh && npm install -g tree-sitter tree-sitter-cli; exit 0;'
-	@# TODO move this to it's own makefile / bash script nad only update
-	#rm -rf $(NVIM)/build
-	#make -C $(NVIM) clean
-	#make -C $(NVIM) distclean
-	make -C $(NVIM) CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(NVIM)"
-	make -C $(NVIM) install || \
-		(make -C $(NVIM) clean && make -C $(NVIM) distclean)
-	@mkdir -p $(BIN_DIR)
-	@$(ROOT_DIR)/update_symlink.bash $(NVIM)/bin/nvim $(BIN_DIR)/nvim
 
 
 .PHONY: nvimrc
 nvimrc:              ## neovim config and plugins
 	$(call log_info,updating $@...)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/nvim $(NVIM_RC)
-	$(call log_info,updating plugins...)
-	@bash -l -c 'source ~/.bashrc && type -t nvim 2>&1 >/dev/null && \
-		{ $(NVIM)/bin/nvim +"lua require('lazy').restore({wait=true})" +qa; } || \
-		{ echo "missing nvim! please call:  make neovim"; }'
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/nvim $(HOME)/.config/nvim
+
+	$(call log_info,updating tree sitter; please wait...)
+	bash -l -c 'source ~/.bashrc && unset PREFIX; source $(HOME)/.nvm/nvm.sh && npm install -g tree-sitter tree-sitter-cli; exit 0;'
+
+	$(call log_info,updating lazy...)
+	nvim --headless "+Lazy! sync" +qa
+
+	$(call log_info,updating mason...)
+	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
 
 
 .PHONY: fonts
