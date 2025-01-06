@@ -35,9 +35,13 @@ check:
 	$(foreach prog,$(_depends),type -t $(prog) 2>&1 >/dev/null || (echo "dependency not in PATH: $(prog)"; exit 1);)
 
 
-$(_BIN): $(_DIR)/.git
+$(_BUILD):
+	mkdir -p $(_BUILD)
+
+
+$(_BIN): $(_DIR)/.git | $(_BUILD)
 	$(call log_info,updating $@...)
-	mkdir -p $(_BUILD) && cd $(_BUILD) && \
+	cd $(_BUILD) && \
 		cmake .. -DCMAKE_INSTALL_PREFIX=$(PREFIX)
 	$(MAKE) -ik -C $(_BUILD) -j all
 	$(call log_info,updating $@...    COMPLETE!)

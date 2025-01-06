@@ -28,7 +28,7 @@ MY_TARGETS := $(MAKEFILE_LIST)
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libncurses-dev libx11-dev libxmu-dev rxvt-unicode
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev rxvt-unicode
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -232,12 +232,11 @@ vim_plugins: | vundle pip  ## download vim plugins
 
 .PHONY: tmux
 tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent xsel xclip  ## add tmux config and plugins
+	$(call log_info,updating $@...)
 	$(call check_pkgs,screen)
-	@# see https://github.com/tmux/tmux/wiki/Installing
-	@# FUTURE try static build for tmux?
-	@# BUG not using custom libncurses right now, getting warnings for
-	@# libtinfo.so.6 no version information available
 	$(MAKE) -ik -C ./tmux
+
+	$(call log_info,updating tmux plugins...)
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
 	@# TODO you have to have tmux in the path to call tmux plugins

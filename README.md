@@ -1,26 +1,31 @@
 # DOTFILES
 
-Development environment.
+My development environment.
 
 ```
-make all              # compile & configure default programs
+make all              # compile default programs
 ```
+
+
+----
+## GOALS
+
+- store my configs
+- set up a dev environment *without* root permissions
+- compile versions that are newer than APT
+
 
 ----
 ## USAGE
 
 
-specific programs, e.g.
+for example:
 ```
 make help             # show usage
-make neovim           # editor
-make alacritty        # terminal
-make tmux             # terminal multiplexer
-```
-
-dependencies are built on a per target basis
-```
-make check_packages   # check for generic dependencies
+make all              # compile default programs
+make neovim           # compile editor
+make alacritty        # compile terminal
+make tmux             # compile terminal multiplexer
 ```
 
 options
@@ -31,27 +36,37 @@ NO_SYMLINKS=ON        # copy config directly instead of linking to files here
 INSTALL_RC=(ON|OFF):  # install config file for a target if ON, uninstall if OFF
 ```
 
-----
-## GOALS
 
-- needed a way to setup a development environment without root permissions
-- compiles dependencies from source (skips if available)
-- primary focus is for the terminal
+----
+## REQUIREMENTS
+
+dependencies are specific to the target, but the basics are:
+```
+bash gcc gpg make git git-lfs curl wget perl
+```
+
+and one can check a recommended list:
+```
+make check_packages   # check for generic dependencies
+```
+
+and install these from your package manager to save time:
+```
+cmake gettext clang llvm
+```
 
 
 ----
 ## TROUBLESHOOTING
 
-This is tested on Ubuntu, YMMV
+Tested on Ubuntu, YMMV
 
+- I got an error that said I'm missing packages!
+    + please install the listed packages to the host
 - this is taking forever!
     + speedup the builds by installing dependencies to your host if possible
-    + recommend installing particular: `cmake`, `gettext`, `clang`, `llvm`
 - my terminal is acting weird! help!
     + call `set +o vi`, is it back to normal?
     + edit your `~/.inputrc` to change the vi/emacs mode
 - the target installed but I can't run it!
-    + PREFIX defaults to `$HOME/.local`, this will need to be in your `PATH`
-    + see `make bash`
-- I got an error that said I'm missing packages!
-    + please install the listed packages to the host
+    + check your `PATH`! PREFIX defaults to `$HOME/.local`

@@ -1,43 +1,69 @@
 #!/usr/bin/make -f
 
 # compile tmux
+# tmux is a terminal multiplexer
 
-# requires pkgconf, libncurses, libevent
+# REQUIRES
+# gcc | clang, pkgconf, libncurses, libevent, yacc | bison
 
+# SEE
+# https://github.com/tmux/tmux/wiki/Installing
+# https://unix.stackexchange.com/questions/459671/how-do-i-build-tmux-from-source-without-root-access-with-a-custom-built-libevent
 
-SHELL := /bin/bash
-ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-MAKEFLAGS += --no-print-directory
-PREFIX := $(HOME)/.local
+include ../helpers.mk
+PREFIX ?= $(HOME)/.local
+_install := $(PREFIX)/bin/tmux
 
-NCURSES_DIR := $(ROOT_DIR)/ncurses
-NCURSES_LIB = $(PREFIX)/lib/libncurses.a
-
-LIBEVENT_DIR := $(ROOT_DIR)/libevent
-LIBEVENT_LIB := $(PREFIX)/lib/libevent.so
-
-TMUX_DIR := $(ROOT_DIR)/tmux
-TMUX_BIN := $(PREFIX)/bin/tmux
+_url := https://github.com/tmux/tmux.git
+_src := tmux
+_bin := $(_src)/tmux
+_branch := master
+_nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
 .PHONY: all
-all: $(TMUX_BIN)
+all: $(_bin)
+
+
+.PHONY: install
+install: $(_install)
 
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik clean -C $(TMUX_DIR)
+	$(MAKE) -C $(_src) clean
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(TMUX_DIR) uninstall
+	$(MAKE) -C $(_src) uninstall
 
 
-# we compile libevent now in the top level makefile
-# skipping ncurses compile b/c I get a warning for
-# libtinfo.so.6 no version information available
-# every time it's used
-$(TMUX_BIN):
-	$(ROOT_DIR)/tmux.bash $(PREFIX)
+.PHONY: repo
+repo:
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
 
+
+$(_src)/.git: | repo
+
+
+$(_bin): $(_src)/.git $(PREFIX)/lib/libevent_core.so $(PREFIX)/lib/libncursesw.so
+	$(call log_info,compiling $@...)
+	$(call check_binary,bison aclocal autoconf automake gettext libtool)
+	@# NB depends on libevent/libncurses SOs in order to enforce a rebuild,
+	@#    but this assumes that they are built locally
+	@# NB use `--enable-static` so LD_LIBRARY_PATH doesn't have to be set to run
+	@#    this is not necessary but simplifies downstream configuration
+	@#    the static build increased binary size 5.0MB -> 6.7MB
+	PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
+	cd $(_src) \
+		&& sh autogen.sh \
+		&& pkg-config --cflags --libs libevent --libs ncurses \
+		&& ./configure \
+			--prefix="$(PREFIX)" \
+			--enable-static
+
+
+$(_install): $(_bin)
+	$(call log_info,updating $@...)
+	$(MAKE) -C $(_src) install

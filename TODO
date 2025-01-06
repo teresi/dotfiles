@@ -1,8 +1,4 @@
-- refactor TMUX
-    + remove bash script
-    + separate libevent & ncurses from tmux
-    + enable libevent compile
-    + enable ncurses compile
+- refactor libevent makefile
 
 - add a 'download' option, download / fetch the release,
     so the project can be rsync-ed to another machine,
