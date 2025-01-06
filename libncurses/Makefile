@@ -60,6 +60,7 @@ $(_bin): | $(_dir)
 		--with-termlib \
 		--without-debug \
 		--enable-pc-files \
+		--with-versioned-syms \
 		--with-pkg-config-libdir=${PREFIX}/lib/pkgconfig
 	make -C $(_dir) -j
 

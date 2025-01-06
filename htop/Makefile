@@ -6,45 +6,47 @@
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
-_URL := https://github.com/htop-dev/htop.git
-_SRC := $(ROOT_DIR)/htop/htop
-#_BIN := $(or $(shell command -v htop), $(PREFIX)/bin/htop)
-_BIN := $(_SRC)/htop
-_BRANCH := main
-_INSTALL := $(PREFIX)/bin/htop
+_url := https://github.com/htop-dev/htop.git
+_src := $(ROOT_DIR)/htop/htop
+_bin := $(_src)/htop
+_branch := main
+_install := $(PREFIX)/bin/htop
 
 
 .PHONY: all
-all: $(_BIN)
+all: $(_bin)
 
 
 .PHONY: install
-install: $(_INSTALL)
+install: $(_install)
 
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_SRC) clean
+	$(MAKE) -ik -C $(_src) clean
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_SRC) uninstall
+	$(MAKE) -ik -C $(_src) uninstall
 
 
-$(_INSTALL): $(_BIN)
+$(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_SRC) install
+	$(MAKE) -ik -C $(_src) install
 
 
-$(_BIN): $(_SRC)/.git | $(_SRC)
+$(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
 	$(call check_binary, autoconf automake gettext libtool pkgconf)
 	$(call check_pkgs, libncurses-dev)
-	cd $(_SRC) && ./autogen.sh && ./configure --prefix=$(PREFIX)
-	$(MAKE) -ik -C $(_SRC)
+	cd $(_src) && ./autogen.sh && ./configure --prefix=$(PREFIX)
+	$(MAKE) -ik -C $(_src)
 
 
-.PHONY: $(_SRC)
-$(_SRC):
-	$(call git_clone_fetch_reset,$(_URL),$(_SRC),$(_BRANCH))
+.PHONY: repo
+repo:
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+
+
+$(_src)/.git: | repo
