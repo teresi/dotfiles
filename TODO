@@ -1,3 +1,7 @@
+- compile curl | wget from source
+
+- compile git from source
+
 - refactor libevent makefile
 
 - add a 'download' option, download / fetch the release,

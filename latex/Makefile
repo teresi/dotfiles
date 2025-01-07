@@ -27,7 +27,7 @@ include ../helpers.mk
 TEXDIR ?= $(HOME)/.texlive2024
 PAPER ?= letter
 # schemes, e.g.:  scheme-basic | scheme-small | scheme-medium
-SCHEME ?= scheme-small
+SCHEME ?= scheme-basic
 BASHRC ?= $(HOME)/.bashrc
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -36,7 +36,7 @@ _tar := install-tl-unx.tar.gz
 _installer := install-tl-2024
 _sig_url := https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz.sha512
 _sig := install-tl-unx.tar.gz.sha512
-_texlive_bin := $(TEXDIR)/bin
+_texlive_bin := $(TEXDIR)/bin/x86_64-linux
 _bashrc_tex := $(HOME)/.config/source_texlive.bash
 
 
@@ -95,7 +95,7 @@ $(_installer): $(_tar) $(_sig)
 
 
 $(_texlive_bin): $(_installer)
-	$(info updating $@...)
+	$(call log_info,updating $@...)
 	@# cd into install-tl* b/c there is a sub dir starting with install-tl-2024* that is unkown
 	cd $(_installer) && cd install-tl-* && \
 		perl install-tl \
@@ -106,11 +106,16 @@ $(_texlive_bin): $(_installer)
 		-no-interaction
 	@# touch the folder b/c it's timestamp is not the install time
 	touch $(_texlive_bin)
+	$(call log_info,installing common packages with tlmgr...)
+	$(_texlive_bin)/tlmgr install latexmk enumitem
 
 
 $(_bashrc_tex): $(_texlive_bin)
+	$(call log_info,updating bash scripts to setup your paths...)
 	mkdir -p $(HOME)/.config
 	echo "MANPATH+=:$(TEXDIR)/texmf-dist/doc/man" > $(_bashrc_tex)
 	echo "INFOPATH+=:$(TEXDIR)/texmf-dist/doc/info" >> $(_bashrc_tex)
-	echo "PATH+=:$(_texlive_bin)/x86_64-linux" >> $(_bashrc_tex)
+	echo "PATH+=:$(_texlive_bin)" >> $(_bashrc_tex)
 	$(call source_file,$(BASHRC),TEXLIVE2024,$(_bashrc_tex))
+
+
