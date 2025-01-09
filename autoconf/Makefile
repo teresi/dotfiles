@@ -14,12 +14,13 @@
 # requires Perl (5.006 +)
 
 
+include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-_dir := $(_root_dir)/autoconf
-_bin := $(_dir)/bin/autoconf
+_src := autoconf
+_bin := $(_src)/bin/autoconf
 _install := $(PREFIX)/bin/autoconf
 
 _gpg_key := gnu-keyring.gpg
@@ -41,14 +42,13 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_dir) clean
-	rm $(_release_sig)
-	rm $(_release_tar)
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_dir) uninstall
+	$(MAKE) -ik -C $(_src) uninstall
 
 
 $(_gpg_key):
@@ -63,7 +63,7 @@ $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 
 
-$(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
+$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
@@ -71,12 +71,12 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		|| (echo "invalid autoconf sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid autoconf tar"; exit 1) \
-		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
+		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
 
 
-$(_bin): | $(_dir)
-	cd $(_dir) && ./configure --prefix=$(PREFIX) && make -j
+$(_bin): | $(_src)
+	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
 
 
 $(_install): $(_bin)
-	cd $(_dir) && make install
+	cd $(_src) && make install

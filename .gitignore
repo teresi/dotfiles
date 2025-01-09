@@ -2,4 +2,6 @@
 **/*.swo
 **/*.orig
 **/*.pdf
+**/*.tar.gz
+**/*.tar.xz
 get-pip.py*

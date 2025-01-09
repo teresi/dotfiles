@@ -2,12 +2,14 @@
 
 # compile htop
 
+# HTOP provides a TUI process viewer
+
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
 _url := https://github.com/htop-dev/htop.git
-_src := $(ROOT_DIR)/htop/htop
+_src := htop/htop
 _bin := $(_src)/htop
 _branch := main
 _install := $(PREFIX)/bin/htop
@@ -23,7 +25,8 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_src) clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
@@ -46,7 +49,7 @@ $(_bin): $(_src)/.git
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

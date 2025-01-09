@@ -6,31 +6,45 @@
 [x] fix 'no version available' warning on ncurses
 [x] refactor tmux
 [x] compile curl
+[x] don't remove release/repo on clean
+[x] add top level rule to clean all subprojects
 
-[ ] compile libpsl (for curl)
+[ ] add top level rule to fetch sources for all subprojects
+    (so we can copy the sources to another machine)
+
+[ ] refactor make
+
+[ ] refactor lua
+
+[ ] refactor vundle
+
+[ ] refactor xsel
+
+[ ] compile libpsl (for curl, wget)
     + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/libpsl.html
 
 [ ] compile wget
     + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
 
-- compile git from source
+[ ] enable change in PREFIX
+    + need to pass PREFIX to make_all_install function
+    + need to mkdir -p $PREFIX
 
+[ ] compile vim
 
-- refactor libevent makefile
+[ ] compile tar
 
-- enable more compile time flags for curl
+[ ] compile git
+
+[ ] enable more compile time flags for curl
     + e.g. --with-nghttp2
     + need?: nghttp2 libnghttp2-dev libssl-dev
 
-[ ] compile libssl-dev
+[ ] compile libss / libssl-dev?
 
-- add a 'download' option, download / fetch the release,
-    so the project can be rsync-ed to another machine,
-    update clean rules to forgo deletion of the release
+[ ] add command to check for existence of a library
 
-- add command to check for existence of a library
-
-- update bison Makefile
+[ ] refactor bison
     + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
 
 - improve npm detection,
@@ -39,16 +53,11 @@
 
 - add gcc
 
-- add gpg
-    + https://ftp.gnu.org/pub/gnu/gettext/gettext-0.22.5.tar.gz.sig
+- add gpg?
+    + https://www.linuxfromscratch.org/blfs/view/git/postlfs/gnupg.html
 
 - add libiconv (for gettext if missing glibc)
     + https://www.gnu.org/software/libiconv/
-
-- add option for local/bin to another dir (e.g. data)
-
-- enable change in PREFIX
-    + need to pass PREFIX to make_all_install function
 
 - add script to update keyring?
     _gnu_pub_url=https://ftp.gnu.org/gnu/gnu-keyring.gpg
@@ -65,6 +74,7 @@
 
 - add xdotool
     https://github.com/jordansissel/xdotool
+    https://www.linuxfromscratch.org/blfs/view/svn/general/xdotool.html
 
     needs libxtst (if `libxtst-dev` isn't installed)
     https://anonscm.debian.org/git/pkg-xorg/lib/libxtst.git
@@ -74,11 +84,6 @@
     see https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
     see https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file
 
-- add xsel
-     + https://github.com/kfish/xsel
-
-- add xclip
-
 - add sysstat
     + https://github.com/sysstat/sysstat
 
@@ -87,10 +92,7 @@
     + https://github.com/sysstat/sysstat
     + remove need for pip as prereq for tmux (no longer need psutil)
 
-- add libssl
-    + does compiling this also install headers/libs so we dont' need libssl-dev?
-
-- remove requirement for libssl-dev for cmake
+- remove requirement for libssl-dev for cmake?
     + ./configure -DCMAKE_USE_OPENSSL=OFF
     + actually neovim needs tls/ssl support in cmake...
 

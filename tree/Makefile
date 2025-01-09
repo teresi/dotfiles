@@ -7,11 +7,12 @@
 
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
+include ../helpers.mk
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-_dir := unix-tree
-_bin := $(_dir)/tree
+_src := unix-tree
+_bin := $(_src)/tree
 _install := $(PREFIX)/bin/tree
 
 _release_ver := 2.1.3
@@ -30,8 +31,8 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_dir) clean
-	rm $(_release_tar)
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
@@ -43,16 +44,16 @@ $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 
 
-$(_dir):  $(_release_tar)
+$(_src):  $(_release_tar)
 	[[ `md5sum < $(_release_tar)` = "$(_md5_sum)  -" ]] \
 		|| (echo "md5sum check failed: $(_release_tar)"; exit $?) \
 		&& tar -xf $(_release_tar) \
-		&& mv $(_dir)-$(_release_ver) $(_dir)
+		&& mv $(_src)-$(_release_ver) $(_src)
 
 
-$(_bin): | $(_dir)
-	make -C $(_dir) -j
+$(_bin): | $(_src)
+	$(MAKE) -C $(_src) -j
 
 
 $(_install): $(_bin)
-	make -C $(_dir) PREFIX=$(PREFIX) MANDIR=$(PREFIX)/share/man install
+	$(MAKE) -C $(_src) PREFIX=$(PREFIX) MANDIR=$(PREFIX)/share/man install

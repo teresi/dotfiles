@@ -10,10 +10,10 @@
 # https://github.com/tmux/tmux/wiki/Installing
 # https://unix.stackexchange.com/questions/459671/how-do-i-build-tmux-from-source-without-root-access-with-a-custom-built-libevent
 
-include ../helpers.mk
 PREFIX ?= $(HOME)/.local
-_install := $(PREFIX)/bin/tmux
+include ../helpers.mk
 
+_install := $(PREFIX)/bin/tmux
 _url := https://github.com/tmux/tmux.git
 _src := tmux
 _bin := $(_src)/tmux
@@ -31,7 +31,8 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -C $(_src) clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall

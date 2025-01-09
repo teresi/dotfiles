@@ -10,13 +10,14 @@
 # automake:  generate Makefile.in from Makefile.am
 
 
+include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-_dir := $(_root_dir)/automake
-_bin := $(_dir)/bin/automake
+_src := automake
+_bin := $(_src)/bin/automake
 _install := $(PREFIX)/bin/automake
 
 _gpg_key := gnu-keyring.gpg
@@ -38,14 +39,13 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_dir) clean
-	rm $(_release_sig)
-	rm $(_release_tar)
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_dir) uninstall
+	$(MAKE) -ik -C $(_src) uninstall
 
 
 $(_gpg_key):
@@ -60,7 +60,7 @@ $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 
 
-$(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
+$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
@@ -68,12 +68,12 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		|| (echo "invalid automake sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid automake tar"; exit 1) \
-		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
+		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
 
 
-$(_bin): | $(_dir)
-	cd $(_dir) && ./configure --prefix=$(PREFIX) && make -j
+$(_bin): | $(_src)
+	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
 
 
 $(_install): $(_bin)
-	cd $(_dir) && make install
+	cd $(_src) && make install

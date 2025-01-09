@@ -11,7 +11,6 @@ PREFIX ?= $(HOME)/.local
 _install := $(PREFIX)/bin/clang
 
 _url := https://github.com/llvm/llvm-project.git
-
 _src := llvm-project
 _build := build
 _bin := $(_src)/$(_build)/bin/clang
@@ -34,7 +33,8 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	cd $(_src) && ninja -C $(_build) --target clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then ninja -C $(_src)/$(_build) clean; fi
 
 
 .PHONY: uninstall

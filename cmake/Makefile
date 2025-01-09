@@ -6,49 +6,51 @@
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
-_URL := https://github.com/Kitware/CMake.git
-_DIR := ./cmake
-_BUILD := $(_DIR)/build
-_BRANCH := release
-_BIN := $(PREFIX)/bin/cmake
+_url := https://github.com/Kitware/CMake.git
+_src := cmake
+_build := $(_src)/build
+_branch := release
+_depth := 1
+_bin := $(PREFIX)/bin/cmake
 
 
 .PHONY: all
-all: $(_BUILD)/bin/cmake
+all: $(_build)/bin/cmake
+
+
+.PHONY: clean
+clean:
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_build) clean; fi
 
 
 .PHONY: install
-install: $(_BIN)
+install: $(_bin)
 
 
-$(_BIN): $(_DIR)/.git
+$(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_BUILD) -j install
+	$(MAKE) -ik -C $(_build) -j install
 	$(call log_info,updating $@...    COMPLETE!)
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_BUILD) uninstall
+	$(MAKE) -ik -C $(_build) uninstall
 
 
-$(_BUILD)/bin/cmake: $(_DIR)/.git
+$(_build)/bin/cmake: $(_src)/.git
 	$(call log_info,updating $@...)
-	mkdir -p $(_BUILD) && cd $(_BUILD) \
+	mkdir -p $(_build) && cd $(_build) \
 		&& ../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
 	@# NB using a low core count b/c cmake uses a lot of ram per core
-	$(MAKE) -ik -C $(_BUILD) -j 2
+	$(MAKE) -ik -C $(_build) -j 2
 	$(call log_info,updating $@...    COMPLETE!)
-
-
-.PHONY: clean
-clean:
-	$(MAKE) -ik -C $(_BUILD) clean || rm -rf $(_DIR)
 
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_URL),$(_DIR),$(_BRANCH))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
 
 
-$(_DIR)/.git: | repo
+$(_src)/.git: | repo

@@ -5,48 +5,49 @@
 # a TUI for viewing git log
 
 
-include ../helpers.mk
 PREFIX ?= $(HOME)/.local
+include ../helpers.mk
 
-_URL := https://github.com/jonas/tig.git
-_DIR := ./tig
-_BRANCH := master
-_BIN := $(_DIR)/src/tig
-_INSTALL := $(PREFIX)/bin/tig
+_url := https://github.com/jonas/tig.git
+_src := tig
+_branch := master
+_bin := $(_src)/src/tig
+_install := $(PREFIX)/bin/tig
 
 
 .PHONY: all
-all: $(_BIN)
+all: $(_bin)
 
 
 .PHONY: install
-install: $(_INSTALL)
+install: $(_install)
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_DIR) prefix=$(PREFIX) uninstall
+	$(MAKE) -ik -C $(_src) prefix=$(PREFIX) uninstall
 
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_DIR) prefix=$(PREFIX) clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
-$(_INSTALL): $(_BIN)
+$(_install): $(_bin)
 	$(call log_info,updating $@...)
-	make -C $(_DIR) prefix=$(PREFIX) install
+	make -C $(_src) prefix=$(PREFIX) install
 
 
-$(_BIN): $(_DIR)/.git
+$(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
-	$(MAKE) -C $(_DIR) prefix=$(PREFIX) -j
+	$(MAKE) -C $(_src) prefix=$(PREFIX) -j
 
 
 .PHONY: repo
 repo:
 	$(call log_info,updating $@...)
-	$(call git_clone_fetch_reset,$(_URL),$(_DIR),$(_BRANCH))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_DIR)/.git: | repo
+$(_src)/.git: | repo

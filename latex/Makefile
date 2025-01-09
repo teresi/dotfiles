@@ -30,7 +30,6 @@ PAPER ?= letter
 SCHEME ?= scheme-basic
 BASHRC ?= $(HOME)/.bashrc
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _tar_url := https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 _tar := install-tl-unx.tar.gz
 _installer := install-tl-2024
@@ -59,7 +58,7 @@ all: $(_installer)
 .PHONY: clean
 clean:
 	rm -rf $(_installer)
-	rm $(_bashrc_tex)
+	rm -rf $(_bashrc_tex)
 
 
 .PHONY: install
@@ -73,7 +72,7 @@ uninstall:
 
 
 .PHONY: download
-download: $(_tar) $(_sig)  # fetch repository
+download: $(_tar) $(_sig)
 
 
 $(_sig):

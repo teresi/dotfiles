@@ -30,13 +30,14 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -C $(_src) clean
-	$(MAKE) -C $(_src) distclean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) distclean; fi
 
 
 .PHONY: uninstall
 uninstall:
-	xargs rm -f < $(_src)/$(_build)/install_manifest.txt
+	[[ -d "$(_src)" ]] && xargs rm -f < $(_src)/$(_build)/install_manifest.txt
 
 
 .PHONY: repo

@@ -10,15 +10,15 @@
 # autoconf automake autopoint flex gperf graphviz help2man texinfo valgrind gnupg
 
 
+include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-_dir := $(_root_dir)/bison
-_bin := $(_dir)/tests/bison
+_src := bison
+_bin := $(_src)/tests/bison
 _install := $(PREFIX)/bin/bison
-
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
@@ -39,14 +39,13 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	rm $(_release_sig)
-	rm $(_release_tar)
-	$(MAKE) -ik -C $(_dir) clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_dir) uninstall
+	$(MAKE) -ik -C $(_src) uninstall
 
 
 $(_gpg_key):
@@ -61,7 +60,7 @@ $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 
 
-$(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
+$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --import $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
@@ -70,12 +69,12 @@ $(_dir):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		|| (echo "invalid bison sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid bison tar"; exit 1) \
-		&& (mkdir -p $(_dir) && tar -xzvf $(_release_tar) -C $(_dir)/ --strip-components=1)
+		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
 
 
-$(_bin): | $(_dir)
-	cd $(_dir) && ./configure --prefix=$(PREFIX) && make -j
+$(_bin): | $(_src)
+	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
 
 
 $(_install): $(_bin)
-	cd $(_dir) && make install
+	cd $(_src) && make install

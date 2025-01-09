@@ -22,6 +22,7 @@ MAKEFLAGS += --no-print-directory
 PREFIX ?= $(HOME)/.local
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
+SUB_PROJECTS := $(dir $(wildcard */Makefile))
 # FUTURE gradually reducing required dependencies
 # gcc: for compiling
 # perl: for compiling
@@ -141,8 +142,14 @@ all:                  ## install programs and configs
 	$(MAKE) -ik check_packages
 
 
+.PHONY: clean
+clean:                ## clean all sub-projects
+	$(call log_info,cleaning all sub projects...)
+	@$(foreach sub,$(SUB_PROJECTS),echo -e "\e[32mINFO\tcleaning all sub projects... $(sub)\e[39m"; $(MAKE) -C $(sub) clean;)
+
+
 .PHONY: gawk
-gawk:
+gawk:                 ## GNU awk
 	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -346,8 +353,8 @@ rangerrc:               ## ranger configuration
 rxvt.conf: xsel            ## rxvt configuration
 	$(call log_info,updating $@...)
 	$(call check_pkgs,rxvt-unicode,libxext-dev,xsel,libx11-dev)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources $(RXVT_CONF)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/Xresources.d $(RXVT_CONF_D)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/Xresources $(RXVT_CONF)
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/Xresources.d $(RXVT_CONF_D)
 	xrdb -merge $(RXVT_CONF)
 
 
@@ -467,7 +474,7 @@ host_alias:           ## set the nickname for this machine
 zathura:             ## zathura pdf reader config
 	$(call log_info,updating $@...)
 	$(call check_pkgs,zathura)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/zathura ~/.config/zathura
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/zathura ~/.config/zathura
 
 
 .PHONY: lua

@@ -60,12 +60,13 @@ install: $(_cargo_bin) $(_source_bash_comp)
 
 .PHONY: clean
 clean:
-	cargo clean \
-		--manifest-path $(_src)/Cargo.toml
+	$(call log_info,clean $(_src))
+	cargo clean --manifest-path $(_src)/Cargo.toml
 
 
 .PHONY: uninstall
 uninstall:
+	$(call log_info,uninstall $(_src))
 	rm $(_install)
 	cargo uninstall alacritty
 

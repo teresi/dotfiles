@@ -12,7 +12,6 @@ _install := $(PREFIX)/bin/ninja
 
 _url := https://github.com/ninja-build/ninja.git
 _branch := master
-
 _src := ninja
 _build := build
 _bin := $(_src)/$(_build)/ninja
@@ -28,7 +27,8 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	cd $(_src) && cmake --build $(_build) --target clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then cmake --build $(_src)/$(_build) --target clean; fi
 
 
 .PHONY: uninstall

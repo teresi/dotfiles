@@ -16,7 +16,6 @@ _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 _url := https://github.com/astrand/xclip.git
 _branch := master
-
 _src := xclip
 _bin := $(_src)/xclip
 _install := $(PREFIX)/bin/xclip
@@ -39,7 +38,8 @@ check:
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_src) clean
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall

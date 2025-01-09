@@ -6,18 +6,19 @@
 # draws to terminal
 # requires pkgconf
 
+
+include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 _release_ver := 6.5
 _release_tar := ncurses-$(_release_ver).tar.gz
 _release_tar_url := https://invisible-mirror.net/archives/ncurses/ncurses-6.5.tar.gz
 _md5_sum := ac2d2629296f04c8537ca706b6977687
 
-_dir := $(_root_dir)/ncurses
-_bin := $(_dir)/ncurses/libncurses.so.$(_release_ver)
+_src := ncurses
+_bin := $(_src)/ncurses/libncurses.so.$(_release_ver)
 _install := $(PREFIX)/lib/libncurses.so
 
 
@@ -31,29 +32,30 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	$(MAKE) -ik -C $(_dir) clean
-	rm -rf $(_dir)
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_dir) uninstall
+	$(MAKE) -ik -C $(_src) uninstall
 
 
 $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 
 
-$(_dir):  $(_release_tar)
+$(_src):  $(_release_tar)
 	[[ `md5sum < $(_release_tar)` = "$(_md5_sum)  -" ]] \
 		|| (echo "md5sum check failed: $(_release_tar)"; exit 1) \
-		&& rm -rf $(_dir) \
+		&& rm -rf $(_src) \
 		&& tar -xf $(_release_tar) \
-		&& mv $(_dir)-$(_release_ver) $(_dir)
+		&& mv $(_src)-$(_release_ver) $(_src)
 
 
-$(_bin): | $(_dir)
-	cd $(_dir) && \
+$(_bin): | $(_src)
+	$(call log_info,compiling $@...)
+	cd $(_src) && \
 	./configure \
 		--prefix=${PREFIX} \
 		--with-shared \
@@ -62,8 +64,8 @@ $(_bin): | $(_dir)
 		--enable-pc-files \
 		--with-versioned-syms \
 		--with-pkg-config-libdir=${PREFIX}/lib/pkgconfig
-	make -C $(_dir) -j
+	make -C $(_src) -j
 
 
 $(_install): $(_bin)
-	make -C $(_dir) install
+	make -C $(_src) install
