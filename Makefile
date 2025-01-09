@@ -706,3 +706,9 @@ odin: cmake ninja    ## compile ODIN lang
 latex:               ## install LaTeX
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
+
+
+.PHONY: curl
+curl: autoconf automake libtool  ## install curl
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)

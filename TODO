@@ -1,16 +1,34 @@
-- compile curl | wget from source
+
+[x] add libtool, remove autotools-dev as dependency
+[x] install LaTeX
+[x] refactor alacritty
+[x] refactor neovim
+[x] fix 'no version available' warning on ncurses
+[x] refactor tmux
+[x] compile curl
+
+[ ] compile libpsl (for curl)
+    + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/libpsl.html
+
+[ ] compile wget
+    + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
 
 - compile git from source
 
+
 - refactor libevent makefile
+
+- enable more compile time flags for curl
+    + e.g. --with-nghttp2
+    + need?: nghttp2 libnghttp2-dev libssl-dev
+
+[ ] compile libssl-dev
 
 - add a 'download' option, download / fetch the release,
     so the project can be rsync-ed to another machine,
     update clean rules to forgo deletion of the release
 
 - add command to check for existence of a library
-
-- add libtool, remove autotools-dev as dependency
 
 - update bison Makefile
     + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
@@ -28,9 +46,6 @@
     + https://www.gnu.org/software/libiconv/
 
 - add option for local/bin to another dir (e.g. data)
-
-- add wget
-    + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/wget.html
 
 - enable change in PREFIX
     + need to pass PREFIX to make_all_install function
