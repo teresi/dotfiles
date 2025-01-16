@@ -34,6 +34,10 @@ uninstall:
 	$(MAKE) -ik -C $(_src) uninstall
 
 
+.PHONY: download
+download: repo
+
+
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_src) install

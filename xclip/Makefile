@@ -48,17 +48,17 @@ uninstall:
 	rm -rf $(PREFIX)/share/man/man1/xclip*
 
 
-$(_install): $(_bin)
-	make -C $(_src) install
-
-
-$(_src)/.git: | repo
-
-
 .PHONY: repo
 repo:
 	$(call log_info,updating $@...)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+.PHONY: download
+download: repo
+
+
+$(_src)/.git: | repo
 
 
 $(_bin): $(_src)/.git
@@ -68,3 +68,7 @@ $(_bin): $(_src)/.git
 		&& autoupdate \
 		&& ./configure --prefix=$(PREFIX) \
 		&& make -j
+
+
+$(_install): $(_bin)
+	make -C $(_src) install

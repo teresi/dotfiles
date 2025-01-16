@@ -42,6 +42,10 @@ uninstall:
 	xargs rm -f < $(_src)/$(_build)/install_manifest.txt
 
 
+.PHONY: download
+download: repo
+
+
 .PHONY: repo
 repo:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))

@@ -8,8 +8,7 @@
 [x] compile curl
 [x] don't remove release/repo on clean
 [x] add top level rule to clean all subprojects
-
-[ ] add top level rule to fetch sources for all subprojects
+[x] add top level rule to fetch sources for all subprojects
     (so we can copy the sources to another machine)
 
 [ ] refactor make
@@ -30,11 +29,15 @@
     + need to pass PREFIX to make_all_install function
     + need to mkdir -p $PREFIX
 
+[ ] move zephyr to it's own directory
+
 [ ] compile vim
 
 [ ] compile tar
 
 [ ] compile git
+
+[ ] download font files to this project, not tmp
 
 [ ] enable more compile time flags for curl
     + e.g. --with-nghttp2

@@ -34,14 +34,8 @@ clean:
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
-$(_install): $(_bin)
-	$(call log_info,updating $@...)
-	make -C $(_src) prefix=$(PREFIX) install
-
-
-$(_bin): $(_src)/.git
-	$(call log_info,updating $@...)
-	$(MAKE) -C $(_src) prefix=$(PREFIX) -j
+.PHONY: download
+download: repo
 
 
 .PHONY: repo
@@ -51,3 +45,13 @@ repo:
 
 
 $(_src)/.git: | repo
+
+
+$(_bin): $(_src)/.git
+	$(call log_info,updating $@...)
+	$(MAKE) -C $(_src) prefix=$(PREFIX) -j
+
+
+$(_install): $(_bin)
+	$(call log_info,installing $@...)
+	make -C $(_src) prefix=$(PREFIX) install

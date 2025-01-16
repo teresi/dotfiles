@@ -36,9 +36,17 @@ uninstall:
 	xargs rm -f < $(_src)/$(_build)/install_manifest.txt
 
 
-$(_install): $(_bin)
+.PHONY: repo
+repo:
 	$(call log_info,updating $@...)
-	cd $(_src) && cmake --build $(_build) --target install -- --no-print-directory
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+.PHONY: download
+download: repo
+
+
+$(_src)/.git: | repo
 
 
 $(_bin): $(_src)/.git
@@ -49,10 +57,6 @@ $(_bin): $(_src)/.git
 		&& cmake --build $(_build) -j
 
 
-.PHONY: repo
-repo:
+$(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
-
-
-$(_src)/.git: | repo
+	cd $(_src) && cmake --build $(_build) --target install -- --no-print-directory

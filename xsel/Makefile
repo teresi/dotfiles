@@ -15,7 +15,8 @@ include ../helpers.mk
 _src := xsel
 _bin := $(_src)/src/xsel
 _install := $(PREFIX)/bin/xsel
-_repo_url := https://github.com/kfish/xsel.git
+_url := https://github.com/kfish/xsel.git
+_branch := master
 
 
 # https://tgebarowski.github.io/2008/08/31/problem-with-pkg_check_modules-under-mac-os-x/
@@ -57,8 +58,21 @@ uninstall:
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) uninstall; fi
 
 
-$(_bin):
-	$(call git_clone_fetch_reset,$(_repo_url),$(_src),master)
+.PHONY: download
+download: repo
+
+
+.PHONY: repo
+repo:
+	$(call log_info,updating $@...)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+$(_src)/.git: | repo
+
+
+$(_bin): $(_src)/.git
+	$(call log_info,updating $@...)
 	export PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
 		&& cd $(_src) \
 		&& sh autogen.sh \
@@ -67,5 +81,5 @@ $(_bin):
 
 
 $(_install): $(_bin)
-	$(call log_info,install $@...)
+	$(call log_info,installing $@...)
 	make -C $(_src) install

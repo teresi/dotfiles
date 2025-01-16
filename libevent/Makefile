@@ -34,6 +34,10 @@ uninstall:
 	$(MAKE) -ik -C $(_build) uninstall
 
 
+.PHONY: download
+download: repo
+
+
 $(_build):
 	mkdir -p $(_build)
 

@@ -48,6 +48,10 @@ uninstall:
 	$(MAKE) -ik -C $(_src) uninstall
 
 
+.PHONY: download
+download: $(_src)
+
+
 $(_gpg_key):
 	curl -C - -o $(_gpg_key) $(_gpg_url)
 

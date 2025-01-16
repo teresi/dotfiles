@@ -16,6 +16,7 @@ for example:
 make help             # usage
 make all              # compile defaults
 make clean            # clean all
+make download         # clone sources
 make neovim           # compile editor
 make alacritty        # compile terminal
 make tmux             # compile terminal multiplexer
@@ -60,5 +61,3 @@ Notably:
 - set up a new machine automatically
 - set up vi motions for terminal & tmux
 - set up copy and paste over ssh
-
-

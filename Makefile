@@ -18,7 +18,7 @@
 
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-MAKEFLAGS += --no-print-directory
+#MAKEFLAGS += --no-print-directory
 PREFIX ?= $(HOME)/.local
 # include call changes MAKEFILE_LIST, so capture this before include
 MY_TARGETS := $(MAKEFILE_LIST)
@@ -146,6 +146,12 @@ all:                  ## install programs and configs
 clean:                ## clean all sub-projects
 	$(call log_info,cleaning all sub projects...)
 	@$(foreach sub,$(SUB_PROJECTS),echo -e "\e[32mINFO\tcleaning all sub projects... $(sub)\e[39m"; $(MAKE) -C $(sub) clean;)
+
+
+.PHONY: download
+download:             ## fetch | download all sub-project sources
+	$(call log_info,downloading all sub projects...)
+	@$(foreach sub,$(SUB_PROJECTS),echo -e "\e[32mINFO\tfetching all sub projects... $(sub)\e[39m"; $(MAKE) -C $(sub) download;)
 
 
 .PHONY: gawk

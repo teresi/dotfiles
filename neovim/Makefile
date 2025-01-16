@@ -45,6 +45,10 @@ repo:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
 
 
+.PHONY: download
+download: repo
+
+
 $(_src)/.git: | repo
 
 

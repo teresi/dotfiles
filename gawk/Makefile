@@ -38,6 +38,10 @@ uninstall:
 	$(MAKE) -ik -C $(_src) uninstall
 
 
+.PHONY: download
+download: $(_src)
+
+
 $(_release_tar):
 	curl -C - -o $(_release_tar) $(_release_tar_url)
 

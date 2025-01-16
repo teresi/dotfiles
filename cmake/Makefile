@@ -28,6 +28,10 @@ clean:
 install: $(_bin)
 
 
+.PHONY: download
+download: repo
+
+
 $(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_build) -j install
