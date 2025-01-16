@@ -63,3 +63,4 @@ vim.opt.synmaxcol = 1024           -- max col for syntax highlight (default 3000
 
 -- Set completeopt to have a better completion experience
 vim.opt.completeopt = 'menuone,noselect'
+

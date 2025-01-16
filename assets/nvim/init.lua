@@ -86,3 +86,4 @@ vim.api.nvim_create_autocmd('User', {
         print('\nmason-update-all has finished\n\n')
     end,
 })
+

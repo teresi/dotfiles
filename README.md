@@ -2,7 +2,7 @@
 
 My development environment.
 
-```
+```bash
 make all              # install default programs & configs
 ```
 
@@ -12,7 +12,7 @@ make all              # install default programs & configs
 
 
 for example:
-```
+```bash
 make help             # usage
 make all              # compile defaults
 make clean            # clean all
@@ -23,7 +23,7 @@ make tmux             # compile terminal multiplexer
 ```
 
 options:
-```
+```bash
 HOST_ALIAS=(<str>):   # user's nickname for their computer
 NO_SYMLINKS=ON        # copy config directly instead of linking to files here
                       # useful if you delete this repo after install

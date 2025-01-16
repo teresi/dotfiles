@@ -13,6 +13,8 @@
 
 [ ] refactor make
 
+[ ] add markdown to html tool for nvim
+
 [ ] refactor lua
 
 [ ] refactor vundle
