@@ -489,8 +489,14 @@ lua:                 ## install Lua
 	@$(ROOT_DIR)/install_lua.bash
 
 
+.PHONY: luarocks
+luarocks: lua        ## install luarocks
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
+
+
 .PHONY: neovim
-neovim: | lua npm rg cmake gettext ninja cmake  ## install neovim
+neovim: | lua luarocks npm rg cmake gettext ninja cmake  ## install neovim
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C neovim all install
 	$(MAKE) -ik nvimrc
