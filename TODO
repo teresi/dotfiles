@@ -10,12 +10,16 @@
 [x] add top level rule to clean all subprojects
 [x] add top level rule to fetch sources for all subprojects
     (so we can copy the sources to another machine)
+[x] compile Lua
+[x] compile luajit
+
+[ ] install treesitter via cargo, not npm
+
+[ ] compile libreadline-dev (for lua and others)
 
 [ ] refactor make
 
 [ ] add markdown to html tool for nvim
-
-[ ] refactor lua
 
 [ ] refactor vundle
 

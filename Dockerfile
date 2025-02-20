@@ -13,6 +13,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
         ca-certificates \
         gnupg \
         build-essential \
+        libreadline-dev \
         libssl-dev \
         screen \
         dconf-editor dconf-cli \
@@ -30,6 +31,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 RUN git-lfs install
 
 WORKDIR /root/dotfiles
+
 RUN git clone https://github.com/teresi/dotfiles .
 
 FROM base as test
