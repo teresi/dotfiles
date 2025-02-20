@@ -54,7 +54,8 @@ $(_src):  $(_release_tar)
 		|| (echo "md5sum check failed: $(_release_tar)"; exit 1) \
 		&& rm -rf $(_src) \
 		&& tar -xf $(_release_tar) \
-		&& mv $(_src)-$(_release_ver) $(_src)
+		&& mv $(_src)-$(_release_ver) $(_src) \
+		&& touch $(_src)
 
 
 $(_bin): | $(_src)

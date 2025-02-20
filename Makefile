@@ -486,7 +486,7 @@ zathura:             ## zathura pdf reader config
 .PHONY: lua
 lua:                 ## install Lua
 	$(call log_info,installing $@...)
-	@$(ROOT_DIR)/install_lua.bash
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: luarocks
