@@ -502,8 +502,14 @@ luarocks: lua        ## install luarocks package manager
 
 
 .PHONY: neovim
-neovim: | lua luajit luarocks npm rg cmake gettext ninja cmake  ## install neovim
+neovim: | lua luajit luarocks rust rg npm cmake gettext ninja  ## install neovim
 	$(call log_info,updating $@...)
+	@# neovim requires lua 5.1 (preferably luajit)
+	@# some lsp's require node
+	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
+	$(call log_info,compiling tree sitter...)
+	$(CARGO_BIN)/cargo install tree-sitter-cli
+	$(call log_info,compiling neovim...)
 	$(MAKE) -ik -C neovim all install
 	$(MAKE) -ik nvimrc
 
@@ -512,9 +518,6 @@ neovim: | lua luajit luarocks npm rg cmake gettext ninja cmake  ## install neovi
 nvimrc:              ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/nvim $(HOME)/.config/nvim
-
-	$(call log_info,updating tree sitter; please wait...)
-	bash -l -c 'source ~/.bashrc && unset PREFIX; source $(HOME)/.nvm/nvm.sh && npm install -g tree-sitter tree-sitter-cli; exit 0;'
 
 	$(call log_info,updating lazy...)
 	nvim --headless "+Lazy! sync" +qa
