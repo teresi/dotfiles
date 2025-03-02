@@ -10,12 +10,11 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _url := https://luajit.org/git/luajit.git
-_src := luajit
+_src := LuaJIT
 _bin := $(_src)/src/luajit
 _install := $(PREFIX)/bin/luajit
 
 _branch := master
-_depth :=
 
 
 .PHONY: all
@@ -43,7 +42,9 @@ download: repo
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	@# luajit doesn't appear to support shallow copies,
+	@# so don't use the depth option
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

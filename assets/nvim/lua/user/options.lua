@@ -4,6 +4,10 @@
 -- SEE  https://github.com/LunarVim/nvim-basic-ide/blob/master/lua/options.lua
 
 
+-- [[ clipboard ]]
+vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
+
+
 -- [[ UI ]]
 vim.opt.termguicolors = true       -- true color support (24bit)
 vim.opt.number = true              -- show line numbers
