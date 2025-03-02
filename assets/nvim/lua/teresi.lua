@@ -12,34 +12,11 @@
 --             'YP'                    'YP'                   ''
 
 
-vim.g.loaded_netrw = 1             -- NB disable netrw at start of init.lua
-vim.g.loaded_netrwPlugin = 1       -- NB disable netrw at start of init.lua
-vim.opt.termguicolors = true       -- true color support (24bit)
-
 vim.filetype.add({ extension = { pyx = 'python' } })  -- cython
 vim.filetype.add({ extension = { pxd = 'python' } })  -- cython
 
-
-require("user.options")            -- sundry vim.opt calls
-require("user.keymaps")            -- sundry vim.keymap calls
-
--- [[ lazy package manager ]]
--- installs plugins at: plugins.lua, plugins/*.lua
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable',
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-require('lazy').setup("plugins")   -- initialize plugins
-
-
+vim.g.loaded_netrw = 1             -- disable netrw at start of init.lua
+vim.g.loaded_netrwPlugin = 1       -- disable netrw at start of init.lua
 
 
 
@@ -66,6 +43,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+
 -- [[ remove trailing whitespace ]]
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = {"*"},
@@ -76,6 +54,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     end,
 })
 
+
 -- [[ update Mason from command line ]]
 -- nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
 vim.api.nvim_create_autocmd('User', {
@@ -84,4 +63,3 @@ vim.api.nvim_create_autocmd('User', {
         print('\nmason-update-all has finished\n\n')
     end,
 })
-

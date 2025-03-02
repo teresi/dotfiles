@@ -50,8 +50,6 @@ vim.opt.smartindent = true         -- autoindent on new lones
 
 
 -- [[ Human Interface Devices ]]
-vim.g.mapleader = ' '              -- <space> as leader key (set before lazy)
-vim.g.maplocalleader = ' '         -- <space> as leader key (set before lazy)
 vim.opt.mouse = 'a'                -- enable mouse
 vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
 vim.opt.timeout = true             -- wait `ttimeoutlen` after recieving ESC for another key
@@ -67,4 +65,3 @@ vim.opt.synmaxcol = 1024           -- max col for syntax highlight (default 3000
 
 -- Set completeopt to have a better completion experience
 vim.opt.completeopt = 'menuone,noselect'
-

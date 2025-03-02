@@ -6,6 +6,11 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
+-- leader key
+vim.g.mapleader = ' '              -- <space> as leader key (set before lazy)
+vim.g.maplocalleader = ' '         -- <space> as leader key (set before lazy)
+
+
 -- faster movement between windows
 Map("n", "<C-h>", "<C-w>h")
 Map("n", "<C-j>", "<C-w>j")
