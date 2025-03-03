@@ -15,13 +15,15 @@ return {
     },
     config = function()
       local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, {})  --find files
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})   --find via grep
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, {})     --find in existing buffer
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})   --find in tags
-      vim.keymap.set('n', '<leader>f?', builtin.oldfiles, {})    --find recently opened
-      vim.keymap.set('n', '<leader>fw', builtin.grep_string, {}) --find current word
+      vim.keymap.set('n', '<leader>ff', builtin.find_files,  {desc="find files"})
+      vim.keymap.set('n', '<leader>fg', builtin.live_grep,   {desc="live grep"})
+      vim.keymap.set('n', '<leader>fb', builtin.buffers,     {desc="find buffer"})
+      vim.keymap.set('n', '<leader>fh', builtin.help_tags,   {desc="find tags"})
+      vim.keymap.set('n', '<leader>f?', builtin.oldfiles,    {desc="find recently open"})
+      vim.keymap.set('n', '<leader>fw', builtin.grep_string, {desc="find words"})
+      vim.keymap.set('n', '<leader>fc', builtin.grep_string, {desc="find word under cursor"})
       require('telescope').load_extension('fzf')
     end
   },
 }
+
