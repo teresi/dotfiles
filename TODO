@@ -13,11 +13,13 @@
 [x] compile Lua
 [x] compile luajit
 
-[ ] install treesitter via cargo, not npm
+[x] install treesitter via cargo, not npm
 
 [ ] compile libreadline-dev (for lua and others)
 
 [ ] refactor make
+
+[ ] download font files to this project, not tmp
 
 [ ] add markdown to html tool for nvim
 
@@ -42,8 +44,6 @@
 [ ] compile tar
 
 [ ] compile git
-
-[ ] download font files to this project, not tmp
 
 [ ] enable more compile time flags for curl
     + e.g. --with-nghttp2
