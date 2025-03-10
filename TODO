@@ -12,10 +12,11 @@
     (so we can copy the sources to another machine)
 [x] compile Lua
 [x] compile luajit
-
 [x] install treesitter via cargo, not npm
+[x] compile libreadline-dev (for lua and others)
+[ ] add zig
 
-[ ] compile libreadline-dev (for lua and others)
+[ ] add readline to top level & test w/ lua
 
 [ ] refactor make
 
