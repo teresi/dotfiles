@@ -14,8 +14,10 @@
 [x] compile luajit
 [x] install treesitter via cargo, not npm
 [x] compile libreadline-dev (for lua and others)
-[ ] add zig
-
+[x] add zig
+[x] fix issue w/ libevent where the remote hash is more than one hash
+[x] fix issue where luarocks branch is wrong
+[ ] move cpython to it's own subdirectory
 [ ] add readline to top level & test w/ lua
 
 [ ] refactor make
@@ -37,6 +39,10 @@
 [ ] enable change in PREFIX
     + need to pass PREFIX to make_all_install function
     + need to mkdir -p $PREFIX
+
+[ ] debug libevent can't checkout the expected tag, but it's at the right branch?
+
+[ ] debug zig, zig binary builds fine but the timestamp is too early?
 
 [ ] move zephyr to it's own directory
 

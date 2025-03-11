@@ -15,8 +15,10 @@ _src := llvm-project
 _build := build
 _bin := $(_src)/$(_build)/bin/clang
 
-# using 18 b/c this what ODIN uses (note that they use 'main', not 'master')
-_branch := release/18.x
+# ODIN uses 18 (release/18.x)
+# ZIG uses 19 (release/19.x)
+# it's ok to compile and install both
+_branch ?= release/18.x
 # using --depth 1 b/c llvm is very large and we don't need the git history
 _depth := 1
 # using half the cores b/c compiling/linkng llvm uses a lot of cpu/ram
@@ -56,6 +58,7 @@ $(_src)/.git: | repo
 
 $(_bin): $(_src)/.git
 	$(call log_info,compiling $@...)
+	$(call log_warn,this may take a few minutes...)
 	$(call log_info,please wait...)
 	$(call check_pkgs,gcc-multilib)
 	$(call check_binary,cmake)

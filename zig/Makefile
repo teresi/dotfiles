@@ -1,18 +1,19 @@
 #!/usr/bin/make -f
 
-# compile luarocks
+# compile Zig
 
-# a package manager for lua modules
-
+# a general-purpose language
+# requires cmake, clang, llvm, llvd 19.x
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
-_url := https://github.com/luarocks/luarocks.git
-_src := luarocks
-_bin := $(_src)/build/luarocks
-_branch := main
-_install := $(PREFIX)/bin/luarocks
+_url := https://github.com/ziglang/zig.git
+_src := zig
+_build := $(_src)/build
+_bin := $(_build)/stage3/bin/zig
+_branch := master
+_install := $(PREFIX)/bin/zig
 _depth := 1
 
 
@@ -27,7 +28,7 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	if [ -d "$(_build)" ]; then $(MAKE) -ik -C $(_build) clean; fi
 
 
 .PHONY: uninstall
@@ -41,16 +42,16 @@ download: repo
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_src) install
+	$(MAKE) -ik -C $(_build) install
 
 
 $(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
-	$(call check_binary, unzip lua)
-	$(call check_pkgs, build-essential libreadline-dev)
-	cd $(_src) \
-		&& ./configure --prefix=$(PREFIX) --with-lua-include=$(PREFIX)/include --with-lua=$(PREFIX)
-	$(MAKE) -ik -C $(_src)
+	$(call check_binary, cmake clang)
+	mkdir -p $(_build)
+	cd $(_build) && \
+		cmake --install-prefix=$(PREFIX) ..
+	$(MAKE) -ik -C $(_build) -j
 
 
 .PHONY: repo

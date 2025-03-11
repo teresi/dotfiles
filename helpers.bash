@@ -67,22 +67,27 @@ update_repo_to_master () {
 	_remote=$(git -C $_dest ls-remote origin refs/heads/${_branch} | cut -f1)
 	if [ -z "$_remote" ]; then
 	# dereference b/c we need the OID of the commit associated w/ the tag, not the object ID of the tag itself
-		_remote=$(git -C $_dest show-ref --hash --dereference refs/tags/${_branch})
+	# NOTE sometimes you can get two lines? this happens w/ libevent
+	#      and it won't actually checkout the remote hash directly
+		_remote=$(git -C $_dest show-ref --hash --dereference refs/tags/${_branch} | head -n 1)
 	fi
 	if [ -z "$_remote" ]; then
-		error "could not find commit for branch/tag: ${_branch}"
-		return 1
+		warn "could not find commit for branch/tag: ${_branch} at ${_dest}"
 	fi
 	notify "    local commit is at  $_local"
 	notify "    remote commit is at $_remote"
-	if [ "$_local" != "$_remote" ]; then
-		notify "    updating to $_branch... checkout"
+	if [ "${_local}" != "${_remote}" ]; then
+		notify "    updating to ${_branch}... checkout"
+		git -C $_dest remote set-branches origin ${_branch}
 		git -C $_dest fetch $_depth origin $_branch
-		git -C $_dest fetch --tags
-		notify "    updating to $_branch... reset to origin"
 		git -C $_dest checkout $_branch
+		git -C $_dest fetch --tags || true
+		if [ "$?" != "0" ]; then
+			error "failed to checkout branch $_branch for repo $_dest"
+			return 1
+		fi
 		# @ means the current branch, {u} means upstream
-		git -C $_dest reset --hard $_remote
+		git -C ${_dest} reset --hard ${_remote}
 	else
 		notify "    updating to $_branch... already up to date"
 	fi

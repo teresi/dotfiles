@@ -740,3 +740,10 @@ latex:               ## install LaTeX
 curl: autoconf automake libtool  ## install curl
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: zig
+zig: export _branch=release/19.x
+zig: clang ## install curl
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)

@@ -55,9 +55,9 @@ I found it was easier to just compile everything.
 Notably:
 
 - does *not* use sudo
-- compile a good editor & supporting tools
-- compile a good terminal & terminal multiplexer
-- display git branch/hash in the PS1
-- set up a new machine automatically
-- set up vi motions for terminal & tmux
-- set up copy and paste over ssh
+- compiles a good editor & supporting tools
+- compiles a good terminal & terminal multiplexer
+- displays git branch/hash in the PS1
+- sets up a new machine automatically
+- sets up vi motions for terminal & tmux
+- sets up copy and paste over ssh
