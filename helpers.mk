@@ -106,22 +106,22 @@ endef
 
 
 # check if any deb packages are not installed using dpkg
-#	print error if any aren't installed, wait 3 sec
+#	print error if any aren't installed, wait 4 sec
 #	1	list of deb packages
 define check_pkgs
 	@for pkg in $(1); do \
-		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || (echo -e "\033[;91mERROR  missing package:  $$pkg\033[0m"; sleep 3;) \
+		dpkg -s $$pkg 2>/dev/null | grep -q "install ok installed" || (echo -e "\033[;91mERROR  missing package! please install:  $$pkg\033[0m"; sleep 4;) \
 	done
 endef
 
 # check if the program exists in the PATH
-#	print error if it's not installed, wait 3 sec
+#	print error if it's not installed, wait 4 sec
 #	1	program name
 define check_binary
 	@if [[ "" != "$(shell which $(1))" ]]; then\
 		echo -e "\e[32mINFO    checking binary $(1)... FOUND\e[39m";\
 	else \
-		echo -e "\033[;91mERROR  could NOT find:  $(1)\033[0m"; sleep 3; \
+		echo -e "\033[;91mERROR  could NOT find binary! please add to your path:  $(1)\033[0m"; sleep 4; \
 	fi
 endef
 

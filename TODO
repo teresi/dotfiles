@@ -17,10 +17,14 @@
 [x] add zig
 [x] fix issue w/ libevent where the remote hash is more than one hash
 [x] fix issue where luarocks branch is wrong
+[x] add Git
+
 [ ] move cpython to it's own subdirectory
 [ ] add readline to top level & test w/ lua
 
 [ ] refactor make
+
+[ ] add xz-utils (for git via tarball)
 
 [ ] download font files to this project, not tmp
 
