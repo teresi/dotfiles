@@ -31,6 +31,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then make -C $(_src) clean; fi
+	@# BUG need a proper uninstall target
 
 
 .PHONY: uninstall
@@ -54,6 +55,7 @@ $(_bin): | $(_src)/.git
 	$(call check_binary, gettext)
 	@# NOTE xz-utils is nedded if downloading tar.xz
 	$(call check_pkgs, dh-autoreconf libcurl4-gnutls-dev libexpat1-dev zlib1g-dev libssl-dev)
+	@# BUG exit if libcurl is not installed? https is necessary
 	cd $(_src) \
 		&& make configure \
 		&& ./configure --prefix=$(PREFIX) \

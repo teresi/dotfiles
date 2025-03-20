@@ -19,6 +19,9 @@
 [x] fix issue where luarocks branch is wrong
 [x] add Git
 
+[ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
+        libcurl4-gnutls-dev? or libcurl4-openssl-dev?
+
 [ ] move cpython to it's own subdirectory
 [ ] add readline to top level & test w/ lua
 

@@ -9,7 +9,9 @@ include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
-_url := https://luajit.org/git/luajit.git
+# using a mirror b/c the main site sometimes gets blocked
+#_url := https://luajit.org/git/luajit.git
+_url := https://github.com/LuaJIT/LuaJIT.git
 _src := LuaJIT
 _bin := $(_src)/src/luajit
 _install := $(PREFIX)/bin/luajit
@@ -33,7 +35,6 @@ clean:
 
 .PHONY: uninstall
 uninstall:
-
 
 
 .PHONY: download
