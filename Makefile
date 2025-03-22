@@ -556,9 +556,9 @@ pip:                    ## install pip
 
 
 .PHONY: cpython
-cpython:                ## compile cpython
+cpython:  pkgconf       ## compile cpython
 	$(call log_info,compiling $@...)
-	@$(ROOT_DIR)/install_cpython.bash -p $(CPYTHON)
+	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
 
 # TODO needs curl

@@ -51,7 +51,7 @@ download: repo
 $(_src)/.git: | repo
 
 
-$(_bin): | $(_src)/.git
+$(_bin): $(_src)/.git
 	$(call check_binary, gettext)
 	@# NOTE xz-utils is nedded if downloading tar.xz
 	$(call check_pkgs, dh-autoreconf libcurl4-gnutls-dev libexpat1-dev zlib1g-dev libssl-dev)

@@ -18,11 +18,12 @@
 [x] fix issue w/ libevent where the remote hash is more than one hash
 [x] fix issue where luarocks branch is wrong
 [x] add Git
+[x] move cpython to it's own subdirectory
+[ ] fix order only $(_bin): | $(_src)/.git, shouldn't use order only
 
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
         libcurl4-gnutls-dev? or libcurl4-openssl-dev?
 
-[ ] move cpython to it's own subdirectory
 [ ] add readline to top level & test w/ lua
 
 [ ] refactor make
