@@ -17,7 +17,7 @@ export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _src := bison
-_bin := $(_src)/tests/bison
+_bin := $(_src)/src/bison
 _install := $(PREFIX)/bin/bison
 
 _gpg_key := gnu-keyring.gpg
@@ -65,6 +65,7 @@ $(_release_tar):
 
 
 $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
+	$(call log_info,unpacking $@...)
 	gpg --import $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
@@ -74,11 +75,14 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid bison tar"; exit 1) \
 		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
+	touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
+	$(call log_info,compiling $@...)
 	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
 
 
 $(_install): $(_bin)
+	$(call log_info,installing $@...)
 	cd $(_src) && make install
