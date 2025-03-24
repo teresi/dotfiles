@@ -121,11 +121,13 @@ are_packages_missing () {
 	fi
 
 	error "you are missing packages!"
+	error "    some targets may not succeed,"
+	error "    or some important programs might be missing"
 	error "please install:"
 	echo ""
 	echo "  ${_missing[@]}"
 	echo ""
-	sleep 1
+	sleep 4
 	return 1
 }
 
@@ -146,6 +148,6 @@ are_packages_missing_warn () {
 	echo ""
 	echo "  ${_missing[@]}"
 	echo ""
-	sleep 1
+	sleep 4
 	return 1
 }
