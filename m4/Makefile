@@ -70,9 +70,10 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid M4 tar"; exit 1) \
 		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
+	touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
 	$(call log_info,compiling $@...)
 	$(call check_binary,gawk)
 	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
@@ -80,4 +81,5 @@ $(_bin): | $(_src)
 
 
 $(_install): $(_bin)
-	cd $(_src) && make install
+	$(call log_info,installing $@...)
+	make -C $(_src) install

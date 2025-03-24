@@ -50,10 +50,12 @@ $(_src):  $(_release_tar)
 	[[ `md5sum < $(_release_tar)` = "$(_md5_sum)  -" ]] \
 		|| (echo "md5sum check failed: $(_release_tar)"; exit $?) \
 		&& tar -xf $(_release_tar) \
-		&& mv $(_src)-$(_release_ver) $(_src)
+		&& mv $(_src)-$(_release_ver) $(_src) \
+		&& touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
+	$(call log_info,compiling $@...)
 	cd $(_src) \
 		&& ./configure \
 			--prefix=$(PREFIX) \
@@ -61,4 +63,5 @@ $(_bin): | $(_src)
 
 
 $(_install): $(_bin)
-	cd $(_src) && make install
+	$(call log_info,installing $@...)
+	make -C $(_src) install

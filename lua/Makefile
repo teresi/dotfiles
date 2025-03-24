@@ -56,10 +56,12 @@ $(_src):  $(_release_tar)
 		&& touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
+	$(call log_info,compiling $@...)
 	$(call check_pkgs, build-essential libreadline-dev)
 	make -C $(_src) INSTALL_TOP=$(PREFIX) linux test
 
 
 $(_install): $(_bin)
+	$(call log_info,installing $@...)
 	make -C $(_src) INSTALL_TOP=$(PREFIX) install

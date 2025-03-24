@@ -2,6 +2,8 @@
 
 # compile readline
 
+# readline is likely installed as a dependency of bash
+#
 # SEE https://tiswww.case.edu/php/chet/readline/rltop.html
 # The GNU Readline library provides a set of functions for use by
 # applications that allow users to edit command lines as they are typed in.
@@ -76,13 +78,16 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
 		|| (echo "invalid autoconf tar"; exit 1) \
 		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
+	touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
+	$(call log_info,compiling $@...)
 	cd $(_src) \
 		&& ./configure --prefix=$(PREFIX) \
 		&& make SHLIB_LIBS=-lcurses -j
 
 
 $(_install): $(_bin)
-	cd $(_src) && make install
+	$(call log_info,installing $@...)
+	make -C $(_src) install

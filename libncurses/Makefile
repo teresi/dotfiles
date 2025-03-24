@@ -58,7 +58,7 @@ $(_src):  $(_release_tar)
 		&& touch $(_src)
 
 
-$(_bin): | $(_src)
+$(_bin): $(_src)
 	$(call log_info,compiling $@...)
 	cd $(_src) && \
 	./configure \
