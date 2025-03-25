@@ -29,7 +29,7 @@ SUB_PROJECTS := $(dir $(wildcard */Makefile))
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim ranger screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev rxvt-unicode
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim screen lm-sensors libssl-dev unzip dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev rxvt-unicode
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -135,7 +135,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik alacritty  # includes fonts
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
-	$(MAKE) -ik rangerrc
+	$(MAKE) -ik ranger
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
 	$(MAKE) -ik tig
@@ -346,11 +346,13 @@ conda:                ## miniconda python distribution & package manager
 	@$(ROOT_DIR)/install_miniconda.sh
 
 
-.PHONY: rangerrc
-rangerrc:               ## ranger configuration
+.PHONY: ranger
+ranger: pipx              ## ranger configuration
 	$(call log_info,updating $@...)
-	$(call check_pkgs,ranger)
-	ranger --copy-config=all || echo -e "\e[91mERROR\t ranger config failed, ranger is not installed! \e[39m"
+	pipx install ranger-fm
+	@# NOTE installing ranger via pipx b/c the Makefile for ranger doesn't allow specifying PREFIX
+	@# b/c it appends `local` to whatever PREFIX you use (so $HOME/.local becomes $HOME/.local/local)
+	ranger --copy-config=all
 	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
 	-sed -i 's/set\ preview_images_method\ .*/set\ preview_images_method\ w3m/' $(RC_CONF)
 
@@ -619,7 +621,7 @@ gnu_make:                ## install make
 # TODO need to use $(BIN_DIR)/pipx
 .PHONY: pipx
 pipx:                    ## install pip extension 'pipx'
-	$(call log_info,installing $@...)
+	$(call log_info,updating $@...)
 	pip install --user --upgrade pipx
 	pipx ensurepath
 	pipx completions
