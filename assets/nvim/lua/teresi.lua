@@ -19,7 +19,6 @@ vim.g.loaded_netrw = 1             -- disable netrw at start of init.lua
 vim.g.loaded_netrwPlugin = 1       -- disable netrw at start of init.lua
 
 
-
 -- [[ append $PWD to path on startup ]]
 -- fix for issue where `:find` can't find files in $PWD
 local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })
@@ -61,5 +60,19 @@ vim.api.nvim_create_autocmd('User', {
     pattern = 'MasonUpdateAllComplete',
     callback = function()
         print('\nmason-update-all has finished\n\n')
+    end,
+})
+
+
+-- [[ turn of diagnostics for markdown ]]
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = {"*.md"},
+    callback = function(args)
+        vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+        vim.diagnostic.config({  -- https://neovim.io/doc/user/diagnostic.html
+                virtual_text = false,
+                signs = false,
+                underline = false,
+            })
     end,
 })

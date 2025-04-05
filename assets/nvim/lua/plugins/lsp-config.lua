@@ -37,7 +37,10 @@ return {
       lspconfig.pyright.setup({})
       lspconfig.rust_analyzer.setup({})
       lspconfig.bashls.setup({})
-      lspconfig.ltex.setup({})
+      lspconfig.ltex.setup({
+        --these are the default filetypes for ltex minus 'markdown'
+        filetypes = { "bib", "gitcommit", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc", "quarto", "rmd", "context", "html", "xhtml", "mail" },
+      })
       lspconfig.taplo.setup({})
       lspconfig.yamlls.setup({})
       lspconfig.jsonls.setup({})
