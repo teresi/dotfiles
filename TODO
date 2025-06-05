@@ -21,6 +21,14 @@
 [x] move cpython to it's own subdirectory
 [x] fix order only $(_bin): | $(_src)/.git, shouldn't use order only
 [x] add ranger
+[x] refactor make
+
+[ ] refactor vundle
+
+[ ] refactor xsel
+
+[ ] refactor bison
+    + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
 
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
         libcurl4-gnutls-dev? or libcurl4-openssl-dev?
@@ -28,17 +36,12 @@
 [ ] add readline to top level & test w/ lua
     (lua needs libreadline-dev, but it readline could be compiled locally)
 
-[ ] refactor make
 
 [ ] add xz-utils (for git via tarball)
 
 [ ] download font files to this project, not tmp
 
 [ ] add markdown to html tool for nvim
-
-[ ] refactor vundle
-
-[ ] refactor xsel
 
 [ ] compile libpsl (for curl, wget)
     + https://www.linuxfromscratch.org/blfs/view/svn/basicnet/libpsl.html
@@ -69,9 +72,6 @@
 [ ] compile libss / libssl-dev?
 
 [ ] add command to check for existence of a library
-
-[ ] refactor bison
-    + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
 
 - improve npm detection,
     + npm might be installed but can't be detected b/c bashrc hasn't run

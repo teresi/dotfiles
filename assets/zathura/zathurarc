@@ -3,6 +3,8 @@
 set window-title-basename "true"
 set selection-clipboard "clipboard"
 
+set sandbox none                    # allow zathura to open links
+
 set page-padding 2                  # pixel gap between pages (1)
 set page-cache-size 32              # max number pages in cache (15)
 

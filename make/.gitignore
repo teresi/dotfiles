@@ -1,0 +1,7 @@
+make
+*.tar.gz
+*.tar.gz.sig
+*.gpg
+.prev-version
+.tarball-version
+.version

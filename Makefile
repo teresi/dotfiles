@@ -120,7 +120,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik automake
 	$(MAKE) -ik libtool
 	$(MAKE) -ik gettext
-	$(MAKE) -ik gnu_make
+	$(MAKE) -ik make
 	$(MAKE) -ik tree
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -611,10 +611,10 @@ mdpdf: npm               ## install Markdown to PDF converter
 		{ source ~/.nvm/nvm.sh && npm install mdpdf -g; exit 0; }'
 
 
-.PHONY: gnu_make
-gnu_make:                ## install make
+.PHONY: make
+make:                    ## install make
 	$(call log_info,installing $@...)
-	@$(ROOT_DIR)/install_make.bash
+	$(MAKE) -k -C $@ all install
 
 
 # TODO pipx needs pip first
