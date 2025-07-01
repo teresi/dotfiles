@@ -22,8 +22,12 @@
 [x] fix order only $(_bin): | $(_src)/.git, shouldn't use order only
 [x] add ranger
 [x] refactor make
+[x] add ctags
 
 [ ] refactor vundle
+    if ca-certificates are not installed, use install_git_cert.bash
+    add a target that checks for ca-certificates, and installs it?
+    maybe just always install it?
 
 [ ] refactor xsel
 

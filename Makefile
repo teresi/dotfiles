@@ -121,6 +121,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik libtool
 	$(MAKE) -ik gettext
 	$(MAKE) -ik make
+	$(MAKE) -ik ctags
 	$(MAKE) -ik tree
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -204,6 +205,12 @@ libevent: cmake
 
 .PHONY: libncurses
 libncurses: pkgconf
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: ctags
+ctags:
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
