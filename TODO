@@ -23,6 +23,10 @@
 [x] add ranger
 [x] refactor make
 [x] add ctags
+[x] add meson
+[ ] ssh fixes (see hyperion)
+
+[ ] refactor fonts, download font files to this project (not temp)
 
 [ ] refactor vundle
     if ca-certificates are not installed, use install_git_cert.bash
@@ -30,6 +34,11 @@
     maybe just always install it?
 
 [ ] refactor xsel
+
+[ ] compile zathura
+    [ ] compile gtk3 https://docs.gtk.org/gtk3/building.html
+    [ ]
+
 
 [ ] refactor bison
     + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
@@ -40,10 +49,7 @@
 [ ] add readline to top level & test w/ lua
     (lua needs libreadline-dev, but it readline could be compiled locally)
 
-
 [ ] add xz-utils (for git via tarball)
-
-[ ] download font files to this project, not tmp
 
 [ ] add markdown to html tool for nvim
 

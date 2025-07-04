@@ -125,6 +125,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik tree
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
+	$(MAKE) -ik meson
 	$(MAKE) -ik vim
 	$(MAKE) -ik neovim
 	$(MAKE) -ik tmux
@@ -633,6 +634,12 @@ pipx:                    ## install pip extension 'pipx'
 	pipx ensurepath
 	pipx completions
 	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
+
+
+.PHONY: meson
+meson: | pipx            ## install meson
+	$(call log_info,updating $@...)
+	pipx install meson
 
 
 .PHONY: zephyr
