@@ -17,6 +17,7 @@ return {
           "dockerls",
           "jsonls",
           "ltex",         -- LaTeX
+          "texlab",       -- LateX
           "lua_ls",
           "pyright",
           "rust_analyzer",
@@ -37,6 +38,8 @@ return {
       lspconfig.pyright.setup({})
       lspconfig.rust_analyzer.setup({})
       lspconfig.bashls.setup({})
+      lspconfig.lua_ls.setup({})
+      lspconfig.texlab.setup({})
       lspconfig.ltex.setup({
         --these are the default filetypes for ltex minus 'markdown'
         filetypes = { "bib", "gitcommit", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc", "quarto", "rmd", "context", "html", "xhtml", "mail" },

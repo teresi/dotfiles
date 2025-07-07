@@ -605,9 +605,11 @@ endif
 npm: node_version_manager ## install nvm and Node
 	$(call log_info,installing $@...)
 	@# uninstall via `rm -rf ~/.nvm`
+	@# MAGIC 24, specifying `nvm install 24` b/c some treesitter parsers need a recent version of node (e.g. latex)
+	@# you may need to uninstall old versions, e.g. `nvm uninstall 20`
 	@bash -l -c 'unset PREFIX; source ~/.bashrc && type -t npm 2>&1 >/dev/null && \
 		{ echo "node is already installed"; } || \
-		{ source ~/.nvm/nvm.sh && nvm install node; exit 0; }'
+		{ source ~/.nvm/nvm.sh && nvm install 24; exit 0; }'
 
 
 .PHONY: mdpdf
