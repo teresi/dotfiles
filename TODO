@@ -24,9 +24,16 @@
 [x] refactor make
 [x] add ctags
 [x] add meson
+[x] add pv
+[ ] add bzip2 and pbzip2
+    https://www.sourceware.org/bzip2/downloads.html
+    https://github.com/ruanhuabin/pbzip2
+
 [ ] ssh fixes (see hyperion)
 
 [ ] refactor fonts, download font files to this project (not temp)
+
+[ ] compile zathura
 
 [ ] refactor vundle
     if ca-certificates are not installed, use install_git_cert.bash

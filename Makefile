@@ -130,6 +130,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik neovim
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
+	$(MAKE) -ik pv
 	$(MAKE) -ik git_config
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
@@ -319,6 +320,12 @@ bashprofile:          ## non-login shell config
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/bash_profile ~/.config/bash_profile
 	$(call source_file,$(BASHPROFILE),CUSTOM_BASHPROFILE,~/.config/bash_profile)
 	$(call comment_line,$(BASHPROFILE),CUSTOM_BASHPROFILE,$(INSTALL_RC))
+
+
+.PHONY: pv
+pv: make
+	$(call log_info,updating $@...)
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: alacritty.yml
