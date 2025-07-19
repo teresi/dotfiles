@@ -27,7 +27,10 @@
 [x] add pv
 [x] add libaio
 [x] add fio
+[x] add sysbench
 [ ] add fio sample job files
+[ ] add sysbench sample tests
+[ ] add pkg-config, add as prereq for sysbench
 
 [ ] fix issue where .git folders are updated when using --depth 1,
     even if there are no updates in the remote,
@@ -37,7 +40,6 @@
 [ ] add bzip2 and pbzip2
     https://www.sourceware.org/bzip2/downloads.html
     https://github.com/ruanhuabin/pbzip2
-
 
 [ ] ssh fixes (see hyperion)
 

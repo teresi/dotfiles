@@ -217,15 +217,24 @@ ctags:                ## indexes source files
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
+
 .PHONY: fio
-fio: libaio           ## flexible I/O tester
+fio: libaio           ## flexible I/O benchmark utility
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
+
 
 .PHONY: libaio
 libaio:               ## linux async I/O library
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: sysbench
+sysbench: make automake libaio  ## benchmarking utility
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
 
 .PHONY: vim
 vim:                  ## vim config and plugins
