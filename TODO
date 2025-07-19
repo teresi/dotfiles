@@ -28,9 +28,9 @@
 [x] add libaio
 [x] add fio
 [x] add sysbench
+[x] add pkg-config, add as prereq for sysbench
 [ ] add fio sample job files
 [ ] add sysbench sample tests
-[ ] add pkg-config, add as prereq for sysbench
 
 [ ] fix issue where .git folders are updated when using --depth 1,
     even if there are no updates in the remote,

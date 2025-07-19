@@ -195,7 +195,13 @@ libtool: gawk m4      ## makefile commands for handling shared libraries (part o
 
 
 .PHONY: pkgconf
-pkgconf: m4           ## tools for path handling during the configure step
+pkgconf: m4           ## handle include/lib paths for configure (replaces pgkf-config)
+	$(call log_info,updating $@...)
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: pkg-config
+pkg-config: m4           ## handle include/lib paths for configure
 	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -231,7 +237,7 @@ libaio:               ## linux async I/O library
 
 
 .PHONY: sysbench
-sysbench: make automake libaio  ## benchmarking utility
+sysbench: make automake pkg-config libaio ## benchmarking utility
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
