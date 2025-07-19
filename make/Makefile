@@ -17,6 +17,8 @@ _install := $(PREFIX)/bin/make
 
 _gpg_key := gnu-keyring.gpg
 _gpg_uri := https://ftp.gnu.org/gnu/gnu-keyring.gpg
+# MAGIC Paul D. Smith's key ID, see:  `gpg -d make-4.4.1.tar.gz.sig`
+_gpg_id  := B2508A90102F8AE3B12A0090DEACCAAEDB78137A
 
 _ver := 4.4.1
 
@@ -67,9 +69,8 @@ $(_tar):
 
 $(_src):  $(_sig) $(_tar) $(_gpg_key)
 
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		|| gpg --import $(_gpg_key)
 
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_sig) \
 		|| (echo "invalid sig"; exit 1)

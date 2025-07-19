@@ -6,7 +6,8 @@ FROM ubuntu:22.04 as base
 # NB installing cmake b/c it takes a lot time to compile
 #    remove if it needs testing here
 WORKDIR /root/dotfiles
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt-get update -y \
     && apt-get install -y --no-install-recommends \
