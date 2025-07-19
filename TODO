@@ -25,9 +25,19 @@
 [x] add ctags
 [x] add meson
 [x] add pv
+[x] add libaio
+[x] add fio
+[ ] add fio sample job files
+
+[ ] fix issue where .git folders are updated when using --depth 1,
+    even if there are no updates in the remote,
+    which causes unecessary rebuilds,
+    which doesn't happen when not using --depth on clone
+
 [ ] add bzip2 and pbzip2
     https://www.sourceware.org/bzip2/downloads.html
     https://github.com/ruanhuabin/pbzip2
+
 
 [ ] ssh fixes (see hyperion)
 

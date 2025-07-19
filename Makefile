@@ -131,6 +131,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik tmux
 	$(MAKE) -ik bash
 	$(MAKE) -ik pv
+	$(MAKE) -ik fio
 	$(MAKE) -ik git_config
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
@@ -182,40 +183,49 @@ automake: gawk        ## generates Makefiles for use with autoconf (aclocal, aut
 
 
 .PHONY: gettext
-gettext:             ## tools to translate human languages (part of autotools-dev)
+gettext:              ## tools to translate human languages (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: libtool
-libtool: gawk m4        ## makefile commands for handling shared libraries (part of autotools-dev)
+libtool: gawk m4      ## makefile commands for handling shared libraries (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
 
 .PHONY: pkgconf
-pkgconf: m4
+pkgconf: m4           ## tools for path handling during the configure step
 	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: libevent
-libevent: cmake
+libevent: cmake       ## callback library
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
 
 .PHONY: libncurses
-libncurses: pkgconf
+libncurses: pkgconf   ## tui library
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
 
 .PHONY: ctags
-ctags:
+ctags:                ## indexes source files
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
+.PHONY: fio
+fio: libaio           ## flexible I/O tester
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+.PHONY: libaio
+libaio:               ## linux async I/O library
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
 
 .PHONY: vim
 vim:                  ## vim config and plugins
