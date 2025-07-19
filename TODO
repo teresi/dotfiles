@@ -29,6 +29,7 @@
 [x] add fio
 [x] add sysbench
 [x] add pkg-config, add as prereq for sysbench
+[x] refactor bison
 [ ] add fio sample job files
 [ ] add sysbench sample tests
 
@@ -59,8 +60,6 @@
     [ ]
 
 
-[ ] refactor bison
-    + was having issue w/ recv-keys for bison, can we forgo calling gpg --import like the others?
 
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
         libcurl4-gnutls-dev? or libcurl4-openssl-dev?
