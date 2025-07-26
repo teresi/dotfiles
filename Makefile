@@ -74,7 +74,6 @@ ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
 RXVT_CONF_D := $(HOME)/.Xresources.d
 RC_CONF := $(HOME)/.config/ranger/rc.conf
-FONTS := $(HOME)/.local/share/fonts
 GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
 GOGH_THEMES := $(HOME)/Gogh
 NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
@@ -136,7 +135,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
 	$(MAKE) -ik rust
-	$(MAKE) -ik alacritty  # includes fonts
+	$(MAKE) -ik alacritty
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
 	$(MAKE) -ik ranger
@@ -363,11 +362,10 @@ alacritty.yml:        ## configuration for alacritty terminal
 
 
 .PHONY: alacritty
-alacritty: rust       ## compile alacritty terminal
+alacritty: rust fonts      ## compile alacritty terminal
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C alacritty all install
 	$(MAKE) -ik alacritty.yml
-	$(MAKE) -ik fonts
 	$(call check_pkgs,wmctrl xdotool)
 
 
@@ -570,16 +568,7 @@ nvimrc:              ## neovim config and plugins
 
 .PHONY: fonts
 fonts:               ## install fonts
-	@# TODO make this a function
-	curl -o /tmp/UbuntuMono.zip -L -O -C - https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/UbuntuMono.zip
-	mkdir -p $(FONTS)/UbuntuMono
-	unzip -u /tmp/UbuntuMono.zip -d $(FONTS)/UbuntuMono
-
-	curl -o /tmp/DejaVuSansMono.zip -L -O -C - https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/DejaVuSansMono.zip
-	mkdir -p $(FONTS)/DejaVuSansMono
-	unzip -u /tmp/DejaVuSansMono.zip -d $(FONTS)/DejaVuSansMono
-
-	fc-cache -f
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: check_packages

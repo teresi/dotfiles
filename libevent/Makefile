@@ -51,7 +51,7 @@ $(_bin): $(_src)/.git | $(_build)
 	$(call log_info,updating $@...    COMPLETE!)
 
 
-$(_install): $(_src)/.git
+$(_install): $(_bin)
 	$(MAKE) -ik -C $(_build) install
 
 
