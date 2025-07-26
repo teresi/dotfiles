@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
-# compile latest release of libevent
+# compile libevent
+# library for callbacks
 
 
 include ../helpers.mk
@@ -9,9 +10,12 @@ PREFIX ?= $(HOME)/.local
 _url := https://github.com/libevent/libevent.git
 _src := libevent
 _build := $(_src)/build
-_branch := release-2.1.12-stable
-_bin := $(_build)/lib/libevent.so
-_install := $(PREFIX)/lib/libevent.so
+# using patches-2.X b/c using the tag release-2.1.12-stable resulted in clone issues,
+# e.g. fatal: couldn't find remote ref refs/heads/release-2.1.12-stable
+# and remote/local commit wouldn't match, and would constantly rebuild,
+_branch := patches-2.1
+_bin := $(_build)/lib/libevent.a
+_install := $(PREFIX)/lib/libevent.a
 _nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
@@ -52,6 +56,7 @@ $(_bin): $(_src)/.git | $(_build)
 
 
 $(_install): $(_bin)
+	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_build) install
 
 

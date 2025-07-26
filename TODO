@@ -30,6 +30,7 @@
 [x] add sysbench
 [x] add pkg-config, add as prereq for sysbench
 [x] refactor bison
+[x] refactor fonts, download font files locally
 [ ] add fio sample job files
 [ ] add sysbench sample tests
 
@@ -44,7 +45,9 @@
 
 [ ] ssh fixes (see hyperion)
 
-[ ] refactor fonts, download font files to this project (not temp)
+[ ] add xz-utils (for git via tarball)
+
+[ ] compile git
 
 [ ] compile zathura
 
@@ -57,8 +60,6 @@
 
 [ ] compile zathura
     [ ] compile gtk3 https://docs.gtk.org/gtk3/building.html
-    [ ]
-
 
 
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
@@ -66,8 +67,6 @@
 
 [ ] add readline to top level & test w/ lua
     (lua needs libreadline-dev, but it readline could be compiled locally)
-
-[ ] add xz-utils (for git via tarball)
 
 [ ] add markdown to html tool for nvim
 
@@ -90,8 +89,6 @@
 [ ] compile vim
 
 [ ] compile tar
-
-[ ] compile git
 
 [ ] enable more compile time flags for curl
     + e.g. --with-nghttp2
@@ -118,8 +115,6 @@
     _gnu_pub=/tmp/gnu-keyring.gpg
     curl -C - -o $_gnu_pub $_gnu_pub_url
     gpg --import $_gnu_pub
-
-- add fc-cache
 
 - start ssh agent on login
     + https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
