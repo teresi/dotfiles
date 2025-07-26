@@ -67,8 +67,6 @@ VUNDLE := $(HOME)/.vim/bundle/Vundle.vim
 VUNDLE_URL=https://github.com/VundleVim/Vundle.vim.git
 TPM := $(HOME)/.tmux/plugins/tpm
 TPM_URL=https://github.com/tmux-plugins/tpm
-FZF := $(HOME)/.fzf
-FZF_URL := https://github.com/junegunn/fzf.git
 ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
@@ -435,8 +433,7 @@ aliases:              ## bash aliases
 .PHONY: fzf
 fzf:                  ## command-line fuzzy finder
 	$(call log_info,updating $@...)
-	$(call git_clone_fetch_reset,$(FZF_URL),$(FZF))
-	$(FZF)/install --all
+	$(MAKE) -ik -C $@ all install
 
 
 .PHONY: cinnamon
