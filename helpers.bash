@@ -96,10 +96,14 @@ update_repo_to_master () {
 
 
 install_rust () {
-	# TODO allow user to specifyh install dir
+	# TODO allow user to specify install dir
+	# RUSTUP_INIT_SKIP_PATH_CHECK=yes allows installation alongside existing /usr/bin
+	#	this check is done b/c if you don't pay attention to your PATH,
+	#	you could accidentally run the wrong rust (/usr/bin vs HOME/.cargo etc.)
 	_which_rust=`which rustup` || true
 	if [[ -z $_which_rust ]]; then
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
+			RUSTUP_INIT_SKIP_PATH_CHECK=yes sh -s -- -y
 	fi
 	. "$HOME"/.bashrc
 	. "$HOME"/.cargo/env
