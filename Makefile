@@ -140,6 +140,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
 	$(MAKE) -ik tig
+	$(MAKE) -ik bzip2
 	$(MAKE) -ik check_packages
 
 
@@ -793,5 +794,11 @@ zig: clang ## install curl
 
 .PHONY: readline
 readline: m4         ## readline
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install
+
+
+.PHONY: bzip2
+bzip2: cmake pkg-config  ## bzip2, libbz2
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install

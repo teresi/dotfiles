@@ -26,11 +26,18 @@
 [x] add meson
 [x] add pv
 [x] add libaio
-[x] add fio
+[x] add fio
 [x] add sysbench
 [x] add pkg-config, add as prereq for sysbench
 [x] refactor bison
 [x] refactor fonts, download font files locally
+
+[ ] add bzip2
+    https://www.sourceware.org/bzip2/downloads.html
+
+[ ] add pbzip2
+    https://github.com/ruanhuabin/pbzip2
+
 [ ] add fio sample job files
 [ ] add sysbench sample tests
 
@@ -39,13 +46,12 @@
     which causes unecessary rebuilds,
     which doesn't happen when not using --depth on clone
 
-[ ] add bzip2 and pbzip2
-    https://www.sourceware.org/bzip2/downloads.html
-    https://github.com/ruanhuabin/pbzip2
-
-[ ] ssh fixes (see hyperion)
+[ ] fix issue where checking out a tag results in a mismatch between local/remote commit
+    which causes issues rebuilding if using a tag
 
 [ ] add xz-utils (for git via tarball)
+
+[ ] ssh fixes (see hyperion)
 
 [ ] compile git
 
@@ -79,8 +85,6 @@
 [ ] enable change in PREFIX
     + need to pass PREFIX to make_all_install function
     + need to mkdir -p $PREFIX
-
-[ ] debug libevent can't checkout the expected tag, but it's at the right branch?
 
 [ ] debug zig, zig binary builds fine but the timestamp is too early?
 
