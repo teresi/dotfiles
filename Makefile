@@ -140,7 +140,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
 	$(MAKE) -ik tig
-	$(MAKE) -ik bzip2
+	$(MAKE) -ik pbzip2
 	$(MAKE) -ik check_packages
 
 
@@ -801,4 +801,12 @@ readline: m4         ## readline
 .PHONY: bzip2
 bzip2: cmake pkg-config  ## bzip2, libbz2
 	$(call log_info,installing $@...)
+	@# install even if bzip2 is on the host b/c we need the library for pbzip2
+	$(MAKE) -k -C $@ all install
+
+
+.PHONY: pbzip2
+pbzip2: bzip2       ## parallel bzip
+	$(call log_info,installing $@...)
+	@# requires bzip2 library (libbz2-dev on Ubuntu), installed by bzip2 rule
 	$(MAKE) -k -C $@ all install

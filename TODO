@@ -31,12 +31,8 @@
 [x] add pkg-config, add as prereq for sysbench
 [x] refactor bison
 [x] refactor fonts, download font files locally
-
-[ ] add bzip2
-    https://www.sourceware.org/bzip2/downloads.html
-
-[ ] add pbzip2
-    https://github.com/ruanhuabin/pbzip2
+[x] add bzip2, https://www.sourceware.org/bzip2/downloads.html
+[x] add pbzip2, https://github.com/ruanhuabin/pbzip2
 
 [ ] add fio sample job files
 [ ] add sysbench sample tests
@@ -119,6 +115,9 @@
     _gnu_pub=/tmp/gnu-keyring.gpg
     curl -C - -o $_gnu_pub $_gnu_pub_url
     gpg --import $_gnu_pub
+
+[ ] rework gpg
+    https://launchpad.net/+help-registry/verify-downloads.html
 
 - start ssh agent on login
     + https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
