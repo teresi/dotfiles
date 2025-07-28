@@ -28,6 +28,7 @@ HOST_ALIAS=(<str>):   # user's nickname for their computer
 NO_SYMLINKS=ON        # copy config directly instead of linking to files here
                       # useful if you delete this repo after install
 INSTALL_RC=(ON|OFF):  # install config file for a target if ON, uninstall if OFF
+CPYTHON=3.XX          # set python version for cpython
 ```
 
 

@@ -33,6 +33,10 @@
 [x] refactor fonts, download font files locally
 [x] add bzip2, https://www.sourceware.org/bzip2/downloads.html
 [x] add pbzip2, https://github.com/ruanhuabin/pbzip2
+[x] refactor rust
+
+[ ] finish curl
+    curl does not stop if missing dependencies (libpsl-dev)
 
 [ ] add fio sample job files
 [ ] add sysbench sample tests

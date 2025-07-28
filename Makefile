@@ -594,7 +594,7 @@ cpython:  pkgconf       ## compile cpython
 .PHONY: rust
 rust:                   ## install rust compiler
 	$(call log_info,installing $@...)
-	@$(ROOT_DIR)/install_rust.sh
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: rg
