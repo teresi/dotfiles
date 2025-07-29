@@ -3,6 +3,12 @@
 # compile curl
 
 # CURL up/downloads files given URLs
+#
+# requires
+# libpsl, libidn2, libunistring
+#
+# FUTURE
+# add zstd depdency
 
 
 include ../helpers.mk
@@ -12,8 +18,7 @@ _install := $(PREFIX)/bin/curl
 _url := https://github.com/curl/curl.git
 _src := curl
 _bin := $(_src)/src/curl
-_branch := master
-_depth := 1
+_branch := curl-8_15_0
 _nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
@@ -41,7 +46,7 @@ download: repo
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo
@@ -49,8 +54,6 @@ $(_src)/.git: | repo
 
 $(_bin): $(_src)/.git
 	$(call log_info,compiling $@...)
-	$(call check_pkgs,libpsl-dev)
-	$(call check_binary,autoreconf)
 	cd $(_src) \
 		&& autoreconf -fi \
 		&& ./configure --with-openssl --prefix=$(PREFIX)

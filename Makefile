@@ -183,7 +183,9 @@ automake: gawk        ## generates Makefiles for use with autoconf (aclocal, aut
 .PHONY: gettext
 gettext:              ## tools to translate human languages (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(call make_all_install_if_not_on_host,$@)
+	@# NB installing even if installed to /usr/bin b/c we need it for libpsl
+	@# and `autopoint` is not installed w/ gettext
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libtool
@@ -201,7 +203,8 @@ pkgconf: m4           ## handle include/lib paths for configure (replaces pgkf-c
 .PHONY: pkg-config
 pkg-config: m4           ## handle include/lib paths for configure
 	$(call log_info,updating $@...)
-	$(call make_all_install_if_not_on_host,$@)
+	@# NB installing even if installed to /usr/bin b/c we need it for libpsl
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libevent
@@ -214,6 +217,30 @@ libevent: cmake       ## callback library
 libncurses: pkgconf   ## tui library
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: libunistring
+libunistring:         ##  unicode strings in C (for psl)
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: libidn2
+libidn2:              ##  internationalized strings in C (for psl)
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+
+.PHONY: libpsl        ## libpsl, handling Public Suffix List (for curl)
+libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2
+	$(call log_info,updating $@...)
+	$(MAKE) -k -C $@ all install
+
+
+.PHONY: curl
+curl: autoconf automake libtool libpsl  ## install curl
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: ctags
@@ -771,12 +798,6 @@ odin: cmake ninja    ## compile ODIN lang
 latex:               ## install LaTeX
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
-
-
-.PHONY: curl
-curl: autoconf automake libtool  ## install curl
-	$(call log_info,installing $@...)
-	$(call make_all_install_if_not_on_host,$@)
 
 
 .PHONY: git

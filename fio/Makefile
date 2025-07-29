@@ -49,7 +49,14 @@ $(_bin): $(_src)/.git
 
 
 $(_install): $(_bin)
+	$(call log_info,installing $@...)
 	make -C $(_src) install
+	@# for some strange reason, the `install` target of fio touches the `fio/.git` folder
+	@# how? not sure, using `set -x` didn't reveal anything obvious
+	@# so touch the targets/folder so the timestamps work properly
+	@# if we don't do this, the install target will always rebuild even if it's up to date
+	touch $(_bin)
+	touch $(_install)
 
 
 .PHONY: repo

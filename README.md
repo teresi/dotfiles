@@ -42,7 +42,7 @@ bash make gcc gpg git git-lfs wget perl
 
 install these from package manager to save time:
 ```
-cmake gettext clang llvm
+cmake clang llvm
 ```
 
 
