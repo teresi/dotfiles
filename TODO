@@ -1,4 +1,3 @@
-
 [x] add libtool, remove autotools-dev as dependency
 [x] install LaTeX
 [x] refactor alacritty
@@ -34,22 +33,34 @@
 [x] add bzip2, https://www.sourceware.org/bzip2/downloads.html
 [x] add pbzip2, https://github.com/ruanhuabin/pbzip2
 [x] refactor rust
+[x] add curl (needed more dependencies)
+[x] fix issue where .git folders are updated when using --depth 1,
+    even if there are no updates in the remote,
+    which causes unecessary rebuilds,
+    which doesn't happen when not using --depth on clone
+[x] fix issue where checking out a tag results in a mismatch between local/remote commit
+    which causes issues rebuilding if using a tag
+[ ] remove --depth calls from git clones
+[ ] fix unecessary rebuild
+    [ ] ctags
+    [x] fio
+    [ ] pkg-config
+    [ ] pkgconf
 
-[ ] finish curl
-    curl does not stop if missing dependencies (libpsl-dev)
+[ ] refactor projects using gpg/sig w/ updates used in the bison check
+    refactor the gpg check into a function
+
+[ ] add zstd, add as prereq to curl, add to curl
+    https://www.linuxfromscratch.org/lfs/view/development/chapter08/zstd.html
+
+[ ] add poppler
+    https://www.linuxfromscratch.org/blfs/view/11.2/general/poppler.html
 
 [ ] add fio sample job files
 [ ] add sysbench sample tests
 
-[ ] fix issue where .git folders are updated when using --depth 1,
-    even if there are no updates in the remote,
-    which causes unecessary rebuilds,
-    which doesn't happen when not using --depth on clone
-
-[ ] fix issue where checking out a tag results in a mismatch between local/remote commit
-    which causes issues rebuilding if using a tag
-
 [ ] add xz-utils (for git via tarball)
+    https://www.linuxfromscratch.org/lfs/view/development/chapter08/xz.html
 
 [ ] ssh fixes (see hyperion)
 

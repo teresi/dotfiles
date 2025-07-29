@@ -50,7 +50,11 @@ update_repo_to_master () {
 
 	if [ ! -d "$_dest" ]; then notify "cloning $url to $_dest"; fi;
 	if [ ! -d "$_dest" ];
-		then git clone $_depth --branch $_branch $_url $_dest;
+		# NB not using depth, or cloning the branch directly, b/c it doesn't work well w/ tags
+		# it gets into a weird situation where you can't fetch tags, (couldn't find remote ref refs/heads/...)
+		# and then you can't checkout that tag b/c it doesn't exist
+		#then git clone $_depth --branch $_branch $_url $_dest && git fetch origin --tags --force;
+		then git clone --progress $_url $_dest && git fetch origin --tags --force && git -C $_dest checkout $_branch;
 	fi;
 	# NB `git status` updates the .git folder for some reason,
 	#    so don't call it here or else it will update even if there are no changes!
@@ -64,12 +68,11 @@ update_repo_to_master () {
 	notify "    updating to $_branch..."
 	_local=$(git -C $_dest rev-list -n 1 HEAD)
 	# use ls-remote b/c we need to handle tags AND branches
+	# TODO may need to use {branch}^{} for tags, else they point to the wrong commit
 	_remote=$(git -C $_dest ls-remote origin refs/heads/${_branch} | cut -f1)
 	if [ -z "$_remote" ]; then
 	# dereference b/c we need the OID of the commit associated w/ the tag, not the object ID of the tag itself
-	# NOTE sometimes you can get two lines? this happens w/ libevent
-	#      and it won't actually checkout the remote hash directly
-		_remote=$(git -C $_dest show-ref --hash --dereference refs/tags/${_branch} | head -n 1)
+		_remote=$(git -C $_dest rev-parse refs/tags/${_branch}^{})
 	fi
 	if [ -z "$_remote" ]; then
 		warn "could not find commit for branch/tag: ${_branch} at ${_dest}"
@@ -79,9 +82,9 @@ update_repo_to_master () {
 	if [ "${_local}" != "${_remote}" ]; then
 		notify "    updating to ${_branch}... checkout"
 		git -C $_dest remote set-branches origin ${_branch}
-		git -C $_dest fetch $_depth origin $_branch
+		git -C $_dest fetch origin $_branch
+		git -C $_dest fetch origin --tags --force || true
 		git -C $_dest checkout $_branch
-		git -C $_dest fetch --tags || true
 		if [ "$?" != "0" ]; then
 			error "failed to checkout branch $_branch for repo $_dest"
 			return 1
@@ -89,7 +92,7 @@ update_repo_to_master () {
 		# @ means the current branch, {u} means upstream
 		git -C ${_dest} reset --hard ${_remote}
 	else
-		notify "    updating to $_branch... already up to date"
+		notify "    updating to $_branch... success"
 	fi
 	echo ""
 }
