@@ -25,7 +25,7 @@
 [x] add meson
 [x] add pv
 [x] add libaio
-[x] add fio
+[x] add fio
 [x] add sysbench
 [x] add pkg-config, add as prereq for sysbench
 [x] refactor bison
@@ -42,11 +42,11 @@
     which causes issues rebuilding if using a tag
 [ ] remove --depth calls from git clones
 [ ] fix unecessary rebuild
-    [ ] ctags
     [x] fio
-    [ ] pkg-config
-    [ ] pkgconf
+    [x] pkg-config
+    [ ] ninja
 
+[ ] tree-setter cli needs to be installed and available before compiling nvim?
 [ ] refactor projects using gpg/sig w/ updates used in the bison check
     refactor the gpg check into a function
 

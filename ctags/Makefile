@@ -48,6 +48,7 @@ $(_src)/.git: | repo
 
 
 $(_bin): $(_src)/.git
+	$(call log_info,updating $@...)
 	cd $(_src) \
 		&& ./autogen.sh \
 		&& ./configure --prefix=$(PREFIX) \

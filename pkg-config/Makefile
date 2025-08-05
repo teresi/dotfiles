@@ -40,11 +40,8 @@ download: repo
 
 $(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
-	cd $(_src) && ./autogen.sh
-	cd $(_src) \
-	&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
-		./configure --prefix=$(HOME)/.local
-	make -C $(_src) all -j
+	cd $(_src) && ./autogen.sh --with-internal-glib --prefix=$(HOME)/.local
+	make -C $(_src)
 
 
 $(_install): $(_bin)
