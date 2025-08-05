@@ -40,11 +40,16 @@
     which doesn't happen when not using --depth on clone
 [x] fix issue where checking out a tag results in a mismatch between local/remote commit
     which causes issues rebuilding if using a tag
-[ ] remove --depth calls from git clones
-[ ] fix unecessary rebuild
-    [x] fio
+[x] fix unecessary rebuild
     [x] pkg-config
-    [ ] ninja
+    [x] ninja
+    [ ] neovim
+    [ ] fio
+[ ] fix unecessary reinstall
+    [ ] libevent
+    [ ] fzf
+[ ] remove --depth calls from git clones
+[ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 
 [ ] tree-setter cli needs to be installed and available before compiling nvim?
 [ ] refactor projects using gpg/sig w/ updates used in the bison check
