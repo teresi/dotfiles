@@ -39,8 +39,8 @@ caps_off ()
 
 # an ssh session may not have X
 if [ -z "$SSH_CLIENT" ] || [ -z "$SSH_TTY" ] || [ -z "$SSH_CONNECTION" ]; then
-	caps_off
-	ctrl_no_caps
+	caps_off &
+	ctrl_no_caps &
 fi
 
 
