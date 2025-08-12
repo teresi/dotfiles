@@ -36,3 +36,5 @@ hide_when_typing = true
 [window]
 # false causes alacritty to not use the system theme in some cases (?)
 dynamic_title = true
+padding.x = 1
+padding.y = 0
