@@ -1,5 +1,15 @@
 # sundry bashrc settings
 
+_notify () {
+	# info message, green text prepended w/ "INFO  "
+	echo -e "\e[32mINFO\t$1 \e[39m"
+}
+
+_warn () {
+	# warning message, yellow text prepended w/ "WARN  "
+	echo -e "\e[33mWARN\t$1 \e[39m"
+}
+
 
 ################################################################################
 # PATH  ########################################################################
@@ -31,16 +41,35 @@ ctrl_no_caps ()
 # turn off CapsLock if it's set
 caps_off ()
 {
-	caps_lock_status=$(xset -q | sed -n 's/^.*Caps Lock:\s*\(\S*\).*$/\1/p')
-	if [ $caps_lock_status == "on" ]; then
+	# ignoring err b/c we don't have an X display in an SSH session, so xset fails
+	caps_lock_status=$(xset -q 2> /dev/null | sed -n 's/^.*Caps Lock:\s*\(\S*\).*$/\1/p')
+	if [ "$caps_lock_status" == "on" ]; then
 		xdotool key Caps_Lock
 	fi
 }
 
-# an ssh session may not have X
+# if we're not in an SSH session, turn of caps lock and remap
 if [ -z "$SSH_CLIENT" ] || [ -z "$SSH_TTY" ] || [ -z "$SSH_CONNECTION" ]; then
-	caps_off &
-	ctrl_no_caps &
+	# disown b/c we don't need it to print when it succeeds
+	caps_off & disown
+	ctrl_no_caps & disown
+fi
+
+
+################################################################################
+# SSH    #######################################################################
+
+# run the ssh agent if we're in an SSH session so we cache our keys
+if [ -n "$SSH_TTY" ] && [ -z "$SSH_AGENT_PID" ] && [ -z "$SSH_AUTH_SOCK" ]; then
+	_notify "SSH session is active but SSH AGENT is not running"
+	_notify "starting ssh-agent..."
+	# start the agent
+	eval "$(ssh-agent -s)"
+	if [ "$?" != 0 ]; then
+		_warn "ssh-agent failed to start using 'ssh-agent -s'"
+	else
+		ssh-add -l &> /dev/null || (_notify "ssh started and keys are empty, adding your default key..."; ssh-add)
+	fi
 fi
 
 
