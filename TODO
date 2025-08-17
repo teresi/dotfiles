@@ -40,19 +40,32 @@
     which doesn't happen when not using --depth on clone
 [x] fix issue where checking out a tag results in a mismatch between local/remote commit
     which causes issues rebuilding if using a tag
+[x] remove --depth calls from git clones
+
 [x] fix unecessary rebuild
     [x] pkg-config
     [x] ninja
     [ ] neovim
     [ ] fio
     [x] readline
+    [ ] ctags
 [ ] fix unecessary reinstall
     [x] libevent
     [ ] fzf
     [x] readline
-[x] remove --depth calls from git clones
+
+[ ] add wget
 
 [ ] targets do not always rebuild if git repo is pulled up
+    add phony 'repo' target prior to $(_src)/.git,
+    remove 'repo' as a prereq to $(_src)/.git
+    then it will always run *first*, and then $(_bin): $(_src).git *should* resolve properly
+
+[ ] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
+    needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
+    add fontconfig, add it as an alacritty dependency?
+
+
 [ ] add recurse-submodules to get clone/fetch
 
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq

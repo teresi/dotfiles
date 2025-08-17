@@ -14,7 +14,6 @@ _build := $(_src)/build
 _bin := $(_build)/stage3/bin/zig
 _branch := master
 _install := $(PREFIX)/bin/zig
-_depth := 1
 
 
 .PHONY: all
@@ -56,7 +55,7 @@ $(_bin): $(_src)/.git
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

@@ -15,7 +15,6 @@ _src := Odin
 _bin := $(_src)/odin
 
 _branch := dev-2024-12
-_depth := 1
 
 
 .PHONY: all
@@ -42,7 +41,7 @@ download: repo
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

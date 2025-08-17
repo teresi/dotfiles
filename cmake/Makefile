@@ -10,7 +10,6 @@ _url := https://github.com/Kitware/CMake.git
 _src := cmake
 _build := $(_src)/build
 _branch := release
-_depth := 1
 _bin := $(PREFIX)/bin/cmake
 
 
@@ -54,7 +53,7 @@ $(_build)/bin/cmake: $(_src)/.git
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

@@ -54,9 +54,8 @@ endef
 #	1	repo url
 #	2	target directory
 #	3	branch or tag (master)
-#	4	depth (all)
 define git_clone_fetch_reset
-	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3) $(4)
+	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3)
 endef
 
 
@@ -64,9 +63,8 @@ endef
 #	1	repo url
 #	2	target directory
 #	3	branch or tag (master)
-#	4	depth (all)
 define update_repo_to_master
-	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3) $(4)
+	@$(ROOT_DIR)/git_clone_fetch_reset.bash $(1) $(2) $(3)
 endef
 
 

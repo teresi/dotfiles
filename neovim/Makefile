@@ -16,7 +16,6 @@ _build := build
 _bin := $(_src)/$(_build)/bin/nvim
 
 _branch := master
-_depth :=
 _nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
@@ -42,7 +41,7 @@ uninstall:
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 .PHONY: download

@@ -21,7 +21,6 @@ _src := alacritty
 _bin := $(_src)/target/release/alacritty
 _branch := master
 
-_depth ?= 1
 _nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 _cargo_install := $(CARGO_INSTALL_ROOT)
@@ -73,7 +72,7 @@ uninstall:
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 .PHONY: download
@@ -98,6 +97,8 @@ $(_bin): $(_src)/.git
 	$(call log_info,compiling $@...)
 	$(call check_pkgs,$(_depends))
 	$(call check_binary,cmake pkg-config python3)
+	@# BUG had issue where fontconfig.pc couldn't be found on the host
+	PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig \
 	cargo +stable build \
 		--manifest-path $(_src)/Cargo.toml \
 		-j $(_nproc) \

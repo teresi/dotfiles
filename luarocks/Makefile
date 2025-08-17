@@ -13,11 +13,10 @@ _src := luarocks
 _bin := $(_src)/build/luarocks
 _branch := main
 _install := $(PREFIX)/bin/luarocks
-_depth := 1
 
 
 .PHONY: all
-all: $(_bin)
+all: repo $(_bin)
 
 
 .PHONY: install
@@ -55,7 +54,7 @@ $(_bin): $(_src)/.git
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo

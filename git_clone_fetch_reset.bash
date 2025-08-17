@@ -5,7 +5,6 @@
 #	1	repo url
 #	2	target directory
 #	3	branch (master)
-#	4	depth (all)
 #
 # NB only call reset if it's not up to date,
 #    so that we can use the .git dir timestamp in Makefile rules,
@@ -18,6 +17,5 @@ source $_ROOT_DIR/helpers.bash
 _url=$1
 _dest=$2
 _branch=$3
-_depth=$4
 
-update_repo_to_master $_url $_dest $_branch $_depth
+update_repo_to_master $_url $_dest $_branch

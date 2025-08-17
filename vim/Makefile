@@ -8,7 +8,6 @@ PREFIX ?= $(HOME)/.local
 
 _url := https://github.com/vim/vim.git
 _branch ?= master
-_depth := 1
 
 _src := vim
 _bin := $(_src)/src/vim
@@ -40,7 +39,7 @@ download: repo
 
 .PHONY: repo
 repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch),$(_depth))
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 $(_src)/.git: | repo
