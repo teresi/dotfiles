@@ -26,6 +26,8 @@ _install := $(PREFIX)/lib/libreadline.a
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
+# MAGIC Chet Ramey's ID, see `gpg -d *sig`
+_gpg_id  := 7C0135FB088AAF6C66C650B9BB5869F064EA74AB
 
 _release_tar := readline-$(_release_ver).tar.gz
 _release_sig := $(_release_tar).sig
