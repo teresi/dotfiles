@@ -21,8 +21,8 @@ _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _release_ver := 8.2
 
 _src := readline
-_bin := $(_src)/shlib/libreadline.so.$(_release_ver)
-_install := $(PREFIX)/lib/readline
+_bin := $(_src)/libreadline.a
+_install := $(PREFIX)/lib/libreadline.a
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
@@ -70,13 +70,16 @@ $(_release_tar):
 
 
 $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
+
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		|| gpg --import $(_gpg_key)
+
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid autoconf sig"; exit 1)
+		|| (echo "invalid signature"; exit 1)
+
+	$(call log_info,extracting source directory $@...)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid autoconf tar"; exit 1) \
+		|| (echo "invalid tar"; exit 1) \
 		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
 	touch $(_src)
 

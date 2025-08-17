@@ -80,7 +80,7 @@ repo:
 download: repo
 
 
-$(_src)/.git: | repo
+$(_src)/.git: repo
 
 
 .PHONY: check_cargo_install

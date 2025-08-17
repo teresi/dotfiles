@@ -45,10 +45,16 @@
     [x] ninja
     [ ] neovim
     [ ] fio
+    [x] readline
 [ ] fix unecessary reinstall
-    [ ] libevent
+    [x] libevent
     [ ] fzf
-[ ] remove --depth calls from git clones
+    [x] readline
+[x] remove --depth calls from git clones
+
+[ ] targets do not always rebuild if git repo is pulled up
+[ ] add recurse-submodules to get clone/fetch
+
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 
 [ ] tree-setter cli needs to be installed and available before compiling nvim?

@@ -28,33 +28,30 @@ update_repo_to_master () {
 	#	1	repo url
 	#	2	target directory
 	#	3	branch or tag (master)
-	#	4	depth (all)
 	#
 	# NB only call reset if it's not up to date,
 	#    so that we can use the .git dir timestamp in Makefile rules,
 	#    since the timestamp will change when git reset is called
+	# NB do not use --depth, as this will prevent checkouts
+	#    from working properly with tags
 
 	notify "updating repository..."
 	local _url=$1
 	local _dest=$2
 	local _branch=$3
-	local _depth=$4
 
 	[ -z "$_branch" ] && _branch=master
-	[ -n "$_depth" ] && _depth="--depth $_depth"
 
 	notify "    repo directory:  $_dest"
 	notify "    repo url:        $_url"
 	notify "    repo branch:     $_branch"
-	notify "    repo depth:      $_depth"
 
 	if [ ! -d "$_dest" ]; then notify "cloning $url to $_dest"; fi;
 	if [ ! -d "$_dest" ];
 		# NB not using depth, or cloning the branch directly, b/c it doesn't work well w/ tags
 		# it gets into a weird situation where you can't fetch tags, (couldn't find remote ref refs/heads/...)
 		# and then you can't checkout that tag b/c it doesn't exist
-		#then git clone $_depth --branch $_branch $_url $_dest && git fetch origin --tags --force;
-		then git clone --progress $_url $_dest && git fetch origin --tags --force && git -C $_dest checkout $_branch;
+		then git clone $_url $_dest && git fetch origin --tags --force && git -C $_dest checkout $_branch;
 	fi;
 	# NB `git status` updates the .git folder for some reason,
 	#    so don't call it here or else it will update even if there are no changes!
@@ -63,9 +60,10 @@ update_repo_to_master () {
 	# fetch, checkout, reset if necessary
 	# set the origin for the branch in case a shallow clone was used
 	# fetch the branch specifically in case a shallow clone was used
-	git -C $_dest fetch $_depth origin $_branch
+	# fetch the tags in case new tags have been added
+	git -C $_dest fetch --tags origin $_branch
 
-	notify "    updating to $_branch..."
+	notify "    checking if branch $_branch is up to date..."
 	_local=$(git -C $_dest rev-list -n 1 HEAD)
 	# use ls-remote b/c we need to handle tags AND branches
 	# TODO may need to use {branch}^{} for tags, else they point to the wrong commit
@@ -80,7 +78,7 @@ update_repo_to_master () {
 	notify "    local commit is at  $_local"
 	notify "    remote commit is at $_remote"
 	if [ "${_local}" != "${_remote}" ]; then
-		notify "    updating to ${_branch}... checkout"
+		notify "    checking if branch $_branch is up to date... NO"
 		git -C $_dest remote set-branches origin ${_branch}
 		git -C $_dest fetch origin $_branch
 		git -C $_dest fetch origin --tags --force || true
@@ -89,10 +87,10 @@ update_repo_to_master () {
 			error "failed to checkout branch $_branch for repo $_dest"
 			return 1
 		fi
-		# @ means the current branch, {u} means upstream
+		notify "    resetting ${_branch} to ${_remote}"
 		git -C ${_dest} reset --hard ${_remote}
 	else
-		notify "    updating to $_branch... success"
+		notify "    checking if branch $_branch is up to date... YES"
 	fi
 	echo ""
 }

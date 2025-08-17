@@ -54,7 +54,10 @@ $(_bin): $(_src)/.git | $(_build)
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_build) install
+	@# manually update install timestamp on success,
+	@# otherwise the install will always reinstall
+	$(MAKE) -ik -C $(_build) install  && touch $(_install)
+
 
 
 .PHONY: repo
