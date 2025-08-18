@@ -2,6 +2,9 @@
 
 # compile readline
 
+# libhistory.so
+# libreadline.so
+
 # readline is likely installed as a dependency of bash
 #
 # SEE https://tiswww.case.edu/php/chet/readline/rltop.html
@@ -18,7 +21,8 @@ PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-_release_ver := 8.2
+# ubuntu 22 shipped w/ 8.1.2
+_release_ver := 8.3
 
 _src := readline
 _bin := $(_src)/libreadline.a
@@ -88,9 +92,13 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 
 $(_bin): $(_src)
 	$(call log_info,compiling $@...)
+	@# SHLIB_LIBS="-lncursesw" forces it to link against ncurses
 	cd $(_src) \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make SHLIB_LIBS=-lcurses -j
+		&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
+			./configure \
+			--prefix=$(PREFIX) \
+			--with-curses \
+		&& make SHLIB_LIBS="-lncursesw" -j
 
 
 $(_install): $(_bin)

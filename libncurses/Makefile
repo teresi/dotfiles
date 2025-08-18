@@ -18,8 +18,8 @@ _release_tar_url := https://invisible-mirror.net/archives/ncurses/ncurses-6.5.ta
 _md5_sum := ac2d2629296f04c8537ca706b6977687
 
 _src := ncurses
-_bin := $(_src)/ncurses/libncurses.so.$(_release_ver)
-_install := $(PREFIX)/lib/libncurses.so
+_bin := $(_src)/lib/libncursesw.so.${_release_ver}
+_install := $(PREFIX)/lib/libncursesw.so.${_release_ver}
 
 
 .PHONY: all
@@ -60,11 +60,13 @@ $(_src):  $(_release_tar)
 
 $(_bin): $(_src)
 	$(call log_info,compiling $@...)
+	@# --disable-widec:  ncurses
+	@# --enable-widec:   ncursesw
+	@# --with-termlib:   build tinfo.so seperately
 	cd $(_src) && \
 	./configure \
 		--prefix=${PREFIX} \
 		--with-shared \
-		--with-termlib \
 		--without-debug \
 		--enable-pc-files \
 		--with-versioned-syms \
@@ -73,4 +75,4 @@ $(_bin): $(_src)
 
 
 $(_install): $(_bin)
-	make -C $(_src) install
+	make -C $(_src) -j install

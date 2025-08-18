@@ -41,8 +41,10 @@
 [x] fix issue where checking out a tag results in a mismatch between local/remote commit
     which causes issues rebuilding if using a tag
 [x] remove --depth calls from git clones
-
+[x] add readline to top level & test w/ lua (lua needs libreadline-dev)
+[x] fix readline, points to wrong ncurses, missing symbols
 [x] fix unecessary rebuild
+    [ ] if a build failed, subsequent successful builds still always rebuild? have to delete everything? (clean doesn't remove the tarballs)
     [x] pkg-config
     [x] ninja
     [ ] neovim
@@ -53,6 +55,7 @@
     [x] libevent
     [ ] fzf
     [x] readline
+    [ ] pv
 
 [ ] add wget
 
@@ -64,7 +67,6 @@
 [ ] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
     needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
     add fontconfig, add it as an alacritty dependency?
-
 
 [ ] add recurse-submodules to get clone/fetch
 
@@ -106,8 +108,6 @@
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
         libcurl4-gnutls-dev? or libcurl4-openssl-dev?
 
-[ ] add readline to top level & test w/ lua
-    (lua needs libreadline-dev, but it readline could be compiled locally)
 
 [ ] add markdown to html tool for nvim
 

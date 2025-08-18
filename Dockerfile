@@ -14,7 +14,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         ca-certificates \
         gnupg \
         build-essential \
-        libreadline-dev \
         libssl-dev \
         screen \
         dconf-editor dconf-cli \

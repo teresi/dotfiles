@@ -561,7 +561,7 @@ luajit:              ## install LuaJIT
 
 
 .PHONY: luarocks
-luarocks: lua        ## install luarocks package manager
+luarocks: lua libreadline  ## install luarocks package manager
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -813,8 +813,8 @@ zig: clang ## install curl
 	$(call make_all_install_if_not_on_host,$@)
 
 
-.PHONY: readline
-readline: m4         ## readline
+.PHONY: libreadline
+libreadline: m4 libncurses  ## libreadline
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 
