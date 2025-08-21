@@ -45,7 +45,8 @@ uninstall:
 $(_build)/bin/cmake: $(_src)/.git
 	$(call log_info,updating $@...)
 	mkdir -p $(_build) && cd $(_build) \
-		&& ../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
+		&& LDFLAGS+=" -L${HOME}/.local/lib" CFLAGS+=" -L${HOME}/.local/include" PKG_CONFIG_PATH+=":${HOME}/.local/lib/pkgconfig" \
+		../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
 	@# NB using a low core count b/c cmake uses a lot of ram per core
 	$(MAKE) -ik -C $(_build) -j 2
 	$(call log_info,updating $@...    COMPLETE!)

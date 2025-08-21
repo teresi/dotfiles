@@ -22,7 +22,7 @@ fi
 if [ -w "$HOME"/.local/lib ]; then
 	export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
 fi
-if [ -w "$HOME"/.local/include]; then
+if [ -w "$HOME"/.local/include ]; then
 	export CFLAGS+=" -I$HOME/.local/include"
 fi
 

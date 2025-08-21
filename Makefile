@@ -169,7 +169,7 @@ m4: gawk              ## GNU M4 macro processor
 
 
 .PHONY: autoconf
-autoconf:             ## M4 macros to configure sources (part of autotools-dev)
+autoconf: m4          ## M4 macros to configure sources (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -201,7 +201,7 @@ pkgconf: m4           ## handle include/lib paths for configure (replaces pgkf-c
 
 
 .PHONY: pkg-config
-pkg-config: m4           ## handle include/lib paths for configure
+pkg-config: m4 libtool  ## handle include/lib paths for configure
 	$(call log_info,updating $@...)
 	@# NB installing even if installed to /usr/bin b/c we need it for libpsl
 	$(MAKE) -k -C $@ all install
@@ -729,7 +729,7 @@ container:               ## run docker image for testing interactively
 
 
 .PHONY: cmake
-cmake:                  ## compile CMake
+cmake: pkg-config                 ## compile CMake
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
