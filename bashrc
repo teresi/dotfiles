@@ -22,9 +22,9 @@ fi
 if [ -w "$HOME"/.local/lib ]; then
 	export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
 fi
-
-# NB used to have /data/.local/bin in the PATH, but $HOME/.local is sufficient
-# NB used to have /data/.cargo/bin for CARGO_INSTALL_ROOT, but $HOME/.cargo is more simple
+if [ -w "$HOME"/.local/include]; then
+	export CFLAGS+=" -I$HOME/.local/include"
+fi
 
 
 ################################################################################

@@ -57,6 +57,7 @@
     [x] readline
     [ ] pv
 
+[ ] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
 [ ] add wget
 
 [ ] targets do not always rebuild if git repo is pulled up
