@@ -56,7 +56,7 @@
     [ ] fzf
     [x] readline
     [ ] pv
-
+[ ] stop on failure for `all` target (no -ik)
 [ ] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
 [ ] add wget
 

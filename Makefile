@@ -201,7 +201,7 @@ pkgconf: m4           ## handle include/lib paths for configure (replaces pgkf-c
 
 
 .PHONY: pkg-config
-pkg-config: m4 libtool  ## handle include/lib paths for configure
+pkg-config: libtool autoconf automake  ## handle include/lib paths for configure
 	$(call log_info,updating $@...)
 	@# NB installing even if installed to /usr/bin b/c we need it for libpsl
 	$(MAKE) -k -C $@ all install

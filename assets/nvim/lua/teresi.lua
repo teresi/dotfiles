@@ -76,3 +76,13 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
             })
     end,
 })
+
+-- [[ auto format rust using the rust analyzer ]]
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    group = vim.api.nvim_create_augroup("RustFormat", { clear = true }),
+    pattern = {"*.rs"},
+    callback = function()
+        vim.lsp.buf.format({ async = false })
+    end,
+})
+
