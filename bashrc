@@ -25,6 +25,9 @@ fi
 if [ -w "$HOME"/.local/include ]; then
 	export CFLAGS+=" -I$HOME/.local/include"
 fi
+if [ -w "$HOME"/.local/include ]; then
+	export CPATH+="$HOME/.local/include"
+fi
 
 
 ################################################################################

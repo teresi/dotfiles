@@ -1,18 +1,17 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
-# compile readline
-
-# libhistory.so
-# libreadline.so
-
-# readline is likely installed as a dependency of bash
+# compile diffutils
 #
-# SEE https://tiswww.case.edu/php/chet/readline/rltop.html
-# The GNU Readline library provides a set of functions for use by
-# applications that allow users to edit command lines as they are typed in.
-#
-# requires M4 (1.4.16 +)
-# requires Perl (5.006 +)
+# diff, diff3, sdiff, cmp
+
+# shows the differences between files or directories
+# see https://www.gnu.org/software/diffutils/
+
+# NB diffutils are installed in the base image for Ubuntu (typically)
+#    however they are *not* in the redhat/ubi8 image
+
+# if reocnfiguring, requires
+# autoconf, automake, gettext, help2man, texinfo
 
 
 include ../helpers.mk
@@ -20,23 +19,19 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-
-# ubuntu 22 shipped w/ 8.1.2
-_release_ver := 8.3
-
-_src := readline
-_bin := $(_src)/libreadline.a
-_install := $(PREFIX)/lib/libreadline.a
+_src := diffutils
+_bin := $(_src)/src/diff
+_install := $(PREFIX)/bin/diff
 
 _gpg_key := gnu-keyring.gpg
 _gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-# MAGIC Chet Ramey's ID, see `gpg -d *sig`
-_gpg_id  := 7C0135FB088AAF6C66C650B9BB5869F064EA74AB
+# MAGIC Jim Meyering's ID, see `gpg -d *sig`
+_gpg_id  := 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
 
-_release_tar := readline-$(_release_ver).tar.gz
+_release_ver := 3.12
+_release_tar := diffutils-$(_release_ver).tar.gz
 _release_sig := $(_release_tar).sig
-
-_release_tar_url := https://ftp.gnu.org/gnu/readline/readline-$(_release_ver).tar.gz
+_release_tar_url := https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.gz
 _release_sig_url := $(_release_tar_url).sig
 
 
@@ -93,13 +88,9 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 
 $(_bin): $(_src)
 	$(call log_info,compiling $@...)
-	@# SHLIB_LIBS="-lncursesw" forces it to link against ncurses
 	cd $(_src) \
-		&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
-			./configure \
-			--prefix=$(PREFIX) \
-			--with-curses \
-		&& make SHLIB_LIBS="-lncursesw" -j
+		&& ./configure --prefix=$(PREFIX) \
+		&& make -j
 
 
 $(_install): $(_bin)

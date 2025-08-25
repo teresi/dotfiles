@@ -79,7 +79,6 @@ NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 CARGO_HOME := $(HOME)/.cargo
 CARGO_BIN := $(HOME)/.cargo/bin
 RIPGREP_BIN := $(CARGO_BIN)/rg
-NINJA_BIN := $(BIN_DIR)/ninja
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
@@ -831,3 +830,15 @@ pbzip2: bzip2       ## parallel bzip
 	$(call log_info,installing $@...)
 	@# requires bzip2 library (libbz2-dev on Ubuntu), installed by bzip2 rule
 	$(MAKE) -k -C $@ all install
+
+.PHONY: diffutils
+diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
+	$(call log_info,installing $@...)
+	@if [[ "" == "$(shell which diff)" || "$(PREFIX)/bin/diff" == "$(shell which diff)" ]]; then\
+		$(MAKE) -ik -C diffutils all install;\
+	else \
+		echo -e "\e[32m"\
+				"\tdiffutils is already installed to $(shell which diff)\n"\
+				"\tto compile locally anyways:  cd diffutils && make all install"\
+				"\e[39m";\
+	fi

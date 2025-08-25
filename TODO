@@ -59,6 +59,8 @@
 [ ] stop on failure for `all` target (no -ik)
 [ ] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
 [ ] add wget
+[ ] update uses of gpg to the pattern used in libreadline, or create a function for it
+[ ] update shebangs to use env/-S pattern
 
 [ ] targets do not always rebuild if git repo is pulled up
     add phony 'repo' target prior to $(_src)/.git,

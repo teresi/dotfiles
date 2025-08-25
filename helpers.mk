@@ -124,6 +124,7 @@ define check_binary
 endef
 
 
+# FUTURE add version of this that allows for different names between directory / binary
 # call `make all install` on $1 for a specific executable
 #	if the host system doesn't have a program named $1, compile
 #	if the program exists, but it's at PREFIX/.local, compile
