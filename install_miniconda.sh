@@ -7,18 +7,17 @@
 
 _ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $_ROOT_DIR/helpers.bash
-_PYTHON=3.10
+_PYTHON=3.13
 _PREFIX=$HOME/miniconda3  # MAGIC miniconda convention
 
-_CONDA_310=https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-x86_64.sh
-_CONDA_39=https://repo.anaconda.com/miniconda/Miniconda3-py39_23.1.0-1-Linux-x86_64.sh
-_CONDA_38=https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh
-_CONDA_37=https://repo.anaconda.com/miniconda/Miniconda3-py37_23.1.0-1-Linux-x86_64.sh
+_CONDA_313=https://repo.anaconda.com/miniconda/Miniconda3-py313_25.7.0-2-Linux-x86_64.sh
+_SHA_313=dda3629462ba1cfa72eb74535214c2e315c77f1cfb0f02046537e99f1bf64abc
 
-_SHA_310=32d73e1bc33fda089d7cd9ef4c1be542616bd8e437d1f77afeeaf7afdb019787
-_SHA_39=5dc619babc1d19d6688617966251a38d245cb93d69066ccde9a013e1ebb5bf18
-_SHA_38=640b7dceee6fad10cb7e7b54667b2945c4d6f57625d062b2b0952b7f3a908ab7
-_SHA_37=fc96109ea96493e31f70abbc5cae58e80634480c0686ab46924549ac41176812
+_CONDA_312=https://repo.anaconda.com/miniconda/Miniconda3-py312_25.7.0-2-Linux-x86_64.sh
+_SHA_312=188b5d94ab3acefdeaebd7cb470d2fb74a3280563c77075de6e3e1d58d84ab0a
+
+_CONDA_311=https://repo.anaconda.com/miniconda/Miniconda3-py311_25.7.0-2-Linux-x86_64.sh
+_SHA_311=e072c062a7e017732c97963ef0d9a1cb474b92b7f25c8a032f9632cfe75add4f
 
 
 usage () {
@@ -55,8 +54,8 @@ done
 set -ex
 
 # TODO add selection for python version
-_CONDA=$_CONDA_310
-_SHA=$_SHA_310
+_CONDA=$_CONDA_313
+_SHA=$_SHA_313
 
 notify "downloading miniconda $_PYTHON..."
 wget -c $_CONDA -P /tmp/

@@ -61,7 +61,7 @@
 [ ] add wget
 [ ] update uses of gpg to the pattern used in libreadline, or create a function for it
 [ ] update shebangs to use env/-S pattern
-
+[ ] cmake is missing some perl modules on redhat
 [ ] targets do not always rebuild if git repo is pulled up
     add phony 'repo' target prior to $(_src)/.git,
     remove 'repo' as a prereq to $(_src)/.git
