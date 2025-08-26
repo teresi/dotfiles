@@ -16,17 +16,19 @@ _warn () {
 
 # MAGIC $HOME/.local/bin is a standard location for binaries
 # NB prepend the location so we prefer our builds
-if [ -w "$HOME"/.local/bin ]; then
+
+
+if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
 	export PATH="$HOME"/.local/bin:$PATH
 fi
-if [ -w "$HOME"/.local/lib ]; then
+if [ -d "$HOME/.local/lib" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib:"* ]]; then
 	export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
 fi
-if [ -w "$HOME"/.local/include ]; then
+if [ -w "$HOME/.local/include" ] && [[ ":$CFLAGS:" != *" -I$HOME/.local/include:"* ]]; then
 	export CFLAGS+=" -I$HOME/.local/include"
 fi
-if [ -w "$HOME"/.local/include ]; then
-	export CPATH+="$HOME/.local/include"
+if [ -w "$HOME/.local/include" ] && [[ ":$CPATH:" != *":$HOME/.local/include:"* ]]; then
+	export CPATH+=:"$HOME/.local/include"
 fi
 
 

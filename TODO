@@ -107,10 +107,8 @@
 [ ] compile zathura
     [ ] compile gtk3 https://docs.gtk.org/gtk3/building.html
 
-
 [ ] add libcurl for Git (git-remote-http, (https://stackoverflow.com/questions/51366101/git-remote-https-is-not-a-git-commandA))
         libcurl4-gnutls-dev? or libcurl4-openssl-dev?
-
 
 [ ] add markdown to html tool for nvim
 
@@ -152,13 +150,14 @@
 - add libiconv (for gettext if missing glibc)
     + https://www.gnu.org/software/libiconv/
 
-- add script to update keyring?
+- add script to update keyring, refactor uses of gpg
     _gnu_pub_url=https://ftp.gnu.org/gnu/gnu-keyring.gpg
     _gnu_pub=/tmp/gnu-keyring.gpg
     curl -C - -o $_gnu_pub $_gnu_pub_url
     gpg --import $_gnu_pub
 
 [ ] rework gpg
+    https://www.gnupg.org/faq/gnupg-faq.html#how_do_i_verify_signed_packages
     https://launchpad.net/+help-registry/verify-downloads.html
 
 - start ssh agent on login
