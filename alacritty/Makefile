@@ -21,6 +21,10 @@ _src := alacritty
 _bin := $(_src)/target/release/alacritty
 _branch := master
 
+# MAGIC this is typically where font config installs fontconfig.pc
+_pkg_conf := $(shell echo /usr/lib/`gcc -dumpmachine`/pkgconfig)
+
+# MAGIC reducing the nproc by 1 helps to prevent an overuse of resources
 _nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 _cargo_install := $(CARGO_INSTALL_ROOT)
@@ -98,7 +102,7 @@ $(_bin): $(_src)/.git
 	$(call check_pkgs,$(_depends))
 	$(call check_binary,cmake pkg-config python3)
 	@# BUG had issue where fontconfig.pc couldn't be found on the host
-	PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig \
+	PKG_CONFIG_PATH+=:$(_pkg_conf) \
 	cargo +stable build \
 		--manifest-path $(_src)/Cargo.toml \
 		-j $(_nproc) \
@@ -114,6 +118,7 @@ $(_source_bash_comp): $(_bash_complete_script) | $(HOME)/.bash_completion
 
 
 $(_cargo_bin): $(_bin)
+	PKG_CONFIG_PATH+=:$(_pkg_conf) \
 	cargo +stable install \
 		--path $(_src)/alacritty \
 		-j $(_nproc)
