@@ -1,8 +1,6 @@
--- [[ Setting options ]]
--- See `:help vim.o`
+require "nvchad.options"
 
--- SEE  https://github.com/LunarVim/nvim-basic-ide/blob/master/lua/options.lua
-
+-- add yours here!
 
 -- [[ clipboard ]]
 vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
