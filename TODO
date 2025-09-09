@@ -56,24 +56,32 @@
     [ ] fzf
     [x] readline
     [ ] pv
-[ ] stop on failure for `all` target (no -ik)
-[ ] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
-[ ] add wget
-[ ] update uses of gpg to the pattern used in libreadline, or create a function for it
+[x] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
+[x] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
+    needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
+
 [ ] update shebangs to use env/-S pattern
-[ ] cmake is missing some perl modules on redhat
+[ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
+[ ] update uses of gpg to the pattern used in libreadline, or create a function for it
+[ ] stop on failure for `all` target (no -ik)
+
 [ ] targets do not always rebuild if git repo is pulled up
     add phony 'repo' target prior to $(_src)/.git,
     remove 'repo' as a prereq to $(_src)/.git
     then it will always run *first*, and then $(_bin): $(_src).git *should* resolve properly
 
-[ ] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
-    needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
-    add fontconfig, add it as an alacritty dependency?
+[ ] add wget
+[ ] install cpanm
+[ ] cmake is missing some perl modules on redhat
+    see cookbook, install_perl_deps
+    https://stackoverflow.com/questions/2980297/how-can-i-use-cpan-as-a-non-root-user
+    https://manpages.ubuntu.com/manpages/jammy/man3/App::cpanminus.3pm.html#:~:text=If%20you%20have%20perl%20in,://git.io/cpanm%22
+
+[ ] add fontconfig (?), add fontconfig as alacritty prereq
+    is fontconfig installed by default on redhat ubi? ubuntu?
 
 [ ] add recurse-submodules to get clone/fetch
 
-[ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 
 [ ] tree-setter cli needs to be installed and available before compiling nvim?
 [ ] refactor projects using gpg/sig w/ updates used in the bison check
@@ -96,7 +104,12 @@
 [ ] compile git
 
 [ ] compile zathura
-
+    https://pwmt.org/projects/zathura/installation/
+    [ ] girara https://pwmt.org/projects/girara/
+    [ ] gtk+
+    [ ] gtk
+        https://www.gtk.org/docs/installations/linux/
+        https://download.gnome.org/sources/gtk/
 [ ] refactor vundle
     if ca-certificates are not installed, use install_git_cert.bash
     add a target that checks for ca-certificates, and installs it?
