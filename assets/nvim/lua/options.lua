@@ -1,6 +1,39 @@
-require "nvchad.options"
+local opt = vim.opt
+local o = vim.o
+local g = vim.g
 
--- add yours here!
+-------------------------------------- options, nvchad ------------------------------------------
+o.showmode = false
+o.splitkeep = "screen"
+
+-- Numbers
+o.laststatus = 3
+o.ruler = true
+
+-- disable nvim intro
+opt.shortmess:append "sI"
+
+o.splitbelow = true
+o.splitright = true
+
+-- go to previous/next line with h,l,left arrow and right arrow
+-- when cursor reaches end/beginning of line
+opt.whichwrap:append "<>[]hl"
+
+-- disable some default providers
+g.loaded_node_provider = 0
+g.loaded_python3_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_ruby_provider = 0
+
+-- add binaries installed by mason.nvim to path
+local is_windows = vim.fn.has "win32" ~= 0
+local sep = is_windows and "\\" or "/"
+local delim = is_windows and ";" or ":"
+vim.env.PATH = table.concat({ vim.fn.stdpath "data", "mason", "bin" }, sep) .. delim .. vim.env.PATH
+
+
+-------------------------------------- options, custom ------------------------------------------
 
 -- [[ clipboard ]]
 vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
@@ -9,8 +42,10 @@ vim.opt.clipboard = 'unnamedplus'  -- sync clipboard between OS and nvim
 -- [[ UI ]]
 vim.opt.termguicolors = true       -- true color support (24bit)
 vim.opt.number = true              -- show line numbers
+vim.opt.numberwidth = 2            -- minimum width of number column
 vim.opt.relativenumber = true      -- show line number relative to current line
 vim.opt.cursorline = true          -- highlight current line
+vim.opt.cursorlineopt = "both"     -- highlight current line via the text line and line number
 vim.opt.breakindent = true         -- wrapped lines are visually indented
 vim.opt.undofile = true            -- persistent undo history
 vim.opt.hlsearch = true            -- highlight matches on search
@@ -44,6 +79,7 @@ vim.api.nvim_set_hl(               -- window separator color
 vim.opt.expandtab = true           -- use spaces not tabs
 vim.opt.shiftwidth = 4             -- shift 4 spaces on tab
 vim.opt.tabstop = 4                -- number spaces a tab displays for
+vim.opt.softtabstop = 4            -- number of spaces to add/delete a tab
 vim.opt.smartindent = true         -- autoindent on new lones
 
 
@@ -56,10 +92,15 @@ vim.opt.timeoutlen = 300           -- ms to wait for a mapped sequence to comple
 
 -- [[ CPU / memory ]]
 vim.opt.hidden = true              -- enable background buffers
-vim.opt.updatetime = 2000          -- period to write swap file (default 4000)
+vim.opt.updatetime = 1000          -- period to write swap file (default 4000) (also used by gitsigns)
 vim.opt.lazyredraw = true          -- faster scroll
 vim.opt.synmaxcol = 1024           -- max col for syntax highlight (default 3000)
 
 
 -- Set completeopt to have a better completion experience
 vim.opt.completeopt = 'menuone,noselect'
+
+
+-- nvtree, don't ask which window to open a file in
+-- TODO move back to old file system viewer
+--require('nvim-tree').setup({ actions = { open\_file = { window\_picker = { enable = false } } } })

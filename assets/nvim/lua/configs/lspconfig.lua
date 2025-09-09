@@ -1,4 +1,4 @@
-require("nvchad.configs.lspconfig").defaults()
+require("configs.lspconfig_defaults").defaults()  -- from nvchad
 
 local servers = { "html", "cssls" }
 vim.lsp.enable(servers)
