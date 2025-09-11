@@ -1,3 +1,4 @@
+-- cokeline displays buffers on the top bar
 
 -- #1C1B1A    gray background
 -- #AFAFAF    white text

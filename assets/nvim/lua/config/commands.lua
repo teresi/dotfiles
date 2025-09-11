@@ -1,23 +1,16 @@
---     s                                          .x+=:.      .
---    :8                                         z`    ^%    @88>
---   .88                  .u    .                   .   <k   %8P
---  :888ooo      .u     .d88B :@8c       .u       .@8Ned8"    .
----*8888888   ud8888.  ="8888f8888r   ud8888.   .@^%8888"   .@88u
---  8888    :888'8888.   4888>'88"  :888'8888. x88:  `)8b. ''888E`
---  8888    d888 '88%"   4888> '    d888 '88%" 8888N=*8888   888E
---  8888    8888.+"      4888>      8888.+"     %8"    R88   888E
--- .8888Lu= 8888L       .d888L .+   8888L        @8Wou 9%    888E
--- ^%888*   '8888c. .+  ^"8888*"    '8888c. .+ .888888P`     888&
---   'Y"     '88888%       'Y'       '88888%   `   ^"F       R888"
---             'YP'                    'YP'                   ''
+-- [[ Basic Autocommands ]]
+--  See `:help lua-guide-autocommands`
 
-
-vim.filetype.add({ extension = { pyx = 'python' } })  -- cython
-vim.filetype.add({ extension = { pxd = 'python' } })  -- cython
-
-vim.g.loaded_netrw = 1             -- disable netrw at start of init.lua
-vim.g.loaded_netrwPlugin = 1       -- disable netrw at start of init.lua
-
+-- [[ Highlight on yank ]]
+--  Try it with `yap` in normal mode
+--  See `:help vim.hl.on_yank()`
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
 
 -- [[ append $PWD to path on startup ]]
 -- fix for issue where `:find` can't find files in $PWD
@@ -29,19 +22,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.opt.path:append '**'
   end,
 })
-
-
--- [[ Highlight on yank ]]
--- see `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
-})
-
 
 -- [[ remove trailing whitespace ]]
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
