@@ -1,7 +1,7 @@
+-- highlight color codes w/ it's color
 return {
-	-- highlight color codes w/ it's color
-	"norcalli/nvim-colorizer.lua",
-	config = function()
-		require("colorizer").setup()
-	end,
+	"catgoose/nvim-colorizer.lua",
+	event = "BufReadPre",
+	opts = { -- set to setup table
+	},
 }
