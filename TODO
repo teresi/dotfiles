@@ -62,6 +62,7 @@
 [x] update shebangs to use env/-S pattern
 [x] add recurse-submodules to get clone/fetch
 [x] fix F2 conflict between neotree / dap
+[x] load plugins by name in lazy instead of all in the plugin folder
 [ ] rework nvim dap for rust
 
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq

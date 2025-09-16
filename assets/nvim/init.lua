@@ -3,8 +3,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- TODO: add codelldb / dap for rustaceanvim
--- TODO: add rosepine
--- TODO: select best colorschemes, remove extraneous colorscheme plugins and remove from themery
 -- TODO: add additional treesitter plugins (see bottom of treesitter.lua)
 -- TODO: clean up this file
 
@@ -42,19 +40,19 @@ vim.cmd.colorscheme("wildcharm")
 -- NOTE: require `plugins.*` manually instead of just `plugins`
 -- so we can turn off a plugin without moving it
 require("lazy").setup({
-	require("plugins.adwaita"),
+	--	require("plugins.adwaita"),
 	require("plugins.autocomplete"),
 	require("plugins.autopairs"),
 	require("plugins.bclose"),
-	require("plugins.catppuccin"),
-	require("plugins.citruszest"),
+	--	require("plugins.catppuccin"),
+	--	require("plugins.citruszest"),
 	require("plugins.cokeline"),
 	require("plugins.colorizer"),
 	require("plugins.conform"),
 	require("plugins.debug"),
 	require("plugins.gitsigns"),
 	require("plugins.guess_indent"),
-	require("plugins.heraldish"),
+	--	require("plugins.heraldish"),
 	require("plugins.indent_line"),
 	require("plugins.lazydev"),
 	require("plugins.lint"),
@@ -64,11 +62,12 @@ require("lazy").setup({
 	require("plugins.mini"),
 	require("plugins.moonfly"),
 	require("plugins.neo-tree"),
+	--	require("plugins.rosepine"),
 	require("plugins.rustacean"),
 	require("plugins.telescope"),
-	require("plugins.themery"),
+	--	require("plugins.themery"),
 	require("plugins.todo-comments"),
-	require("plugins.tokyonight"),
+	--	require("plugins.tokyonight"),
 	require("plugins.treesitter"),
 	require("plugins.vim-startuptime"),
 	require("plugins.whichkey"),
