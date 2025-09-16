@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # compile tmux
 # tmux is a terminal multiplexer

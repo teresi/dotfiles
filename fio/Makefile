@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # Flexible I/O tester
 # simulates an I/O workload

@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # compile libevent
 # library for callbacks

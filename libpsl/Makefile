@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # libpsl
 # C library to handle the Public Suffix List

@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # helper scripts to install dotfiles
 # __file__ Makefile

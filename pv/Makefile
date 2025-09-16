@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # Pipe Viewer
 # command line tool to visualize data through a pipe

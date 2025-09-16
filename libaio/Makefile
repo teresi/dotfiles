@@ -1,4 +1,4 @@
-#!/usr/bin/make -f
+#!/usr/bin/env make -S -f
 
 # linux asynchronous I/O library
 # SEE https://pagure.io/libaio
