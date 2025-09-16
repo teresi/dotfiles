@@ -3,12 +3,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- TODO: add codelldb / dap for rustaceanvim
--- TODO: add leader b d for Bclose
 -- TODO: add rosepine
--- TODO: select best colorschems, remove extraneous colorscheme plugins and remove from themery
--- TODO: move telescope to old keymaps, leader s appears to have a conflict
---      <leader s> is making a substition call, but <leader s f> is telescope find
+-- TODO: select best colorschemes, remove extraneous colorscheme plugins and remove from themery
 -- TODO: add additional treesitter plugins (see bottom of treesitter.lua)
+-- TODO: clean up this file
 
 require("config.options") -- loads lua/config/options.lua
 require("config.keymaps") -- loads lua/config/keymaps.lua
@@ -36,10 +34,45 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
--- loads lua/plugins/*.lua
 -- the returned table will be merged and passed to setup
-require("lazy").setup("plugins")
+--require("lazy").setup("plugins")  -- loads all plugins in lua/plugins/*lua
+
 vim.cmd.colorscheme("wildcharm")
+
+-- NOTE: require `plugins.*` manually instead of just `plugins`
+-- so we can turn off a plugin without moving it
+require("lazy").setup({
+	require("plugins.adwaita"),
+	require("plugins.autocomplete"),
+	require("plugins.autopairs"),
+	require("plugins.bclose"),
+	require("plugins.catppuccin"),
+	require("plugins.citruszest"),
+	require("plugins.cokeline"),
+	require("plugins.colorizer"),
+	require("plugins.conform"),
+	require("plugins.debug"),
+	require("plugins.gitsigns"),
+	require("plugins.guess_indent"),
+	require("plugins.heraldish"),
+	require("plugins.indent_line"),
+	require("plugins.lazydev"),
+	require("plugins.lint"),
+	require("plugins.lsp-config"),
+	require("plugins.lualine"),
+	require("plugins.mason_update_all"),
+	require("plugins.mini"),
+	require("plugins.moonfly"),
+	require("plugins.neo-tree"),
+	require("plugins.rustacean"),
+	require("plugins.telescope"),
+	require("plugins.themery"),
+	require("plugins.todo-comments"),
+	require("plugins.tokyonight"),
+	require("plugins.treesitter"),
+	require("plugins.vim-startuptime"),
+	require("plugins.whichkey"),
+})
 
 -- [[ Configure and install plugins ]]
 --
