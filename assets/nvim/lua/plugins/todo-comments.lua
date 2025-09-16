@@ -6,6 +6,11 @@
 -- ERROR:
 -- WARN:
 -- HACK:
+-- FUTURE:
+--    custom_onedark.normal.c.bg = '#1C1B1A'
+--    custom_onedark.normal.a.bg = '#87D787'
+--    custom_onedark.insert.a.bg = '#00AFFF'
+--    custom_onedark.visual.a.bg = '#D75FD7'
 return {
 	"folke/todo-comments.nvim",
 	event = "VimEnter",
@@ -20,11 +25,12 @@ return {
 				-- signs = false, -- configure signs for some keywords individually
 			},
 			TODO = { icon = " ", color = "info" },
+			FUTURE = { icon = " ", color = "#1C1B1A" },
 			HACK = { icon = " ", color = "warning" },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			ERROR = { icon = " ", color = "error" },
 			PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-			INFO = { icon = " ", color = "#10B981" },
+			INFO = { icon = " ", color = "#00AFFF" },
 			NOTE = { icon = " ", color = "#10B981" },
 			TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
 		},
