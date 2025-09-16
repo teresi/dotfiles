@@ -61,6 +61,7 @@
     needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
 [x] update shebangs to use env/-S pattern
 [x] add recurse-submodules to get clone/fetch
+[ ] fix F2 conflict between neotree / dap
 
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 [ ] update uses of gpg to the pattern used in libreadline, or create a function for it
