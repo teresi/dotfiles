@@ -59,8 +59,9 @@
 [x] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
 [x] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
     needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
+[x] update shebangs to use env/-S pattern
+[x] add recurse-submodules to get clone/fetch
 
-[ ] update shebangs to use env/-S pattern
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 [ ] update uses of gpg to the pattern used in libreadline, or create a function for it
 [ ] stop on failure for `all` target (no -ik)
@@ -80,7 +81,6 @@
 [ ] add fontconfig (?), add fontconfig as alacritty prereq
     is fontconfig installed by default on redhat ubi? ubuntu?
 
-[ ] add recurse-submodules to get clone/fetch
 
 
 [ ] tree-setter cli needs to be installed and available before compiling nvim?
