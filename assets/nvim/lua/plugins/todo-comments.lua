@@ -1,12 +1,13 @@
 -- Highlight todo, notes, etc in comments
--- TEST:
--- INFO:
--- TODO:
--- NOTE:
--- ERROR:
--- WARN:
--- HACK:
--- FUTURE:
+-- TEST: test
+-- INFO: info
+-- TODO: todo
+-- NOTE: note
+-- NB: nota bene
+-- ERROR: error
+-- WARN: warning
+-- HACK: hack
+-- FUTURE: future
 --    custom_onedark.normal.c.bg = '#1C1B1A'
 --    custom_onedark.normal.a.bg = '#87D787'
 --    custom_onedark.insert.a.bg = '#00AFFF'
@@ -25,13 +26,13 @@ return {
 				-- signs = false, -- configure signs for some keywords individually
 			},
 			TODO = { icon = " ", color = "info" },
-			FUTURE = { icon = " ", color = "#1C1B1A" },
+			FUTURE = { icon = " ", color = "#918C88" },
 			HACK = { icon = " ", color = "warning" },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			ERROR = { icon = " ", color = "error" },
 			PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
 			INFO = { icon = " ", color = "#00AFFF" },
-			NOTE = { icon = " ", color = "#10B981" },
+			NOTE = { icon = " ", color = "#10B981", alt = { "NB" } },
 			TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
 		},
 		colors = {
