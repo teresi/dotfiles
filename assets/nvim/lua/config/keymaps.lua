@@ -75,3 +75,10 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 vim.keymap.set("n", "<leader>i", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = "Toggle Inlay Hints" })
+
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader>ng",
+	":lua require('neogen').generate()<CR>",
+	{ noremap = true, silent = true, desc = "[N]eogen [G]enerate docs" }
+)

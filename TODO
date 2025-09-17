@@ -63,8 +63,10 @@
 [x] add recurse-submodules to get clone/fetch
 [x] fix F2 conflict between neotree / dap
 [x] load plugins by name in lazy instead of all in the plugin folder
-[ ] rework nvim dap for rust
+[x] try midnight (black) colorscheme https://github.com/dasupradyumna/midnight.nvim
+[x] add doc generator (neogen)
 
+[ ] rework nvim dap for rust
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
 [ ] update uses of gpg to the pattern used in libreadline, or create a function for it
 [ ] stop on failure for `all` target (no -ik)
