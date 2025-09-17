@@ -64,6 +64,7 @@ require("lazy").setup({
 	require("plugins.moonfly"),
 	require("plugins.neogen"),
 	require("plugins.neo-tree"),
+	--	require("plugins.oxocarbon"),
 	--	require("plugins.rosepine"),
 	require("plugins.rustacean"),
 	require("plugins.telescope"),

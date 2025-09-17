@@ -621,6 +621,9 @@ cpython:  pkgconf       ## compile cpython
 rust:                   ## install rust compiler
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
+	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
+	# NB call :MasonUninstall rust-analyzer if necessary
+	rustup component add rust-analyzer
 
 
 .PHONY: rg
