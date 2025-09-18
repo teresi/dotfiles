@@ -493,7 +493,9 @@ cinnamon:             ## cinnamon desktop
 .PHONY: gnome
 gnome:                ## gnome desktop
 	$(call log_info,updating $@...)
-	bash -i $(ROOT_DIR)/kb_shortcuts_gnome.bash
+
+	@# gsettings or similar appear to call nvm, so unset prefix
+	bash -l -c 'unset PREFIX; ./kb_shortcuts_gnome.bash'
 
 	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
