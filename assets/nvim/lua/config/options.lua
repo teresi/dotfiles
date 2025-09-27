@@ -13,27 +13,27 @@ vim.opt.undofile = true -- persistent undo history
 vim.opt.hlsearch = true -- highlight matches on search
 vim.opt.ignorecase = true -- ignorecase when searching
 vim.opt.smartcase = true -- override ignorecase if pattern has uppercase
-vim.opt.signcolumn = 'yes' -- show lint/debug signs on left hand side
+vim.opt.signcolumn = "yes" -- show lint/debug signs on left hand side
 vim.opt.list = true -- visualize trailing whitespace
 vim.opt.listchars = {
-  trail = '·',
-  tab = '¦ ',
-  precedes = '«',
-  extends = '»',
+	trail = "·",
+	tab = "¦ ",
+	precedes = "«",
+	extends = "»",
 }
 vim.opt.fillchars = { -- window separators
-  horiz = '─',
-  horizup = '┴',
-  horizdown = '┬',
-  vert = '|',
-  vertleft = '┤',
-  vertright = '├',
-  verthoriz = '┼',
+	horiz = "─",
+	horizup = "┴",
+	horizdown = "┬",
+	vert = "|",
+	vertleft = "┤",
+	vertright = "├",
+	verthoriz = "┼",
 }
 vim.api.nvim_set_hl( -- window separator color
-  0,
-  'WinSeparator',
-  { fg = '#FFFF5F' }
+	0,
+	"WinSeparator",
+	{ fg = "#FFFF5F" }
 )
 
 -- [[ tabs vs spaces ]]
@@ -43,7 +43,7 @@ vim.opt.tabstop = 4 -- number spaces a tab displays for
 vim.opt.smartindent = true -- autoindent on new lones
 
 -- [[ Human Interface Devices ]]
-vim.opt.mouse = 'a' -- enable mouse
+vim.opt.mouse = "a" -- enable mouse
 vim.opt.timeout = true -- wait `ttimeoutlen` after recieving ESC for another key
 vim.opt.timeoutlen = 300 -- ms to wait for a mapped sequence to complete (default 1000)
 
@@ -56,15 +56,13 @@ vim.opt.synmaxcol = 1024 -- max col for syntax highlight (default 3000)
 -- ---------kickstart:
 
 -- Set completeopt to have a better completion experience
-vim.opt.completeopt = 'menuone,noselect'
+vim.opt.completeopt = "menuone,noselect"
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
-
-vim.g.loaded_netrw = 1             -- disable netrw at start of init.lua
-vim.g.loaded_netrwPlugin = 1       -- disable netrw at start of init.lua
-
+vim.g.loaded_netrw = 1 -- disable netrw at start of init.lua
+vim.g.loaded_netrwPlugin = 1 -- disable netrw at start of init.lua
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
@@ -74,7 +72,7 @@ vim.o.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
+	vim.o.clipboard = "unnamedplus"
 end)
 
 -- Configure how new splits should be opened
@@ -82,7 +80,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 -- Preview substitutions live, as you type!
-vim.o.inccommand = 'split'
+vim.o.inccommand = "split"
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 8
@@ -91,3 +89,22 @@ vim.o.scrolloff = 8
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- [[ folding zm/zr]]
+-- fold level 0 means all levels are folded
+vim.opt.foldmethod = "expr" -- use treesitter for folding
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- use treesetter for folding
+vim.opt.foldlevelstart = 99 -- fold level on opening a file,
+vim.opt.foldlevel = 99 -- current level for folds not manually set
+vim.opt.foldnestmax = 4 -- max level to close, treat as one chunk
+vim.opt.foldtext = "" -- show the line, not a folding message
+vim.opt.foldcolumn = "0" -- number chars on lefthand side to display fold level
+
+-- todo don't reset fold level on buffer change, use autocmd to save/load views
+
+vim.cmd([[
+augroup MyColors
+autocmd!
+autocmd ColorScheme * highlight Folded guibg=#0F0000
+augroup end
+]])
