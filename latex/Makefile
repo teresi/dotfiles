@@ -83,6 +83,9 @@ $(_tar):
 	curl -L -o $(_tar) $(_tar_url)
 
 
+@# TODO unpacking install-tl-202* w/o a -C will extract to the current version, e.g. install-tl-20250927
+@# but having a date in our $(_installer) variable clobbers this
+@# how can we track the version and update?
 $(_installer): $(_tar) $(_sig)
 	@# touch the decompressed file b/c it's timestamp is not it's decompress time
 	sha512sum -c $(_sig) \

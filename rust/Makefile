@@ -17,7 +17,7 @@ _install := $(CARGO_HOME)/bin/rustup
 
 
 .PHONY: all
-all: rustup.sh
+all:
 
 
 .PHONY: install
@@ -45,15 +45,11 @@ update: $(_install)
 	source $(CARGO_ENV) && rustup update stable
 
 
-rustup.sh:
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o $@
-
-
-$(_install): rustup.sh
+$(_install):
 	$(call log_info,installing $@...)
 	# RUSTUP_INIT_SKIP_PATH_CHECK=yes allows installation alongside existing /usr/bin
 	#	this check is done b/c if you don't pay attention to your PATH,
 	#	you could accidentally run the wrong rust (/usr/bin vs HOME/.cargo etc.)
-	@which /usr/bin/rustc && \
-		(echo -e "\e[33mWARN\trustc detected at /usr/bin, installing to HOME, manage your PATH accordingly\e[39m"; sleep 3)
-	cat $< | RUSTUP_INIT_SKIP_PATH_CHECK=yes sh -s -- -y
+	@which /usr/bin/rustc && (echo -e "\e[33mWARN\trustc detected at /usr/bin, installing to HOME, manage your PATH accordingly\e[39m"; sleep 3) || true
+	RUSTUP_INIT_SKIP_PATH_CHECK=yes \
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
