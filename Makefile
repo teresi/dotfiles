@@ -625,7 +625,8 @@ rust:                   ## install rust compiler
 	$(MAKE) -k -C $@ all install
 	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
 	# NB call :MasonUninstall rust-analyzer if necessary
-	rustup component add rust-analyzer
+	rustup component add rust-analyzer --toolchain stable
+	rustup component add rust-analyzer --toolchain nightly
 
 
 .PHONY: rg
