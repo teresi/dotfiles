@@ -31,6 +31,13 @@ if [ -w "$HOME/.local/include" ] && [[ ":$CPATH:" != *":$HOME/.local/include:"* 
 	export CPATH+=:"$HOME/.local/include"
 fi
 
+# NOTE: by default, pkg-config searches at <prefix>/lib/pkgconfig (and others)
+# if it's compiled to a non-standard path, it won't have the normal /usr/lib!
+# this will prevent pkg-config from finding normal packages, so add the normal path
+if [[ -x /usr/bin/pkg-config ]] && [[ -x "$HOME/.local/bin/pkg-config" ]] && [[ -z "$PKG_CONFIG_PATH" ]]; then
+    export PKG_CONFIG_PATH=$(/usr/bin/pkg-config --variable pc_path pkg-config)
+fi
+
 
 ################################################################################
 # KEYBOARD  ####################################################################
