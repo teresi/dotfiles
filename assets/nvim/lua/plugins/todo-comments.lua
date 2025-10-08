@@ -1,10 +1,12 @@
 -- Highlight todo, notes, etc in comments
 -- TEST: test
+-- MAGIC: magic number
 -- INFO: info
 -- TODO: todo
 -- NOTE: note
 -- NB: nota bene
 -- ERROR: error
+-- BUG: error
 -- WARN: warning
 -- HACK: hack
 -- FUTURE: future
@@ -26,10 +28,12 @@ return {
 				-- signs = false, -- configure signs for some keywords individually
 			},
 			TODO = { icon = " ", color = "info" },
+			MAGIC = { icon = "★ ", color = "#720092" },
 			FUTURE = { icon = " ", color = "#918C88" },
 			HACK = { icon = " ", color = "warning" },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			ERROR = { icon = " ", color = "error" },
+			BUG = { icon = " ", color = "error" },
 			PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
 			INFO = { icon = " ", color = "#00AFFF" },
 			NOTE = { icon = " ", color = "#10B981", alt = { "NB" } },
