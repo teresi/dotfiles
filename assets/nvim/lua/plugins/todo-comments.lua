@@ -10,6 +10,7 @@
 -- WARN: warning
 -- HACK: hack
 -- FUTURE: future
+-- SEE: see link
 --    custom_onedark.normal.c.bg = '#1C1B1A'
 --    custom_onedark.normal.a.bg = '#87D787'
 --    custom_onedark.insert.a.bg = '#00AFFF'
@@ -30,6 +31,7 @@ return {
 			TODO = { icon = " ", color = "info" },
 			MAGIC = { icon = "★ ", color = "#720092" },
 			FUTURE = { icon = " ", color = "#918C88" },
+			SEE = { icon = " ", color = "#918C88" },
 			HACK = { icon = " ", color = "warning" },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			ERROR = { icon = " ", color = "error" },
