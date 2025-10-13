@@ -9,7 +9,7 @@ include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local
 
-_url := $ https://gitlab.com/bzip2/bzip2
+_url := https://gitlab.com/bzip2/bzip2
 _branch := master
 _src := bzip2
 _build := $(_src)/build

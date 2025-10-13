@@ -848,3 +848,8 @@ diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
 				"\tto compile locally anyways:  cd diffutils && make all install"\
 				"\e[39m";\
 	fi
+
+.PHONY: zstd
+zstd: make          ## parallel bzip
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install

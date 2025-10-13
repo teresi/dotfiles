@@ -64,6 +64,12 @@
 [x] load plugins by name in lazy instead of all in the plugin folder
 [x] try midnight (black) colorscheme https://github.com/dasupradyumna/midnight.nvim
 [x] add doc generator (neogen)
+[x] add zstd (for python 3.14)
+[ ] update to python 3.14
+[ ] update to auto clean if python compilation fails
+[ ] add libzlma (for zstd) (or use xz utils?)
+    https://www.linuxfromscratch.org/lfs/view/12.4/chapter08/xz.html
+[ ] add liblz4 (for zstd)
 
 [ ] rework nvim dap for rust
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
