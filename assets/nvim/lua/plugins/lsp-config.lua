@@ -218,7 +218,6 @@ return {
 			--
 			-- But for many setups, the LSP (`ts_ls`) will work just fine
 			-- ts_ls = {},
-			--
 
 			lua_ls = {
 				-- cmd = { ... },
@@ -258,24 +257,93 @@ return {
 			"bash-language-server", -- shell/bash
 			"yq", -- yaml
 			"jq", -- json
+			"basedpyright", -- python
 			"black", -- python
-			"isort", --python
+			--			"ruff", -- python
+			--			"pylsp", -- python
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 		require("mason-lspconfig").setup({
 			ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
 			automatic_installation = false,
-			handlers = {
-				function(server_name)
-					local server = servers[server_name] or {}
-					-- This handles overriding only values explicitly passed
-					-- by the server configuration above. Useful when disabling
-					-- certain features of an LSP (for example, turning off formatting for ts_ls)
-					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-					require("lspconfig")[server_name].setup(server)
-				end,
-			},
+			-- WARNING: for some reason, using the 'handlers' didn't pass in lsp settings!
+			-- or, for some reason, there would be duplicate setup calls!
+			-- instead, call it manually with:  require("lspconfig").<my lsp server>.setup({})
+			--
+			--handlers = {
+			--	function(server_name)
+			--		local server = servers[server_name] or {}
+			--		-- This handles overriding only values explicitly passed
+			--		-- by the server configuration above. Useful when disabling
+			--		-- certain features of an LSP (for example, turning off formatting for ts_ls)
+			--		server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+			--		vim.notify("lsp config")
+			--		require("lspconfig")[server_name].setup(server)
+			--	end,
+			--},
+			----			require("lspconfig").pylsp.setup({
+			----				on_attach = function(client, bufnr)
+			----					-- Your custom on_attach function for keybindings, etc.
+			----					-- Example:
+			----					-- require('keymaps').lsp_keymaps(bufnr)
+			----				end,
+			----				settings = {
+			----					pylsp = {
+			----						plugins = {
+			----							-- Enable/disable formatters, linters, etc.
+			----							black = { enabled = true },
+			----							autopep8 = { enabled = false },
+			----							pylint = { enabled = true, executable = "pylint" },
+			----							pyflakes = { enabled = false },
+			----							pylsp_mypy = { enabled = true },
+			----							pyls_isort = { enabled = true },
+			----						},
+			----					},
+			----				},
+			----				flags = {
+			----					debounce_text_changes = 200,
+			----				},
+			----				capabilities = capabilities, -- If you have custom capabilities
+			----			}),
+
+			require("lspconfig").basedpyright.setup({
+				settings = {
+					-- SEE: https://docs.basedpyright.com/v1.20.0/configuration/language-server-settings/
+					basedpyright = {
+						analysis = {
+							diagnosticMode = "openFilesOnly", -- workspace / openFilesOnly
+							typeCheckingMode = "recommended", -- off / basic / standard / strict / recommended / all
+							capabilities = capabilities,
+							useLibraryCodeForTypes = true,
+							inlayHints = {
+								callArgumentNames = true, --- show inlays on function args
+								variableTypes = true, -- show inlays on assignments
+								functionReturnTypes = true, -- show inlays on return types
+								genericTypes = true, -- show inlays on inferred generic types
+							},
+							-- SEE: https://docs.basedpyright.com/v1.20.0/configuration/config-files/#type-check-diagnostics-settings
+							diagnosticSeverityOverrides = { -- error, warning, information, true, false, none
+								autoSearchPaths = true,
+								enableTypeIgnoreComments = true,
+								reportGeneralTypeIssues = true,
+								reportArgumentType = true,
+								reportUnknownMemberType = true,
+								reportAssignmentType = true,
+								reportUnusedImport = "information",
+								reportAny = "warning",
+								reportMissingTypeArgument = true,
+								reportMissingParameterType = true,
+								reportMissingTypeStubs = true,
+								reportUnknownArgumentType = true,
+								reportUnknownParameterType = true,
+								reportUnknownVariableType = "warning",
+								reportUnusedCallResult = "information",
+							},
+						},
+					},
+				},
+			}),
 		})
 	end,
 }

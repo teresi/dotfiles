@@ -85,3 +85,18 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 		end
 	end,
 })
+
+-- [[ python diagnostics ]]
+-- limit virtual text in python for better readability
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "python",
+	callback = function()
+		vim.diagnostic.config({
+			virtual_text = {
+				severity = {
+					min = vim.diagnostic.severity.ERROR,
+				},
+			},
+		})
+	end,
+})
