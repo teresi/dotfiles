@@ -47,7 +47,7 @@ HOST_ALIAS ?= $(HOSTNAME)
 NO_SYMLINKS ?=
 export NO_SYMLINKS
 # use this branch when compiling cpython
-CPYTHON ?= 3.13
+CPYTHON ?= 3.14
 
 
 # FILEPATHS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -613,7 +613,7 @@ pip:                    ## install pip
 
 
 .PHONY: cpython
-cpython:  pkgconf       ## compile cpython
+cpython:  pkgconf zstd       ## compile cpython
 	$(call log_info,compiling $@...)
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
