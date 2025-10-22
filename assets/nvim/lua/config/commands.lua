@@ -100,3 +100,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		})
 	end,
 })
+
+-- [[ spelling ]]
+-- spelling causes too many false positives, so turn it off
+vim.cmd("autocmd Filetype yaml,json,markdown,text setlocal nospell")
