@@ -84,9 +84,9 @@ return {
 		-- Slightly advanced example of overriding default behavior and theme
 		vim.keymap.set("n", "<leader>/", function()
 			-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-				winblend = 10,
-				previewer = false,
+			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_ivy({
+				winblend = 5,
+				previewer = true,
 			}))
 		end, { desc = "[/] Fuzzily search in current buffer" })
 
