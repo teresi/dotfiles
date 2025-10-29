@@ -36,7 +36,8 @@ return { -- Autoformat
 			sh = { "shfmt", "shellcheck" },
 			bash = { "shfmt", "shellcheck" },
 			-- Conform can also run multiple formatters sequentially
-			python = { "isort", "black" },
+			-- NB: don't use isort, it moves custom libs into the third party group
+			python = { "black" },
 			--
 			-- You can use 'stop_after_first' to run the first available formatter from the list
 			-- javascript = { "prettierd", "prettier", stop_after_first = true },
