@@ -307,7 +307,8 @@ return {
 			----				capabilities = capabilities, -- If you have custom capabilities
 			----			}),
 
-			require("lspconfig").basedpyright.setup({
+            vim.lsp.enable("basedpyright"),
+            vim.lsp.config("basedpyright", {
 				settings = {
 					-- SEE: https://docs.basedpyright.com/v1.20.0/configuration/language-server-settings/
 					basedpyright = {
