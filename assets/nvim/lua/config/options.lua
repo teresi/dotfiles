@@ -108,3 +108,6 @@ autocmd!
 autocmd ColorScheme * highlight Folded guibg=#0F0000
 augroup end
 ]])
+
+-- [[ spell check ]]
+vim.opt.spelllang = "en_US"
