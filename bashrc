@@ -109,6 +109,8 @@ export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 export PYTHON_BASIC_REPL=1 # re-enable vi mode for python3.13 REPL
 
+type -P uv &>/dev/null && eval "$(uv generate-shell-completion bash)"
+
 ################################################################################
 # PROMPT  ######################################################################
 #     example prompt:

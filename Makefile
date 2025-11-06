@@ -618,15 +618,25 @@ cpython:  pkgconf zstd       ## compile cpython
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
 
-# TODO needs curl
 .PHONY: rust
-rust:                   ## install rust compiler
+rust: curl                   ## install rust compiler
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
 	# NB call :MasonUninstall rust-analyzer if necessary
 	rustup component add rust-analyzer --toolchain stable
 	rustup component add rust-analyzer --toolchain nightly
+	rustup update
+
+
+.PHONY: sccache
+sccache:                     ## caches compilation artifacts for C, Rust, etc
+	$(call log_info,installing $@...)
+	$(call log_warn,compiling $@ will take a few minutes... this is ok...)
+	# TODO: should use release tarball, this takes a while to build
+	# TODO: update ~/.cargo/config.toml to use sccache ([build] rustc-wrapper = "sccache")
+	sleep 1
+	cargo install sccache
 
 
 .PHONY: rg
@@ -687,6 +697,15 @@ pipx:                    ## install pip extension 'pipx'
 	pipx ensurepath
 	pipx completions
 	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
+
+
+.PHONY: uv
+uv: curl                 ## uv python manager
+	$(call log_info,installing $@...)
+	# NOTE: one could compile but it takes 7..10 minutes:  cargo install --git https://github.com/astral-sh/uv uv
+	# TODO: move this to it's own folder and check install target (PREFIX/.local/bin/{uv,uvx}
+	# TODO: add uninstall rule (just rm -rf the two binaries
+	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 
 .PHONY: meson

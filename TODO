@@ -65,7 +65,9 @@
 [x] try midnight (black) colorscheme https://github.com/dasupradyumna/midnight.nvim
 [x] add doc generator (neogen)
 [x] add zstd (for python 3.14)
-[ ] update to python 3.14
+[x] update to python 3.14
+[x] add uv
+[ ] update uv so it doesn't download if unecessary
 [ ] update to auto clean if python compilation fails
 [ ] add libzlma (for zstd) (or use xz utils?)
     https://www.linuxfromscratch.org/lfs/view/12.4/chapter08/xz.html
