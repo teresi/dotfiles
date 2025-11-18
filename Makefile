@@ -225,7 +225,7 @@ libunistring:         ##  unicode strings in C (for psl)
 
 
 .PHONY: libidn2
-libidn2:              ##  internationalized strings in C (for psl)
+libidn2: texinfo      ##  internationalized strings in C (for psl)
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
@@ -766,6 +766,12 @@ ninja: cmake          ## compile ninja-build
 
 .PHONY: bison
 bison: gawk gettext   ## compile bison
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: texinfo
+texinfo: autoconf libtool  ## compile texinfo
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
