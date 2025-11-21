@@ -67,6 +67,7 @@
 [x] add zstd (for python 3.14)
 [x] update to python 3.14
 [x] add uv
+[ ] add mold linker
 [ ] update uv so it doesn't download if unecessary
 [ ] update to auto clean if python compilation fails
 [ ] add libzlma (for zstd) (or use xz utils?)
