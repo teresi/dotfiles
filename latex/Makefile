@@ -1,41 +1,42 @@
 #!/usr/bin/env make -S -f
 
-# install texlive 2024
+# install texlive
+#
+# REQUIRES perl, tar, curl
 #
 # installs, e.g.:
 #	pdflatex tlmgr latexmk
 #
-# REQUIRES perl, tar, curl
-#
-# SEE https://wiki.debian.org/TeXLive
-# SEE https://www.tug.org/texlive/doc/install-tl.html
-# SEE https://en.wikibooks.org/wiki/LaTeX/Installation
-# SEE https://tug.org/texlive/doc/texlive-en/texlive-en.html#x1-50001.3
-
-# MAGIC output dir of tar decompress is from the version downloaded
-# MAGIC texdir is typically $HOME/.texlive2024, by LaTeX convention
-# MAGIC paper size is letter b/c that's what I have available
-# MAGIC scheme is scheme-small in order to cut down on install size
-#       and we are going to install packages w/ tlmgr later
-# MAGIC texlive installs binaries to TEXDIR/bin/x86_64-linux,
+# MAGIC: texlive installs binaries to TEXDIR/bin/x86_64-linux,
 #       but will change depending on your setup
 #
-# NOTE installer requires an internet connection
-
+# SEE: https://wiki.debian.org/TeXLive
+# SEE: https://www.tug.org/texlive/doc/install-tl.html
+# SEE: https://en.wikibooks.org/wiki/LaTeX/Installation
+# SEE: https://tug.org/texlive/doc/texlive-en/texlive-en.html#x1-50001.3
 
 include ../helpers.mk
-TEXDIR ?= $(HOME)/.texlive2024
-PAPER ?= letter
-# schemes, e.g.:  scheme-basic | scheme-small | scheme-medium
-SCHEME ?= scheme-basic
 BASHRC ?= $(HOME)/.bashrc
+
+# MAGIC: texdir is typically $HOME/.texlive2024, by LaTeX convention
+# I don't track the year b/c the installer will download the latest year
+TEXDIR ?= $(HOME)/.texlive
+# MAGIC: paper size is letter in US
+PAPER ?= letter
+# MAGIC: schemes, e.g.:  scheme-basic | scheme-small | scheme-medium
+# basic includes "plain and latex", use a small package to save time,
+# we use tlmgr to install dependencies later
+SCHEME ?= scheme-basic
+
 
 _tar_url := https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 _tar := install-tl-unx.tar.gz
-_installer := install-tl-2024
+_installer := install-tl
 _sig_url := https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz.sha512
 _sig := install-tl-unx.tar.gz.sha512
+# MAGIC: default directory on my systems
 _texlive_bin := $(TEXDIR)/bin/x86_64-linux
+# MAGIC: my convention, location of extra bash file w/ LaTeX variables
 _bashrc_tex := $(HOME)/.config/source_texlive.bash
 
 
@@ -85,11 +86,9 @@ $(_tar):
 	curl -L -o $(_tar) $(_tar_url)
 
 
-# TODO unpacking install-tl-202* w/o a -C will extract to the current version, e.g. install-tl-20250927
-# but having a date in our $(_installer) variable clobbers this
-# how can we track the version and update?
 $(_installer): $(_tar) $(_sig)
 	@# touch the decompressed file b/c it's timestamp is not it's decompress time
+	@# tar -C <output> is used to keep things consistent, otherwise it outputs install-tl-YYYYMMDD
 	sha512sum -c $(_sig) \
 		&& echo "signature check PASSED, unpacking installer..." \
 		&& (mkdir -p $(_installer) \
@@ -120,6 +119,4 @@ $(_bashrc_tex): $(_texlive_bin)
 	echo "MANPATH+=:$(TEXDIR)/texmf-dist/doc/man" > $(_bashrc_tex)
 	echo "INFOPATH+=:$(TEXDIR)/texmf-dist/doc/info" >> $(_bashrc_tex)
 	echo "PATH+=:$(_texlive_bin)" >> $(_bashrc_tex)
-	$(call source_file,$(BASHRC),TEXLIVE2024,$(_bashrc_tex))
-
-
+	$(call source_file,$(BASHRC),TEXLIVE,$(_bashrc_tex))
