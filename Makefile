@@ -225,7 +225,7 @@ libunistring:         ##  unicode strings in C (for psl)
 
 
 .PHONY: libidn2
-libidn2: texinfo      ##  internationalized strings in C (for psl)
+libidn2: makeinfo      ##  internationalized strings in C (for psl)
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
@@ -770,8 +770,8 @@ bison: gawk gettext   ## compile bison
 	$(call make_all_install_if_not_on_host,$@)
 
 
-.PHONY: texinfo
-texinfo: autoconf libtool  ## compile texinfo
+.PHONY: makeinfo
+makeinfo: autoconf libtool  ## compile texinfo (texindex, makeinfo, etc.)
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
