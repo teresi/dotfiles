@@ -1,0 +1,4 @@
+*.gpg
+*.tar.gz
+*.tar.gz.sig
+# TODO: needs to ignore source folder

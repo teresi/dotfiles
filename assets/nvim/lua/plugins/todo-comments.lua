@@ -29,7 +29,7 @@ return {
 				-- signs = false, -- configure signs for some keywords individually
 			},
 			TODO = { icon = " ", color = "info" },
-			MAGIC = { icon = "★ ", color = "#720092" },
+			MAGIC = { icon = "★ ", color = "#8600AB" },
 			FUTURE = { icon = " ", color = "#918C88" },
 			SEE = { icon = " ", color = "#918C88" },
 			HACK = { icon = " ", color = "warning" },
