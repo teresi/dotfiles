@@ -52,7 +52,7 @@ $(_bin): $(_src)
 	$(call log_info,updating $@...    COMPLETE!)
 
 
-$(_install): $(_src)/.git
+$(_install): $(_src)
 	$(call log_info,updating $@...)
 	$(MAKE) -j -C $(_src) -j install
 	$(call log_info,updating $@...    COMPLETE!)
