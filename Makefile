@@ -230,8 +230,8 @@ libidn2: makeinfo      ##  internationalized strings in C (for psl)
 	$(MAKE) -ik -C $@ all install
 
 
-.PHONY: libpsl        ## libpsl, handling Public Suffix List (for curl)
-libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2
+.PHONY: libpsl
+libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 ## libpsl, handling Public Suffix List (for curl)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 

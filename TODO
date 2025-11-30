@@ -73,6 +73,10 @@
 [ ] add libzlma (for zstd) (or use xz utils?)
     https://www.linuxfromscratch.org/lfs/view/12.4/chapter08/xz.html
 [ ] add liblz4 (for zstd)
+[ ] add perl/cpan and use to install File::Compare for autoconf
+    autom4te can't locate File/Compare.pm
+    consider compiling perl from source?
+    https://perlmaven.com/how-to-build-perl-from-source-code
 
 [ ] rework nvim dap for rust
 [ ] test whether the `repo` rule is more reliable as a prereq, not an order only prereq
