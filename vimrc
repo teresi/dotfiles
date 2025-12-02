@@ -130,8 +130,6 @@ let vim_markdown_preview_github=1
 " TERMINAL
 
 set shell=bash                 " :term default to bash
-"let g:Terminal_FastMode = 0   " 'tc50cal/vim-terminal' for speed
-"let g:Terminal_PyVersion = 3  " 'tc50cal/vim-terminal'
 
 " Function keys that start with an <Esc> are recognized in Insert
 " mode.  When this option is off, the cursor and function keys cannot be
@@ -150,9 +148,6 @@ set clipboard=unnamedplus      " use system clipboard as default register
 
 set ttyfast                    " speedup editing
 set lazyredraw                 " speedup editing
-
-" also add this to .tmux.conf:    set -g default-terminal 'screen-256color'
-set term=screen-256color   " fix colors for vim inside tmux
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -457,6 +452,8 @@ endfunction
 " FIXES
 
 set nocompatible              " needed at the end to re-enable arrows in insert mode
+set term=xterm-256color       " needed at the end to re-enable HOME/END (and fix colors)
+
 
 " listchars were getting clobbered by something else
 " so add to the end
