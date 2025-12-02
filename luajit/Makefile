@@ -16,7 +16,7 @@ _src := LuaJIT
 _bin := $(_src)/src/luajit
 _install := $(PREFIX)/bin/luajit
 
-_branch := master
+_branch := v2.1
 
 
 .PHONY: all
