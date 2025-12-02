@@ -11,6 +11,7 @@
 "   'Y"     '88888%       'Y'       '88888%   `   ^"F       R888"
 "             'YP'                    'YP'                   ''
 
+
 set encoding=utf-8
 scriptencoding utf-8
 set nocompatible              " be iMproved, required
@@ -38,54 +39,42 @@ Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
 Plugin 'preservim/tagbar'                       " browse tags (class structure etc.)
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
-Plugin 'tpope/vim-fugitive'                     " git tools
-"Plugin 'rbong/vim-flog'                         " git graph (broken atm)
-"Plugin 'ton/vim-alternate'                  " switch h/cpp (e.g. w/ `:A`)  FUTURE switch to ton/vim-alternate?
 Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'vim-airline/vim-airline'                " status bar
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
-Plugin 'gregsexton/gitv'                        " gitk in vim
-Plugin 'JamshedVesuna/vim-markdown-preview'     " markdown preview
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
 Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
 Plugin 'tpope/vim-dispatch'                     " `:Make!` for async `:make`
 Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cnext), [q (cprevious)
-"Plugin 'neoclide/coc.nvim'                      " auto complete
+Plugin 'tpope/vim-fugitive'                     " git tools
+Plugin 'rbong/vim-flog'                         " git graph (:Flog -all)
 Plugin 'ojroques/vim-oscyank'                   " clipboard overr SSH
-Plugin 'sheerun/vim-polyglot'                   " various language highlighting
-Plugin 'zchee/vim-flatbuffers'                  " flatbuffer syntax highlighting
 
 " colors
 Plugin 'taxilian/herald.vim'                    " 'herald' color scheme
 Plugin 'vim-airline/vim-airline-themes'         " status bar colors
+Plugin 'vim/colorschemes'                       " various color schemes
 
 " languages
 Plugin 'rhysd/vim-clang-format'                 " format C w/ `:ClangFormat`
-"Plugin 'lervag/vimtex'                          " LaTeX syntax
+Plugin 'lervag/vimtex'                          " LaTeX syntax
 Plugin 'rust-lang/rust.vim'                     " Rust basics: syntastic, :RustFmt, tagbar
 Plugin 'octol/vim-cpp-enhanced-highlight'       " c/c++ highlighting
 Plugin 'ekalinin/Dockerfile.vim'                " dockerfile highlighting
 Plugin 'vim-python/python-syntax'               " python highlighting
 Plugin 'lambdalisue/vim-cython-syntax'          " cython highlighting
-Plugin 'elzr/vim-json'                          " json syntax highlighting
+Plugin 'sheerun/vim-polyglot'                   " various language highlighting
 Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
-Plugin '7erra/vim-sqf'                          " SQF syntax (Arma III)
+Plugin 'elzr/vim-json'                          " json syntax highlighting
+Plugin 'zchee/vim-flatbuffers'                  " flatbuffer syntax highlighting
 
 " future
-"Plugin 'itchyny/lightline.vim'                  " status line, bottom
-"Plugin 'mengelbrecht/lightline-bufferline'      " buffer list, top
-"Plugin 'itchyny/vim-gitbranch'                  " lightline gitbranch#name() func
-"Plugin 'severin-lemaignan/vim-minimap'          " show minimap sidebar
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
-"Plugin 'git://github.com/majutsushi/tagbar.git' " class outline viewer
-
-" old
-"Plugin 'flazz/vim-colorschemes'                 " colors
+"Plugin 'neoclide/coc.nvim'                      " auto complete
 "Plugin 'xolox/vim-colorscheme-switcher'         " switch color w/ F8 / SHIFT F8
 "Plugin 'xolox/vim-misc'                         " dependency for ^
-"Plugin 'joshdick/onedark.vim'                   " color, atom onedark
 
 call vundle#end()            " required, all plugins must be added before this
 filetype plugin indent on    " required
@@ -118,15 +107,6 @@ vnoremap > >gv
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-" MARKDOWN PREVIEW 'JamshedVesuna/vim-markdown-preview'
-" apt-get install xdotool
-" pip install grip
-
-let vim_markdown_preview_toggle=3  " show markdown on write, no images
-let vim_markdown_preview_github=1
-
-
-" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " TERMINAL
 
 set shell=bash                 " :term default to bash
@@ -156,14 +136,16 @@ set lazyredraw                 " speedup editing
 syntax enable
 set background=dark
 silent! colorscheme ron        " default color
-silent! colorscheme herald     " next color if downloaded
+"silent! colorscheme herald     " next color if downloaded
+silent! colorscheme wildcharm  " next color if downloaded
+
 "let g:airline_theme='base16_chalk'
 " colors in docker get messed up somehow? (not even in tmux)
 " so use 'deus' since that one is consistent
 let g:airline_theme='deus'
 
 " match indentline colors
-highlight SpecialKey ctermfg=239
+"highlight SpecialKey ctermfg=239    " change color of whitespace chars
 set number          " show line numbers
 set hlsearch        " show highlighted search
 set title           " show title in window bar
@@ -173,9 +155,9 @@ set tw=0            " do not automatically break lines at certain length
 " fix colors for showing current line and line numbers
 " 234 matches the grey background
 " see https://vim.fandom.com/wiki/Xterm256_color_names_for_console_Vim
-highlight CursorLine ctermbg=232
-highlight CursorLineNr ctermbg=232
-highlight LineNr ctermbg=232
+"highlight CursorLine ctermbg=232
+"highlight CursorLineNr ctermbg=232
+"highlight LineNr ctermbg=232
 
 " show relative numbers on active window
 :set number relativenumber
@@ -186,19 +168,19 @@ highlight LineNr ctermbg=232
 :augroup END
 
 " highlight column limit on active window
-highlight ColorColumn ctermbg=White
-let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for per project setting
-function! HighlightColumn( LIMIT )
-	let l:expr = '\%' . a:LIMIT . 'v.'
-	call matchadd('ColorColumn', l:expr, 100)
-endfunc
-augroup column_highlighting
-	autocmd!
-	let ft_to_ignore = ['floggraph']
-	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
-	autocmd BufEnter,WinEnter,FocusGained * IndentLinesEnable
-	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
-augroup END
+"highlight ColorColumn ctermbg=White
+"let HIGHLIGHT_COLS=89                        "overwrite this in local .vimrc for per project setting
+"function! HighlightColumn( LIMIT )
+"	let l:expr = '\%' . a:LIMIT . 'v.'
+"	call matchadd('ColorColumn', l:expr, 100)
+"endfunc
+"augroup column_highlighting
+"	autocmd!
+"	let ft_to_ignore = ['floggraph']
+"	autocmd BufEnter,WinEnter,FocusGained * if index(ft_to_ignore, &ft) < 0 | silent! call HighlightColumn(HIGHLIGHT_COLS) endif
+"	autocmd BufEnter,WinEnter,FocusGained * IndentLinesEnable
+"	autocmd BufLeave,WinLeave,FocusLost * if index(ft_to_ignore, &ft) < 0 | silent! call clearmatches()
+"augroup END
 
 " Yggdroot indentline, display indentation
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']  " cycle w/ different 'character' per indent level, utf-8 only!
@@ -211,7 +193,6 @@ autocmd BufEnter *.tex set conceallevel=0
 autocmd BufEnter *.cls set conceallevel=0
 autocmd BufEnter *.md set conceallevel=0
 autocmd BufEnter *.json set conceallevel=0
-
 
 " enable line numbers in NERDTree
 let NERDTreeShowLineNumbers=1
@@ -233,11 +214,12 @@ set hidden                       " allow buffer switch w/o save
 " LANGUAGES
 
 set tabstop=4
-autocmd Filetype python,cython setlocal expandtab tabstop=4 shiftwidth=4
-autocmd FileType c,cpp setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
-autocmd FileType tex setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
-autocmd FileType make setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
-autocmd FileType sh,bash setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype python,cython  setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType c,cpp          setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
+autocmd FileType tex            setlocal tabstop=4 shiftwidth=4 softtabstop=4 cindent
+autocmd FileType make           setlocal tabstop=4 shiftwidth=8 softtabstop=0 noexpandtab
+autocmd FileType sh,bash        setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType yaml,yml       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
 
 augroup debianlatexfix
@@ -258,7 +240,6 @@ augroup roslaunch
 	au!
 	autocmd BufNewFile,BufRead *.launch   set syntax=xml
 augroup END
-"let g:indent_guides_enable_on_vim_startup = 1
 
 " default LaTeX style
 let g:tex_flavor = 'latex'
@@ -270,11 +251,10 @@ function TrimWhiteSpace()
 	''
 endfunction
 
-set list listchars=trail:.,extends:>
-autocmd FileWritePre * call TrimWhiteSpace()
-autocmd FileAppendPre * call TrimWhiteSpace()
-autocmd FilterWritePre * call TrimWhiteSpace()
-autocmd BufWritePre * call TrimWhiteSpace()
+autocmd FileWritePre    * call TrimWhiteSpace()
+autocmd FileAppendPre   * call TrimWhiteSpace()
+autocmd FilterWritePre  * call TrimWhiteSpace()
+autocmd BufWritePre     * call TrimWhiteSpace()
 
 
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
@@ -317,52 +297,6 @@ nnoremap yoq :ToggleQuickFix<CR>
 "command! OscCopy :call OscCopy()
 
 
-"" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-"" LIGHTLINE (status line on bottom)
-"
-"set laststatus=2                                     " show status line
-"set guioptions-=e                                    " don't use gui tabline
-"" SEE `:h g:lightline.component`
-"let g:lightline = {
-"      \   'active': {
-"      \   'left': [ [ 'mode', 'paste' ],
-"      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-"      \   'right': [ [ 'lineinfo', 'syntastic' ],
-"      \              [ 'percent' ],
-"      \              [ 'filetype' ] ]
-"      \ },
-"      \ 'component_function': {
-"      \   'gitbranch': 'gitbranch#name'
-"      \ },
-"      \   'colorscheme': 'wombat',
-"      \ }
-"
-""let g:lightline.separator = {
-""      \   'left': '', 'right': ''
-""      \}
-"let g:lightline.subseparator = {
-"      \   'left': '', 'right': ''
-"      \}
-"let g:lightline.colorscheme = 'onedark'
-"
-"" TODO (?) add customizations for better tabs from:
-"" https://github.com/NovaDev94/lightline-onedark
-"" TODO (?) add tmux colors to compliment onedark from:
-"" https://github.com/odedlaz/tmux-onedark-theme
-"
-"" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
-"" LIGHTLINE-BUFFERLINE (buffer list on top)
-"
-"set showtabline=2                                    " show tabline (top buffer list)
-"let g:lightline#bufferline#show_number  = 1          " prepend buffer number
-""let g:lightline#bufferline#shorten_path = 1          " abbreviate paths
-"let g:lightline#bufferline#filename_modifier = ':t'  " no path in buf filename
-"let g:lightline#bufferline#unnamed = '[No Name]'
-"let g:lightline.tabline = {'left': [['buffers']], 'right': [['tabs']]}
-"let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-"let g:lightline.component_type   = {'buffers': 'tabsel'}
-"
-"
 " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
 " AIRLINE
 set laststatus=2                                  " show airline
@@ -454,15 +388,6 @@ endfunction
 set nocompatible              " needed at the end to re-enable arrows in insert mode
 set term=xterm-256color       " needed at the end to re-enable HOME/END (and fix colors)
 
-
-" listchars were getting clobbered by something else
-" so add to the end
-"
+" listchars were getting clobbered by something, so add to the end
 " show whitespace
-"set listchars=trail:\uB7,nbsp:~,eol:\u23CE
-"set list lcs=trail:\uB7,tab:\uBB\uB7
-"set list lcs=trail:\uB7,tab:»·
-"set list lcs=trail:·,precedes:«,extends:»,eol:↲,tab:▸\
-"set list lcs=trail:·,precedes:«,extends:»,eol:⏎,tab:▸\
-"set list lcs=tab:▸\ ,trail:·,precedes:«,extends:»
 set list lcs=tab:¦\ ,trail:·,precedes:«,extends:»

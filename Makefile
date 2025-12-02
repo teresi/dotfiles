@@ -288,7 +288,6 @@ vundle:               ## vim package manager
 	$(call git_clone_fetch_reset,$(VUNDLE_URL),$(VUNDLE))
 
 
-# TODO install pipx first and use that instead of pip
 # FUTURE consider parallel vundle installer?
 # https://github.com/jdevera/parallel-vundle-installer
 .PHONY: vim_plugins
@@ -298,7 +297,6 @@ vim_plugins: | vundle pip  ## download vim plugins
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	$(call log_info,updating $@... please wait while plugins are downloaded...)
 	vim +'PluginInstall' +qall +'--sync' &>/dev/null
-	pip install --user grip  # for 'JamshedVesuna/vim-markdown-preview'
 
 
 .PHONY: tmux
