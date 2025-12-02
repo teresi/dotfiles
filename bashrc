@@ -86,7 +86,14 @@ fi
 ################################################################################
 # SHELL  #######################################################################
 
-export TERM=screen-256color  # fix vim colors inside tmux
+# fix vim colors inside vim/tmux, but don't set if we don't need to
+if [ "$TERM" = "xterm" ]; then
+    export TERM=xterm-256color
+fi
+if [ "$TERM" = "screen" ]; then
+    export TERM=screen-256color
+fi
+
 export TZ='America/New_York' # fix clock in tmux using the wrong TZ
 export VISUAL=vim            # default editor
 export EDITOR="$VISUAL"      # set default editor for legacy programs
