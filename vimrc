@@ -36,8 +36,8 @@ call vundle#begin()                             " initialize vundle
 Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
 " tools
-Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree`
-Plugin 'preservim/tagbar'                       " browse tags (class structure etc.)
+Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree` (F2)
+Plugin 'preservim/tagbar'                       " browse tags (class structure etc.) (F8)
 Plugin 'Yggdroot/indentLine'                    " show indentation levels
 Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
@@ -93,7 +93,7 @@ map <C-l> <C-w>l
 nnoremap <F2> :NERDTreeToggle<CR>
 " format the buffer
 nnoremap <F3> :Autoformat<CR>
-
+" show classes and etc. on right hand side
 nnoremap <F8> :TagbarToggle<CR>
 
 " TAB in general mode will move to text buffer
