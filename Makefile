@@ -296,6 +296,7 @@ vim_plugins: | vundle pip  ## download vim plugins
 	curl -kfLo $(HOME)/.vim/autoload/plug.vim --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	$(call log_info,updating $@... please wait while plugins are downloaded...)
+	vim +'VundleUpdate' +qall +'--sync' &>/dev/null
 	vim +'PluginInstall' +qall +'--sync' &>/dev/null
 
 

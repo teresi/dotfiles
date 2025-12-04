@@ -1,16 +1,5 @@
-"     s                                          .x+=:.      .
-"    :8                                         z`    ^%    @88>
-"   .88                  .u    .                   .   <k   %8P
-"  :888ooo      .u     .d88B :@8c       .u       .@8Ned8"    .
-"-*8888888   ud8888.  ="8888f8888r   ud8888.   .@^%8888"   .@88u
-"  8888    :888'8888.   4888>'88"  :888'8888. x88:  `)8b. ''888E`
-"  8888    d888 '88%"   4888> '    d888 '88%" 8888N=*8888   888E
-"  8888    8888.+"      4888>      8888.+"     %8"    R88   888E
-" .8888Lu= 8888L       .d888L .+   8888L        @8Wou 9%    888E
-" ^%888*   '8888c. .+  ^"8888*"    '8888c. .+ .888888P`     888&
-"   'Y"     '88888%       'Y'       '88888%   `   ^"F       R888"
-"             'YP'                    'YP'                   ''
-
+" " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " " "
+" VIM CONFIG
 
 set encoding=utf-8
 scriptencoding utf-8
@@ -36,16 +25,15 @@ call vundle#begin()                             " initialize vundle
 Plugin 'VundleVim/Vundle.vim'                   " use Vundle, required
 
 " tools
-Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree` (F2)
-Plugin 'preservim/tagbar'                       " browse tags (class structure etc.) (F8)
-Plugin 'Yggdroot/indentLine'                    " show indentation levels
-Plugin 'dense-analysis/ale'                     " Linter
-Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'vim-airline/vim-airline'                " status bar
+Plugin 'preservim/nerdtree'                     " file explorer `:NERDTree` (F2)
+Plugin 'Yggdroot/indentLine'                    " show indentation levels
+Plugin 'airblade/vim-gitgutter'                 " show git status +/0 on side
 Plugin 'rbgrouleff/bclose.vim'                  " `:BClose` bd but no close win
 Plugin 'danro/rename.vim'                       " `:rename <fname>` rename file
+Plugin 'preservim/tagbar'                       " browse tags (class structure etc.) (F8)
+Plugin 'dense-analysis/ale'                     " Linter
 Plugin 'Chiel92/vim-autoformat'                 " format buffer w/ :Autoformat et. al
-Plugin 'tpope/vim-surround'                     " change surrounding pairs (e.g. '')
 Plugin 'tpope/vim-dispatch'                     " `:Make!` for async `:make`
 Plugin 'tpope/vim-unimpaired'                   " quickfix bindings, e.g. ]q (cnext), [q (cprevious)
 Plugin 'tpope/vim-fugitive'                     " git tools
@@ -68,7 +56,6 @@ Plugin 'lambdalisue/vim-cython-syntax'          " cython highlighting
 Plugin 'sheerun/vim-polyglot'                   " various language highlighting
 Plugin 'uarun/vim-protobuf'                     " protobuf syntax highlighting
 Plugin 'elzr/vim-json'                          " json syntax highlighting
-Plugin 'zchee/vim-flatbuffers'                  " flatbuffer syntax highlighting
 
 " future
 "Plugin 'christoomey/vim-tmux-navigator'         " navigate tmux / vim splits
