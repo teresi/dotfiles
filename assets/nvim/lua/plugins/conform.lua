@@ -30,7 +30,7 @@ return { -- Autoformat
 		end,
 		formatters_by_ft = {
 			lua = { "stylua" },
-			yaml = { "yq" },
+			-- not using 'yq' for yaml, yamlls works better
 			json = { "jq" },
 			toml = { "taplo" },
 			sh = { "shfmt", "shellcheck" },
