@@ -1,17 +1,24 @@
 #!/usr/bin/env make -S -f
 
 # compile Universal CTAGS
+#
+# generates indexes for navigating source files
 
 
 include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
+
 _url := https://github.com/universal-ctags/ctags.git
 _branch := master
 _src := ctags
 _bin := $(_src)/ctags
 _install := $(PREFIX)/bin/ctags
+
+# NB: deferred expansion, = not :=, to evaluate in the rule instead of at start
+_repohash = $(shell git -C $(_src) rev-parse HEAD)
+_lasthash = $(shell cat git-hash)
 
 
 .PHONY: all
@@ -26,7 +33,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then make -C $(_src) clean; fi
-	@# BUG need a proper uninstall target
+	rm -f git-hash
 
 
 .PHONY: uninstall
@@ -34,28 +41,35 @@ uninstall:
 	make -C $(_src) PREFIX=$(PREFIX) uninstall
 
 
-.PHONY: repo
-repo:
+.PHONY: download
+download:
 	$(call log_info,updating $@...)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	@# NB: update hashes only after the git repo updates
+	@if [[ "$(_repohash)" != "$(_lasthash)" ]]; then \
+		git -C $(_src) rev-parse HEAD > git-hash;\
+	fi
 
 
-$(_src)/.git: | repo
+$(_src)/Makefile.in: git-hash
+	touch $(_src)/Makefile.in
 
 
-$(_bin): $(_src)/.git
-	$(call log_info,updating $@...)
+$(_src)/Makefile: $(_src)/Makefile.in
 	cd $(_src) \
 		&& ./autogen.sh \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j all
+		&& ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	make -C $(_src) -j all
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	@# NOTE profile-fast-install fails, try again in the future?
+	@# FUTURE: could 'profile-fast-install' improve build time?
 	make -C $(_src) PREFIX=$(PREFIX) install

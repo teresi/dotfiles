@@ -41,6 +41,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -69,18 +70,23 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid automake sig"; exit 1)
+		|| (echo "invalid signature $(_release_sig)"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid automake tar"; exit 1) \
+		|| (echo "invalid tar $(_release_tar)"; exit 1) \
 		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
 	touch $(_src)
 
 
-$(_bin): $(_src)
+$(_src)/Makefile.in: | $(_src)
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	cd $(_src) \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)

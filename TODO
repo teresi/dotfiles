@@ -7,8 +7,7 @@
 [x] compile curl
 [x] don't remove release/repo on clean
 [x] add top level rule to clean all subprojects
-[x] add top level rule to fetch sources for all subprojects
-    (so we can copy the sources to another machine)
+[x] add top level rule to fetch sources (so we can copy to another machine)
 [x] compile Lua
 [x] compile luajit
 [x] install treesitter via cargo, not npm
@@ -43,19 +42,6 @@
 [x] remove --depth calls from git clones
 [x] add readline to top level & test w/ lua (lua needs libreadline-dev)
 [x] fix readline, points to wrong ncurses, missing symbols
-[x] fix unecessary rebuild
-    [ ] if a build failed, subsequent successful builds still always rebuild? have to delete everything? (clean doesn't remove the tarballs)
-    [x] pkg-config
-    [x] ninja
-    [ ] neovim
-    [ ] fio
-    [x] readline
-    [ ] ctags
-[ ] fix unecessary reinstall
-    [x] libevent
-    [ ] fzf
-    [x] readline
-[ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [x] use `gcc -dumpmachine` for paths instead of hardcoded x86_64-linux-gnu
 [x] alacritty couldn't find fontconfig.pc, which is in /usr/lib/x86_64-linux-gnu/pkgconfig
     needed: PKG_CONFIG_PATH+=:/usr/lib/x86_64-linux-gnu/pkgconfig cargo +stable build
@@ -68,6 +54,13 @@
 [x] add zstd (for python 3.14)
 [x] update to python 3.14
 [x] add uv
+[x] fix bad order of prereqs for tarball projects
+    [x] fix automake
+    [ ] fix ...
+[ ] fix bad order of prereqs for git projects (don't use .git folder)
+    [x] fix ctags
+    [ ] fix ...
+[ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
 [ ] update uv so it doesn't download if unecessary
 [ ] update to auto clean if python compilation fails
