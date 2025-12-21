@@ -60,6 +60,8 @@
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] fix ctags
     [ ] fix ...
+[ ] prepend tex binaries to PATH instead of append
+    to prefer local over global tex install
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
 [ ] update uv so it doesn't download if unecessary

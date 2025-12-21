@@ -44,6 +44,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -79,11 +80,16 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	touch $(_src)
 
 
-$(_bin): $(_src)
+$(_src)/Makefile.in: | $(_src)
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	cd $(_src) \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)
