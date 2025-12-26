@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
-# sundry Make functions
+# sundry functions
+
 
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -24,6 +25,39 @@ endef
 define log_error
 	@echo -e "\e[91mERROR\t$1\e[39m"
 endef
+
+
+# download a tarball given it's url
+#
+# %.tar.gz.url is file (by our convention) with the url stored in it
+%.tar.gz: %.tar.gz.url
+	curl -C - -o $@ $(shell cat $^)
+
+
+# download a signature file given it's url
+#
+# %.tar.gz.sig.url is file (by our convention) with the url stored in it
+%.tar.gz.sig: %.tar.gz.sig.url
+	curl -C - -o $@ $(shell cat $^)
+
+
+# verify and unpack a tarball, exit if unsuccessful
+#
+# %            is the destination directory
+# %.tar.gz     is the tarball
+# %.tar.gz.sig is the signature
+# %.tar.gz.id  is an empty target for whether the key has been downloaded
+#
+# see `gpg --recv-keys <ID>` to download the key given the ID
+# see also `gpg -d <SIG>` to find the key ID from the signature file
+#
+%: %.tar.gz %.tar.gz.sig %.tar.gz.id
+	$(call log_info,verify $< using signature $(word 2, $^)...)
+	gpg --verify $(word 2, $^) $< || (echo -e "\e[91mERROR\tcouldn't verify tarball $< using $(word 2, $^)\e[39m"; exit 1)
+	$(call log_info,unpacking contents of $< to $@/...)
+	mkdir -p $@ && tar -xzvf $< -C $@/ --strip-components=1
+	@# update timestamp b/c it's originally based on the packed time
+	touch $@
 
 
 # safe git clone, clone repo 1 to dir 2

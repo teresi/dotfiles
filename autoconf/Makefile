@@ -56,9 +56,14 @@ uninstall:
 download: $(_src)
 
 
+# FUTURE: should only need to download this once
+
 $(_gpg_key):
 	curl -C - -o $(_gpg_key) $(_gpg_url)
 
+
+# FUTURE: get target from url via
+# @echo "Basename (without suffix/directory): $(basename $(notdir $(_release_sig_url)))"
 
 $(_release_sig):
 	curl -C - -o $(_release_sig) $(_release_sig_url)
@@ -72,6 +77,7 @@ $(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
 	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
 		| grep 'RSA' | awk '{print $$5}' \
 		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
+	# BUG: checking the tar file twice here? the first checks the tar, not the sig
 	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
 		|| (echo "invalid autoconf sig"; exit 1)
 	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \

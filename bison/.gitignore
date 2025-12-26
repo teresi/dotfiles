@@ -1,4 +1,4 @@
 *.tar.gz
+*.tar.gz.id
 *.tar.gz.sig
-*.gpg
 bison
