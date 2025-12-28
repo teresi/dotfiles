@@ -31,14 +31,14 @@ endef
 #
 # %.tar.gz.url is file (by our convention) with the url stored in it
 %.tar.gz: %.tar.gz.url
-	curl -C - -o $@ $(shell cat $^)
+	curl -C - -o $@ $(shell cat $<)
 
 
 # download a signature file given it's url
 #
 # %.tar.gz.sig.url is file (by our convention) with the url stored in it
 %.tar.gz.sig: %.tar.gz.sig.url
-	curl -C - -o $@ $(shell cat $^)
+	curl -C - -o $@ $(shell cat $<)
 
 
 # verify and unpack a tarball, exit if unsuccessful
@@ -58,6 +58,20 @@ endef
 	mkdir -p $@ && tar -xzvf $< -C $@/ --strip-components=1
 	@# update timestamp b/c it's originally based on the packed time
 	touch $@
+
+
+# update the git-hash file to the current commit hash
+#
+#	1 is the git repository directory
+#
+# git-hash is an empty target containing the last hash of the repo
+# used to determine whether the commit of a repo has changed
+#
+define check_commit
+	@if [ "$(shell git -C $(1) rev-parse HEAD)" != "$(shell cat git-hash)" ]; then \
+		git -C $(1) rev-parse HEAD > git-hash; \
+	fi
+endef
 
 
 # safe git clone, clone repo 1 to dir 2

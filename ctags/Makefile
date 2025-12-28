@@ -16,10 +16,6 @@ _src := ctags
 _bin := $(_src)/ctags
 _install := $(PREFIX)/bin/ctags
 
-# NB: deferred expansion, = not :=, to evaluate in the rule instead of at start
-_repohash = $(shell git -C $(_src) rev-parse HEAD)
-_lasthash = $(shell cat git-hash)
-
 
 .PHONY: all
 all: $(_bin)
@@ -43,15 +39,11 @@ uninstall:
 
 .PHONY: download
 download:
-	$(call log_info,updating $@...)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
 git-hash: download
-	@# NB: update hashes only after the git repo updates
-	@if [[ "$(_repohash)" != "$(_lasthash)" ]]; then \
-		git -C $(_src) rev-parse HEAD > git-hash;\
-	fi
+	$(call check_commit, $(_src))
 
 
 $(_src)/Makefile.in: git-hash
