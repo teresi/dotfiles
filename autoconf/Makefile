@@ -19,17 +19,25 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 _src := autoconf
 _bin := $(_src)/bin/autoconf
 _install := $(PREFIX)/bin/autoconf
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 2.72
 _release_tar := autoconf-$(_release_ver).tar.gz
 _release_sig := $(_release_tar).sig
 _release_tar_url := https://ftp.gnu.org/gnu/autoconf/autoconf-$(_release_ver).tar.gz
 _release_sig_url := $(_release_tar_url).sig
+
+
+# downloaded tarball here given the url stored in %.tar.gz.url
+_tarball     := autoconf.tar.gz
+# download sig here given the url stored in %.tar.gz.sig.url
+_tarball_sig := autoconf.tar.gz.sig
+# MAGIC ID for the signature, see `gpg -d *sig`
+_gpg_id      := 82F854F3CE73174B8B63174091FCC32B6769AA64
+# empty target for whether we pulled the key
+_tarball_id  := autoconf.tar.gz.id
 
 
 .PHONY: all
@@ -43,7 +51,9 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	@# not removing the tarball etc here so it builds without having to download
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	@# remove the makefile so configure runs
 	rm -f $(_src)/Makefile
 
 
@@ -56,34 +66,13 @@ uninstall:
 download: $(_src)
 
 
-# FUTURE: should only need to download this once
-
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
-
-
-# FUTURE: get target from url via
-# @echo "Basename (without suffix/directory): $(basename $(notdir $(_release_sig_url)))"
-
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
-
-
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
-	# BUG: checking the tar file twice here? the first checks the tar, not the sig
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid autoconf sig"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid autoconf tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+$(_src): $(_targball) $(_targball_sig) $(_targball_id)
 
 
 $(_src)/Makefile.in: | $(_src)

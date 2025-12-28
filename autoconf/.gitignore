@@ -1,7 +1,4 @@
 *.tar.gz
+*.tar.gz.id
 *.tar.gz.sig
-*.gpg
 autoconf
-.prev-version
-.tarball-version
-.version

@@ -25,7 +25,7 @@ _install := $(PREFIX)/bin/bison
 _tarball     := bison.tar.gz
 # download sig here given the url stored in %.tar.gz.sig.url
 _tarball_sig := bison.tar.gz.sig
-# MAGIC Akim Demaille's ID, see `gpg -d *sig`
+# MAGIC ID for the signature, see `gpg -d *sig`
 _gpg_id      := 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E
 # empty target for whether we pulled the key
 _tarball_id  := bison.tar.gz.id
