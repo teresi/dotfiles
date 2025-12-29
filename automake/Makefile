@@ -16,17 +16,19 @@ PREFIX ?= $(HOME)/.local/
 export PATH := $(PREFIX)/bin:$(PATH)
 
 _root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 _src := automake
 _bin := $(_src)/bin/automake
 _install := $(PREFIX)/bin/automake
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 1.16.5
-_release_tar := automake-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
-_release_tar_url := https://mirrors.ocf.berkeley.edu/gnu/automake/$(_release_tar)
-_release_sig_url := $(_release_tar_url).sig
+# downloaded tarball here given the url stored in %.tar.gz.url
+_tarball     := $(_src).tar.gz
+# download sig here given the url stored in %.tar.gz.sig.url
+_tarball_sig := $(_src).tar.gz.sig
+# empty target for whether we pulled the key
+_tarball_id  := $(_src).tar.gz.id
+# MAGIC ID for the signature, see `gpg -d *sig`
+_gpg_id      := 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
 
 
 .PHONY: all
@@ -53,28 +55,13 @@ uninstall:
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
-
-
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
-
-
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid signature $(_release_sig)"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid tar $(_release_tar)"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+$(_src): $(_targball) $(_targball_sig) $(_targball_id)
 
 
 $(_src)/Makefile.in: | $(_src)

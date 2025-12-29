@@ -24,20 +24,14 @@ _src := autoconf
 _bin := $(_src)/bin/autoconf
 _install := $(PREFIX)/bin/autoconf
 
-_release_tar := autoconf-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
-_release_tar_url := https://ftp.gnu.org/gnu/autoconf/autoconf-$(_release_ver).tar.gz
-_release_sig_url := $(_release_tar_url).sig
-
-
 # downloaded tarball here given the url stored in %.tar.gz.url
 _tarball     := autoconf.tar.gz
 # download sig here given the url stored in %.tar.gz.sig.url
 _tarball_sig := autoconf.tar.gz.sig
-# MAGIC ID for the signature, see `gpg -d *sig`
-_gpg_id      := 82F854F3CE73174B8B63174091FCC32B6769AA64
 # empty target for whether we pulled the key
 _tarball_id  := autoconf.tar.gz.id
+# MAGIC ID for the signature, see `gpg -d *sig`
+_gpg_id      := 82F854F3CE73174B8B63174091FCC32B6769AA64
 
 
 .PHONY: all
@@ -72,7 +66,7 @@ $(_tarball_id):
 		&& echo $(_gpg_id) > $@
 
 
-$(_src): $(_targball) $(_targball_sig) $(_targball_id)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
 $(_src)/Makefile.in: | $(_src)
