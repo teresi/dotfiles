@@ -54,14 +54,21 @@
 [x] add zstd (for python 3.14)
 [x] update to python 3.14
 [x] add uv
-[x] fix bad order of prereqs for tarball projects
-    [x] fix automake
-    [ ] fix ...
-[ ] fix bad order of prereqs for git projects (don't use .git folder)
-    [x] fix ctags
-    [ ] fix ...
 [ ] prepend tex binaries to PATH instead of append
     to prefer local over global tex install
+[x] fix bad order of prereqs for tarball projects
+    [x] automake
+    [x] autoconf
+    [x] bison
+    [ ]
+[ ] fix bad order of prereqs for git projects (don't use .git folder)
+    [x] bzip2
+    [x] ctags
+    [ ] clang
+    [ ] cmake
+    [ ] cpython
+    [ ] curl
+[ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
 [ ] update uv so it doesn't download if unecessary

@@ -22,13 +22,13 @@ _bin := $(_src)/src/bison
 _install := $(PREFIX)/bin/bison
 
 # downloaded tarball here given the url stored in %.tar.gz.url
-_tarball     := bison.tar.gz
+_tarball     := $(_src).tar.gz
 # download sig here given the url stored in %.tar.gz.sig.url
-_tarball_sig := bison.tar.gz.sig
+_tarball_sig := $(_src).tar.gz.sig
+# empty target for whether we pulled the key
+_tarball_id  := $(_src).tar.gz.id
 # MAGIC ID for the signature, see `gpg -d *sig`
 _gpg_id      := 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E
-# empty target for whether we pulled the key
-_tarball_id  := bison.tar.gz.id
 
 
 .SECONDARY: $(tarball_sig)

@@ -4,10 +4,14 @@
 
 # file compression tool
 # https://www.sourceware.org/bzip2/downloads.html
+#
+# requires
+# pkg-config, cmake
 
 include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local
+
 
 _url := https://gitlab.com/bzip2/bzip2
 _branch := master
@@ -37,27 +41,21 @@ uninstall:
 	if [ -f "$(_manifest)" ]; then xargs rm -f < $(_manifest); fi
 
 
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+.PHONY: download
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
 $(_build):
 	mkdir -p $(_build)
 
 
-$(_src)/.git: | repo
-
-
-$(_bin): $(_src)/.git | $(_build)
+$(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
-
-	@# need: pkg-config, cmake
 	@# FUTURE ENABLE_LIB_ONLY can be used to only build libbz2
 	cd $(_build) \
 		&& cmake .. \

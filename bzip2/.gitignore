@@ -1,1 +1,5 @@
 bzip2
+git-hash
+.prev-version
+.tarball-version
+.version

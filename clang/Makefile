@@ -7,20 +7,21 @@
 
 
 include ../helpers.mk
+SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local
-_install := $(PREFIX)/bin/clang
 
 _url := https://github.com/llvm/llvm-project.git
-_src := llvm-project
-_build := build
-_bin := $(_src)/$(_build)/bin/clang
-
 # ODIN uses 18 (release/18.x)
 # ZIG uses 19 (release/19.x)
 # it's ok to compile and install both
 _branch ?= release/18.x
-# using half the cores b/c compiling/linkng llvm uses a lot of cpu/ram
-_nproc := $(shell echo $$(( `nproc` / 2 )))
+_src := llvm-project
+_build := build
+_bin := $(_src)/$(_build)/bin/clang
+_install := $(PREFIX)/bin/clang
+
+# use fewer cores b/c compiling/linkng llvm uses a lot of cpu/ram
+_nproc := $(shell echo $$(( `nproc` / 2 + 1)))
 
 
 .PHONY: all
@@ -43,18 +44,15 @@ uninstall:
 
 
 .PHONY: download
-download: repo
-
-
-.PHONY: repo
-repo:
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/.git
+$(_bin): git-hash
 	$(call log_info,compiling $@...)
 	$(call log_warn,this may take a few minutes...)
 	$(call log_info,please wait...)
