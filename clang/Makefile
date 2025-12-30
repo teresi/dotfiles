@@ -35,7 +35,10 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then ninja -C $(_src)/$(_build) clean; fi
+	@# NB: we *could* call clean from ninja/make,
+	@#if [ -d "$(_src)" ]; then ninja -C $(_src)/$(_build) clean; fi
+	@# *but* this is not reliable (it's a cmake project), so delete the build folder
+	rm -rf $(_build)
 
 
 .PHONY: uninstall
@@ -61,11 +64,13 @@ $(_bin): git-hash
 	$(call check_binary,ninja)
 	@# see `LLVM_ALL_PROJECTS`, see llvm.org
 	@# test with `ninja -C build check-llvm`
+	@# DLLVM_INSTALL_UTILS=ON needed to build FileCheck
 	cd $(_src) \
 		&& cmake \
 			-B build \
 			-S llvm \
 			-DCMAKE_INSTALL_PREFIX=$(PREFIX) \
+			-DLLVM_INSTALL_UTILS=ON \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DCLANG_ENABLE_STATIC_ANALYZER=1 \
 			-DLLVM_ENABLE_LIBCXX=1 \

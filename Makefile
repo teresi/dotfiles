@@ -811,8 +811,14 @@ tree:                 ## compile tree
 	$(call make_all_install_if_not_on_host,$@)
 
 
+.PHONY: libedit
+libedit: automake     ## compile libedit
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install
+
+
 .PHONY: clang
-clang: cmake ninja    ## compile clang via LLVM
+clang: libedit cmake ninja  ## compile clang via LLVM
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 

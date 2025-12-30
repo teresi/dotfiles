@@ -54,6 +54,7 @@
 [x] add zstd (for python 3.14)
 [x] update to python 3.14
 [x] add uv
+[x] add libedit (libedit-dev) (for llvm/clang) (https://thrysoee.dk/editline/)
 [ ] prepend tex binaries to PATH instead of append
     to prefer local over global tex install
 [x] fix bad order of prereqs for tarball projects
