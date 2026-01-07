@@ -67,7 +67,7 @@
     [x] bzip2
     [x] ctags
     [x] clang
-    [ ] cmake
+    [x] cmake
     [x] cpython
     [ ] curl
     [ ]
