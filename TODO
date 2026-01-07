@@ -69,8 +69,13 @@
     [x] clang
     [x] cmake
     [x] cpython
-    [ ] curl
+    [ ] gawk
+    [ ] gettext
+    [ ] lua
+    [ ] pkgconf
+    [x] curl
     [ ]
+[ ] compile vim from source
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
@@ -161,8 +166,6 @@
 [ ] debug zig, zig binary builds fine but the timestamp is too early?
 
 [ ] move zephyr to it's own directory
-
-[ ] compile vim
 
 [ ] compile tar
 

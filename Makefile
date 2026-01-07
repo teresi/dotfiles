@@ -237,7 +237,7 @@ libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 ## lib
 
 
 .PHONY: curl
-curl: autoconf automake libtool libpsl  ## install curl
+curl: autoconf automake libtool libpsl zstd  ## install curl
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 

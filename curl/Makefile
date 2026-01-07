@@ -5,21 +5,17 @@
 # CURL up/downloads files given URLs
 #
 # requires
-# libpsl, libidn2, libunistring
-#
-# FUTURE
-# add zstd depdency
+# libpsl, libidn2, libunistring, libzstd
 
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
-_install := $(PREFIX)/bin/curl
 _url := https://github.com/curl/curl.git
 _src := curl
-_bin := $(_src)/src/curl
 _branch := curl-8_15_0
-_nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+_bin := $(_src)/src/curl
+_install := $(PREFIX)/bin/curl
 
 
 .PHONY: all
@@ -41,26 +37,31 @@ uninstall:
 
 
 .PHONY: download
-download: repo
-
-
-.PHONY: repo
-repo:
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/.git
-	$(call log_info,compiling $@...)
+$(_src)/Makefile.in: git-hash
+	touch $@
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	@# need to include the pkg_config_path in case we have a local dependency (e.g. libzstd)
 	cd $(_src) \
 		&& autoreconf -fi \
-		&& ./configure --with-openssl --prefix=$(PREFIX)
-	make -C $(_src) -j $(_nproc)
+		&& LDFLAGS+=" -L${HOME}/.local/lib" CFLAGS+=" -L${HOME}/.local/include" PKG_CONFIG_PATH+=":${HOME}/.local/lib/pkgconfig" \
+			./configure --with-openssl --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
+	make -C $(_src) -j $$((`nproc`>1 ? `nproc`-1 : 1))
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	make -C $(_src) install
+	make -C $(_src) -j install
