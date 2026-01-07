@@ -47,7 +47,7 @@ git-hash: download
 
 
 $(_src)/Makefile.in: git-hash
-	touch $(_src)/Makefile.in
+	touch $@
 
 
 $(_src)/Makefile: $(_src)/Makefile.in

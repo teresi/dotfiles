@@ -7,7 +7,7 @@ include ../helpers.mk
 
 PREFIX ?= $(HOME)/.local
 # NB the commit branch is the same as the python version
-_branch ?= 3.13
+_branch ?= 3.14
 _url := https://github.com/python/cpython.git
 _src := cpython
 _bin := $(_src)/python
@@ -41,30 +41,36 @@ uninstall:
 	rm -rf $(PREFIX)/bin/pydoc$(_branch)
 
 
-.PHONY: repo
-repo:
+.PHONY: download
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
-$(_src)/.git: | repo
+$(_src)/Makefile.pre.in: git-hash
+	touch $@
 
 
-$(_bin): $(_src)/.git
+$(_src)/Makefile: $(_src)/Makefile.pre.in
 	$(call log_info,updating $@...)
-	$(call check_pkgs, $(_dep))
 	cd $(_src) \
 		&& ./configure \
 			--prefix=$(PREFIX) \
 			--enable-optimizations \
 			--with-lto \
 			--with-ensurepip=upgrade
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	$(call check_pkgs, $(_dep))
 	make -C $(_src) all -j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
+	@# using altinstall so previous versions are not overwritten
 	make -C $(_src) altinstall -j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))

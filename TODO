@@ -61,14 +61,16 @@
     [x] automake
     [x] autoconf
     [x] bison
+    [ ] diffutils
     [ ]
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] bzip2
     [x] ctags
-    [ ] clang
+    [x] clang
     [ ] cmake
-    [ ] cpython
+    [x] cpython
     [ ] curl
+    [ ]
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
