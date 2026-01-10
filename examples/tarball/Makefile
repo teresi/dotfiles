@@ -17,12 +17,13 @@
 # ...
 #
 # TODO
-# [ ] update word "EXAMPLE" with the project name (e.g. autoconf) in the Makefile variables
+# [ ] update Makefile variables: _src, _bin, _install, _gpg_id
+# [ ] update .gitignore to ignore the source folder
 # [ ] update the files EXAMPLE.tar.gz.url, EXAMPLE.tar.gz.sig.url
 # 		[ ] update the filename prefixes to match the $(_src) variable
 # 		[ ] update the URLs in the files point to tarbal and signature files to download
-# [ ] update .gitignore to ignore the source folder
 # [ ] update the rules to compile the project depending on it's compilation
+# [ ] update the docs
 
 
 include ../helpers.mk
@@ -30,17 +31,20 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 
+# source directory destination
 _src := EXAMPLE
+# binary (or lib) compiled
 _bin := $(_src)/bin/EXAMPLE
+# destination for the bin (or lib) when installed
 _install := $(PREFIX)/bin/EXAMPLE
 
 
 # downloaded tarball here given the url stored in %.tar.gz.url
-_tarball     := EXAMPLE.tar.gz
+_tarball     := $(_src).tar.gz
 # download sig here given the url stored in %.tar.gz.sig.url
-_tarball_sig := EXAMPLE.tar.gz.sig
+_tarball_sig := $(_src).tar.gz.sig
 # empty target for whether we pulled the key
-_tarball_id  := EXAMPLE.tar.gz.id
+_tarball_id  := $(_src).tar.gz.id
 # MAGIC ID for the signature, see `gpg -d *sig`
 _gpg_id      := 82F854F3CE73174B8B63174091FCC32B6769AA64
 

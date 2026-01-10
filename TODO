@@ -61,7 +61,7 @@
     [x] automake
     [x] autoconf
     [x] bison
-    [ ] diffutils
+    [x] diffutils
     [ ]
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] bzip2
@@ -69,12 +69,15 @@
     [x] clang
     [x] cmake
     [x] cpython
+    [ ] fio
+    [ ] fonts
     [ ] gawk
     [ ] gettext
     [ ] lua
     [ ] pkgconf
     [x] curl
     [ ]
+
 [ ] compile vim from source
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
@@ -94,7 +97,7 @@
 [ ] update uses of gpg to the pattern used in libreadline, or create a function for it
 [ ] stop on failure for `all` target (no -ik)
 
-[ ] targets do not always rebuild if git repo is pulled up
+[x] targets do not always rebuild if git repo is pulled up
     add phony 'repo' target prior to $(_src)/.git,
     remove 'repo' as a prereq to $(_src)/.git
     then it will always run *first*, and then $(_bin): $(_src).git *should* resolve properly
@@ -108,8 +111,6 @@
 
 [ ] add fontconfig (?), add fontconfig as alacritty prereq
     is fontconfig installed by default on redhat ubi? ubuntu?
-
-
 
 [ ] tree-setter cli needs to be installed and available before compiling nvim?
 [ ] refactor projects using gpg/sig w/ updates used in the bison check

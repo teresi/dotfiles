@@ -1,4 +1,4 @@
 diffutils
-gnu-keyring.gpg
 *tar.gz
 *tar.gz.sig
+*tar.gz.id

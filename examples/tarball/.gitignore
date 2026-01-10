@@ -1,5 +1,5 @@
-*.gpg
 *.tar.gz
 *.tar.gz.sig
+*.tar.gz.id
 # TODO: needs to ignore source folder
 EXAMPLE
