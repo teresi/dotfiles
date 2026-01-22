@@ -118,6 +118,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik gettext
 	$(MAKE) -ik make
 	$(MAKE) -ik ctags
+	$(MAKE) -ik cmatrix
 	$(MAKE) -ik tree
 	$(MAKE) -ik pip
 	$(MAKE) -ik pipx
@@ -866,6 +867,13 @@ pbzip2: bzip2       ## parallel bzip
 	$(call log_info,installing $@...)
 	@# requires bzip2 library (libbz2-dev on Ubuntu), installed by bzip2 rule
 	$(MAKE) -k -C $@ all install
+
+
+.PHONY: cmatrix
+cmatrix: autoconf libncurses  ## displays the matrix
+	$(call log_info,installing $@...)
+	$(MAKE) -k -C $@ all install
+
 
 .PHONY: diffutils
 diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
