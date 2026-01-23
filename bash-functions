@@ -3,7 +3,7 @@
 # compress a PDF file ($1)
 pdfcompress ()
 {
-    gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dPDFSETTINGS=/screen -dEmbedAllFonts=true -dSubsetFonts=true -dColorImageDownsampleType=/Bicubic -dColorImageResolution=144 -dGrayImageDownsampleType=/Bicubic -dGrayImageResolution=144 -dMonoImageDownsampleType=/Bicubic -dMonoImageResolution=144 -sOutputFile=$1.compressed.pdf $1; 
+    gs -q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -dCompatibilityLevel=1.3 -dPDFSETTINGS=/screen -dEmbedAllFonts=true -dSubsetFonts=true -dColorImageDownsampleType=/Bicubic -dColorImageResolution=144 -dGrayImageDownsampleType=/Bicubic -dGrayImageResolution=144 -dMonoImageDownsampleType=/Bicubic -dMonoImageResolution=144 -sOutputFile=$1.compressed.pdf $1;
 }
 
 # true if apt package is installed
@@ -11,4 +11,18 @@ pdfcompress ()
 is_package_installed ()
 {
 	dpkg-query -W --showformat='${status}\n' $1 2>/dev/null | grep -q "install ok installed" 2>/dev/null || return 1
+}
+
+
+# run the matrix screensaver
+# requires cmatrix, wmctrl, xdotool
+# NB: the `-L` option will lock the terminal, you'll need to kill it to exit
+matrix ()
+{
+    _text_arr=("Wake up, Neo..." "The Matrix has you" "Follow the white rabbit" "Knock, knock, Neo")
+    _text_N=${#_text_arr[@]}
+    _text_i=$(($RANDOM % $_text_N))
+    _text=${_text_arr[$_text_i]}
+    # sleep so that the window is done resizing before cmatrix starts
+    wmctrl -ir $(xdotool getwindowfocus) -b add,fullscreen; sleep 0.1; cmatrix -abk -u 10 -M "$_text" -L
 }
