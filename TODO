@@ -62,22 +62,28 @@
     [x] autoconf
     [x] bison
     [x] diffutils
-    [ ]
+    [ ] LaTeX
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] bzip2
-    [x] ctags
     [x] clang
     [x] cmake
     [x] cpython
+    [x] ctags
+    [x] curl
+    [x] libedit
+    [x] libevent
     [ ] fio
+    [ ] libaio
     [ ] fonts
     [ ] gawk
     [ ] gettext
+    [ ] htop
     [ ] lua
     [ ] pkgconf
-    [x] curl
     [ ]
 
+[ ] compile openssl (libssl-dev), add as prereq to libevent
+    https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
 [ ] compile vim from source
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)

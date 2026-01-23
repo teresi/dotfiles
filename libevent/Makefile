@@ -1,7 +1,12 @@
 #!/usr/bin/env make -S -f
 
-# compile libevent
+# libevent
+#
+# PROVIDES
 # library for callbacks
+#
+# REQUIRES
+# cmake, libssl-dev
 
 
 include ../helpers.mk
@@ -13,7 +18,6 @@ _build := $(_src)/build
 _branch := release-2.1.12-stable
 _bin := $(_build)/lib/libevent.a
 _install := $(PREFIX)/lib/libevent.a
-_nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
 .PHONY: all
@@ -23,7 +27,10 @@ all: $(_bin)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_build) clean; fi
+	@# NB: we *could* call clean from the build folder
+	@#if [ -d "$(_src)" ]; then make -C $(_build) clean; fi
+	@# *but* this is not reliable (it's a cmake project), so delete the build folder
+	rm -rf $(_build)
 
 
 .PHONY: install
@@ -36,20 +43,29 @@ uninstall:
 
 
 .PHONY: download
-download: repo
+download:
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+git-hash: download
+	$(call check_commit, $(_src))
 
 
 $(_build):
 	mkdir -p $(_build)
 
 
-$(_bin): $(_src)/.git | $(_build)
+$(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
 	$(call check_binary,cmake)
+	@# autotools is available but is deprecated since 2.2
+	@# use CMAKE_POLICY_VERSION_MINIMUM so it works for newer versions of cmake
 	cd $(_build) && \
-		cmake .. -DCMAKE_INSTALL_PREFIX=$(PREFIX)
-	$(MAKE) -ik -C $(_build) -j $(_nproc) all
-	$(call log_info,updating $@...    COMPLETE!)
+		cmake .. \
+		-DCMAKE_INSTALL_PREFIX=$(PREFIX) \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5
+	$(MAKE) -ik -C $(_build) all \
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
 $(_install): $(_bin)
@@ -57,12 +73,3 @@ $(_install): $(_bin)
 	@# manually update install timestamp on success,
 	@# otherwise the install will always reinstall
 	$(MAKE) -ik -C $(_build) install  && touch $(_install)
-
-
-
-.PHONY: repo
-repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
-
-
-$(_src)/.git: | repo
