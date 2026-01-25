@@ -24,9 +24,6 @@ _branch := master
 # MAGIC this is typically where font config installs fontconfig.pc
 _pkg_conf := $(shell echo /usr/lib/`gcc -dumpmachine`/pkgconfig)
 
-# MAGIC reducing the nproc by 1 helps to prevent an overuse of resources
-_nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
-
 _cargo_install := $(CARGO_INSTALL_ROOT)
 ifeq ($(_cargo_install),)
 	_cargo_install := $(CARGO_HOME)
@@ -74,16 +71,13 @@ uninstall:
 	cargo uninstall alacritty
 
 
-.PHONY: repo
-repo:
+.PHONY: download
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
-
-
-$(_src)/.git: repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
 .PHONY: check_cargo_install
@@ -97,7 +91,7 @@ $(HOME)/.terminfo:
 	mkdir -p "$$HOME/.terminfo"
 
 
-$(_bin): $(_src)/.git
+$(_bin): git-hash
 	$(call log_info,compiling $@...)
 	$(call check_pkgs,$(_depends))
 	$(call check_binary,cmake pkg-config python3)
@@ -105,7 +99,7 @@ $(_bin): $(_src)/.git
 	PKG_CONFIG_PATH+=:$(_pkg_conf) \
 	cargo +stable build \
 		--manifest-path $(_src)/Cargo.toml \
-		-j $(_nproc) \
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 ))) \
 		--release
 
 
@@ -121,4 +115,4 @@ $(_cargo_bin): $(_bin)
 	PKG_CONFIG_PATH+=:$(_pkg_conf) \
 	cargo +stable install \
 		--path $(_src)/alacritty \
-		-j $(_nproc)
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))

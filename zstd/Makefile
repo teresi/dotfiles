@@ -11,7 +11,7 @@ PREFIX ?= $(HOME)/.local
 _url := https://github.com/facebook/zstd.git
 _branch := dev
 _src := zstd
-_bin := zstd
+_bin := $(_src)/programs/zstd
 _install := $(PREFIX)/bin/zstd
 
 
@@ -35,25 +35,21 @@ uninstall:
 	make -C ${_src} uninstall
 
 
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+.PHONY: download
+download:
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	$(call check_commit, $(_src))
 
 
-$(_src)/.git: | repo
-
-
-$(_bin): $(_src)/.git
+$(_bin): git-hash
 	$(call log_info,updating $@...)
-	make -C ${_src} prefix=${PREFIX} all
-	make -C ${_src} check
+	make -C ${_src} -j prefix=${PREFIX} all
+	make -C ${_src} -j check
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	make -C ${_src} prefix=${PREFIX} install
+	make -C ${_src} -j prefix=${PREFIX} install

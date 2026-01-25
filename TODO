@@ -64,6 +64,7 @@
     [x] diffutils
     [ ] LaTeX
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
+    [x] alacritty
     [x] bzip2
     [x] clang
     [x] cmake
@@ -72,6 +73,7 @@
     [x] curl
     [x] libedit
     [x] libevent
+    [x] libzstd
     [ ] fio
     [ ] libaio
     [ ] fonts
@@ -82,6 +84,8 @@
     [ ] pkgconf
     [ ]
 
+[ ] compile libfreetype6, add as prereq to alacritty
+    https://www.linuxfromscratch.org/blfs/view/svn/general/freetype2.html
 [ ] compile openssl (libssl-dev), add as prereq to libevent
     https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
 [ ] compile vim from source
