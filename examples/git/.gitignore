@@ -1,5 +1,3 @@
-*.tar.gz
-*.tar.gz.sig
-*.tar.gz.id
+git-hash
 # TODO: need to ignore source folder
 EXAMPLE

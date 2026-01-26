@@ -48,7 +48,8 @@ git-hash: download
 	$(call check_commit, $(_src))
 
 
-$(_src)/Makefile.in: git-hash | $(_src)
+$(_src)/Makefile.in: git-hash
+	touch $@
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
