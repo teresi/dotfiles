@@ -11,19 +11,14 @@ include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _src := m4
 _bin := $(_src)/src/m4
 _install := $(PREFIX)/bin/m4
-_depends := gawk
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 1.4.19
-_release_tar := m4-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
-_release_tar_url := https://mirrors.dotsrc.org/gnu/m4/m4-$(_release_ver).tar.gz
-_release_sig_url := $(_release_tar_url).sig
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := 71C2CC22B1C4602927D2F3AAA7A16B4A2527436A
 
 
 .PHONY: all
@@ -38,6 +33,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -49,35 +45,25 @@ uninstall:
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+$(_src)/Makefile.in: | $(_src)
 
 
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid M4 sig"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid M4 tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
 
 
-$(_bin): $(_src)
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	$(call check_binary,gawk)
-	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
-	@#not calling make check b/c 1.4.19 has a bug, fixed in 1.4.20? see https://bugs.gentoo.org/808749
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)

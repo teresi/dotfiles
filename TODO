@@ -62,6 +62,8 @@
     [x] autoconf
     [x] bison
     [x] diffutils
+    [x] m4
+    [ ] gettext
     [ ] LaTeX
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] alacritty
@@ -77,8 +79,7 @@
     [ ] fio
     [ ] libaio
     [ ] fonts
-    [ ] gawk
-    [ ] gettext
+    [x] gawk
     [ ] htop
     [ ] lua
     [ ] pkgconf

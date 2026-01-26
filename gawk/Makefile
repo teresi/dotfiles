@@ -13,10 +13,11 @@ _src := gawk
 _bin := $(_src)/gawk
 _install := $(PREFIX)/bin/gawk
 
-_release_ver := 5.3.1
-_release_tar := gawk-$(_release_ver).tar.xz
-_release_tar_url := https://ftp.gnu.org/gnu/gawk/gawk-5.3.1.tar.xz
-_md5_sum := 4e9292a06b43694500e0620851762eec
+
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := D1967C63788713177D861ED7DF597815937EC0D2
 
 
 .PHONY: all
@@ -31,6 +32,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -42,24 +44,25 @@ uninstall:
 download: $(_src)
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_src):  $(_release_tar)
-	[[ `md5sum < $(_release_tar)` = "$(_md5_sum)  -" ]] \
-		|| (echo "md5sum check failed: $(_release_tar)"; exit $?) \
-		&& tar -xf $(_release_tar) \
-		&& mv $(_src)-$(_release_ver) $(_src) \
-		&& touch $(_src)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
-$(_bin): $(_src)
+$(_src)/Makefile.in: | $(_src)
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	cd $(_src) \
-		&& ./configure \
-			--prefix=$(PREFIX) \
-		&& make -j
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)
