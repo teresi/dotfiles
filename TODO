@@ -63,7 +63,7 @@
     [x] bison
     [x] diffutils
     [x] m4
-    [ ] gettext
+    [x] gettext
     [ ] LaTeX
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] alacritty
@@ -84,6 +84,8 @@
     [ ] lua
     [ ] pkgconf
     [ ]
+
+[ ] add libclang as a prereq for tree-sitter-cli
 
 [ ] compile libfreetype6, add as prereq to alacritty
     https://www.linuxfromscratch.org/blfs/view/svn/general/freetype2.html

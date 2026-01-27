@@ -4,23 +4,25 @@
 
 # gettext provides tools for internationalization and localization
 
+# BINARIES
+# autopoint, envsubst, gettext, gettext.sh, gettextize, msgattrib, msgcat, msgcmp, msgcomm, msgconv, msgen, msgexec, msgfilter, msgfmt, msggrep, msginit, msgmerge, msgunfmt, msguniq, ngettext, recode-sr-latin, xgettext
+
+# LIBRARIES
+# libasprintf.so, libgettextlib.so, libgettextpo.so, libgettextsrc.so, libtextstyle.so, and preloadable_libintl.so
+
 
 include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 _src := gettext
 _bin := $(_src)/gettext-runtime/src/gettext
 _install := $(PREFIX)/bin/gettext
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 0.22.5
-_release_tar := gettext-$(_release_ver).tar.gz
-_release_sig := gettext-$(_release_ver).tar.gz.sig
-_release_tar_url := https://ftp.gnu.org/pub/gnu/gettext/$(_release_tar)
-_release_sig_url := https://ftp.gnu.org/pub/gnu/gettext/$(_release_tar).sig
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := E0FFBD975397F77A32AB76ECB6301D9E1BBEAC08
 
 
 .PHONY: all
@@ -35,6 +37,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -46,37 +49,29 @@ uninstall:
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+$(_src)/Makefile.in: | $(_src)
 
 
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid gettext sig"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid gettext tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
 
 
-$(_bin): $(_src)
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	$(call log_warn,compiling $@ will take a few minutes... this is ok...)
+	$(call log_warn,compiling $@ this may take a few minutes... this is ok...)
 	sleep 1
-	cd $(_src) && ./configure --prefix=$(PREFIX) && make -j
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)
 	$(call log_info,installing $@...)
-	cd $(_src) && make install
+	make -C $(_src) install

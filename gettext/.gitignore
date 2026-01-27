@@ -1,7 +1,4 @@
 *.tar.gz
 *.tar.gz.sig
-*.gpg
+*.tar.gz.id
 gettext
-.prev-version
-.tarball-version
-.version

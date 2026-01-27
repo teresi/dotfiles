@@ -7,10 +7,10 @@
 # downloads, verifies, and unpacks a tarball to $(_src)
 # compiles the project assuming the basics: configure/make/make install
 #
-# BINARIES PROVIDED
+# BINARIES
 # ...
 #
-# LIBRARIES PROVIDED
+# LIBRARIES
 # ...
 #
 # REQUIRES
