@@ -1,7 +1,4 @@
 *.tar.gz
 *.tar.gz.sig
-*.gpg
+*.tar.gz.id
 libtool
-.prev-version
-.tarball-version
-.version

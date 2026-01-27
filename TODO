@@ -64,6 +64,7 @@
     [x] diffutils
     [x] m4
     [x] gettext
+    [x] libtool
     [ ] LaTeX
 [ ] fix bad order of prereqs for git projects (don't use .git folder)
     [x] alacritty

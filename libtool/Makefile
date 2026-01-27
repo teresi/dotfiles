@@ -3,6 +3,12 @@
 # compile libtool
 
 # libtool provides commands for Makefiles to handle shared libraries
+#
+# BINARIES
+# libtool, libtoolize
+#
+# LIBRARIES
+# libltdl
 
 
 include ../helpers.mk
@@ -14,13 +20,10 @@ _src := libtool
 _bin := $(_src)/libtool
 _install := $(PREFIX)/bin/libtool
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 2.4.7
-_release_tar := libtool-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
-_release_tar_url := https://mirror.fcix.net/gnu/libtool/$(_release_tar)
-_release_sig_url := $(_release_tar_url).sig
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := FA26CA784BE188927F22B99F6570EA01146F7354
 
 
 .PHONY: all
@@ -35,6 +38,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -46,37 +50,25 @@ uninstall:
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+$(_src)/Makefile.in: | $(_src)
 
 
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-	gpg --verify $(_root_dir)/$(_release_sig) 2>&1 \
-		| grep 'RSA' | awk '{print $$5}' \
-		| xargs -I {} gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys {}
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid autoconf sig"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid autoconf tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
 
 
-$(_bin): | $(_src)
-	@# NB the configure script changes the timestamp of the $(_src) for some reason
-	@# use an order only for bin from src
+$(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
-	cd $(_src) \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j
+	make -j -C $(_src) all
 
 
 $(_install): $(_bin)
