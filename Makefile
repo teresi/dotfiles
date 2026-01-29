@@ -195,7 +195,7 @@ libtool: gawk m4      ## makefile commands for handling shared libraries (part o
 
 
 .PHONY: pkgconf
-pkgconf: m4           ## handle include/lib paths for configure (replaces pgkf-config)
+pkgconf: automake autoconf libtool  ## handle include/lib paths for configure (replaces pgkf-config)
 	$(call log_info,updating $@...)
 	$(call make_all_install_if_not_on_host,$@)
 

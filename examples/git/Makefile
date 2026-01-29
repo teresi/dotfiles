@@ -71,12 +71,12 @@ git-hash: download
 
 
 $(_src)/Makefile.in: git-hash
-	touch $@
+	cd $(_src) \
+		&& ./autogen.sh
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
 	cd $(_src) \
-		&& ./autogen.sh \
 		&& ./configure --prefix=$(PREFIX)
 
 

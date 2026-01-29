@@ -86,6 +86,9 @@
     [ ] pkgconf
     [ ]
 
+[ ] fix rules using git to call autogen.sh for the target Makefile.in (if it uses that)
+    (instead of in the rule creating Makefile)
+
 [ ] add libclang as a prereq for tree-sitter-cli
 
 [ ] compile libfreetype6, add as prereq to alacritty
