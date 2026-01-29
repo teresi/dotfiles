@@ -48,8 +48,6 @@ rtp:prepend(lazypath)
 -- the returned table will be merged and passed to setup
 --require("lazy").setup("plugins")  -- loads all plugins in lua/plugins/*lua
 
-vim.cmd.colorscheme("wildcharm")
-
 -- NOTE: require `plugins.*` manually instead of just `plugins`
 -- so we can turn off a plugin without moving it
 require("lazy").setup({

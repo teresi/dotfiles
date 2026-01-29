@@ -5,6 +5,7 @@
 
 -- [[ UI ]]
 vim.opt.termguicolors = true -- true color support (24bit)
+vim.cmd.colorscheme("wildcharm")
 vim.opt.number = true -- show line numbers
 vim.opt.relativenumber = true -- show line number relative to current line
 vim.opt.cursorline = true -- highlight current line
@@ -34,6 +35,11 @@ vim.api.nvim_set_hl( -- window separator color
 	0,
 	"WinSeparator",
 	{ fg = "#FFFF5F" }
+)
+vim.api.nvim_set_hl( -- fill for non-buffer space in cokeline
+	0,
+	"TabLineFill",
+	{ fg = "#000000" }
 )
 
 -- [[ tabs vs spaces ]]
