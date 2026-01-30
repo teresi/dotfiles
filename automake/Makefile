@@ -28,7 +28,7 @@ _tarball_sig := $(_src).tar.gz.sig
 # empty target for whether we pulled the key
 _tarball_id  := $(_src).tar.gz.id
 # MAGIC ID for the signature, see `gpg -d *sig`
-_gpg_id      := 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+_gpg_id      := 17D3311B14BC0F248267BF020716748A30D155AD
 
 
 .PHONY: all
