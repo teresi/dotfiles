@@ -2,7 +2,8 @@
 
 # simplifies include/lib paths during configure and/or make
 #
-# SEE https://www.linuxfromscratch.org/blfs/view/7.4/general/pkgconfig.html
+# BINARIES
+# pkg-config
 
 
 include ../helpers.mk
@@ -19,38 +20,45 @@ _install := $(PREFIX)/bin/pkg-config
 all: $(_bin)
 
 
-.PHONY: clean
-clean:
-	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
-
-
 .PHONY: install
 install: $(_install)
 
 
 .PHONY: uninstall
 uninstall:
-	make -C $(_src) uninstall
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) PREFIX=$(PREFIX) uninstall; fi
+
+
+.PHONY: clean
+clean:
+	$(call log_info,clean $(_src))
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: download
-download: repo
-
-
-$(_bin): $(_src)/.git
-	$(call log_info,updating $@...)
-	cd $(_src) && ./autogen.sh --with-internal-glib --prefix=$(HOME)/.local
-	make -C $(_src)
-
-
-$(_install): $(_bin)
-	make -C $(_src) install
-
-
-.PHONY: repo
-repo:
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
+
+
+$(_src)/Makefile.in: git-hash
+	cd $(_src) && ./autogen.sh --with-internal-glib --prefix=$(HOME)/.local
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) && ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	make -C $(_src) -j all
+
+
+$(_install): $(_bin)
+	$(call log_info,updating $@...)
+	make -C $(_src) PREFIX=$(PREFIX) install

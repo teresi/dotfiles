@@ -83,7 +83,7 @@
     [x] gawk
     [ ] htop
     [ ] lua
-    [ ] pkgconf
+    [x] pkgconf
     [ ]
 
 [ ] fix rules using git to call autogen.sh for the target Makefile.in (if it uses that)
