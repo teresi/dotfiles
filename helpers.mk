@@ -53,7 +53,7 @@ endef
 #
 %: %.tar.gz %.tar.gz.sig %.tar.gz.id
 	$(call log_info,verify $< using signature $(word 2, $^)...)
-	gpg --verify $(word 2, $^) $< || (echo -e "\e[91mERROR\tcouldn't verify tarball $< using $(word 2, $^)\e[39m"; exit 1)
+	gpg --verify $(word 2, $^) $< || (echo -e "\e[91mERROR\tcouldn't verify tarball $< using $(word 2, $^), check the key ID stored here: $(word 3, $^)\e[39m"; exit 1)
 	$(call log_info,unpacking contents of $< to $@/...)
 	mkdir -p $@ && tar -xzvf $< -C $@/ --strip-components=1
 	@# update timestamp b/c it's originally based on the packed time

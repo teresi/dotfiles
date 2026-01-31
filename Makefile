@@ -567,14 +567,25 @@ luarocks: lua libreadline  ## install luarocks package manager
 	$(call make_all_install_if_not_on_host,$@)
 
 
+.PHONY: tree-sitter-cli
+tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
+	$(call log_info,updating $@...)
+	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
+	@# TODO: just need libclang, not the whole thing, add a libclang target/option?
+	$(CARGO_BIN)/cargo install tree-sitter-cli
+
+
+.PHONY: nvim
+nvim: gettext lua luajit luarocks cmake ninja  ## neovim binary
+	$(MAKE) -ik -C neovim all install
+
+
 .PHONY: neovim
-neovim: | lua luajit luarocks rust rg npm cmake gettext ninja  ## install neovim
+neovim: nvim rg npm tree-sitter-cli  ## neovim binary, config, and plugins
 	$(call log_info,updating $@...)
 	@# neovim requires lua 5.1 (preferably luajit)
-	@# some lsp's require node
-	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
-	$(call log_info,compiling tree sitter...)
-	$(CARGO_BIN)/cargo install tree-sitter-cli
+	@# lsp's require node
+	@# telescope require ripgrep
 	$(call log_info,compiling neovim...)
 	$(MAKE) -ik -C neovim all install
 	$(MAKE) -ik nvimrc
@@ -624,9 +635,9 @@ rust: curl                   ## install rust compiler
 	$(MAKE) -k -C $@ all install
 	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
 	# NB call :MasonUninstall rust-analyzer if necessary
-	rustup component add rust-analyzer --toolchain stable
-	rustup component add rust-analyzer --toolchain nightly
-	rustup update
+	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain stable
+	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain nightly
+	which rustc || . $(CARGO_HOME)/env && rustup update
 
 
 .PHONY: sccache

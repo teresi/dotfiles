@@ -3,20 +3,20 @@
 # compile neovim
 
 # NEOVIM is an editor and successor to vim
+#
+# REQUIRES
+# ninja gettext libtool autoconf automake cmake g++ pkg-config unzip curl
+
 
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
-_install := $(PREFIX)/bin/nvim
 
 _url := https://github.com/neovim/neovim.git
-
-_src := neovim
-_build := build
-_bin := $(_src)/$(_build)/bin/nvim
-
 _branch := master
-_nproc ?= $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+_src := neovim
+_bin := $(_src)/build/bin/nvim
+_install := $(PREFIX)/bin/nvim
 
 
 .PHONY: all
@@ -36,33 +36,33 @@ clean:
 
 .PHONY: uninstall
 uninstall:
-	[[ -d "$(_src)" ]] && xargs rm -f < $(_src)/$(_build)/install_manifest.txt
-
-
-.PHONY: repo
-repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+	@# uninstall binaries
+	[[ -d "$(_src)" ]] && xargs rm -f < $(_src)/build/install_manifest.txt
+	@# uninstall plugins
+	rm -rf $(PREFIX)/share/nvim
 
 
 .PHONY: download
-download: repo
+download:
+	@# creates or updates repo at $(_src)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/.git
+$(_bin): git-hash
 	$(call log_info,compiling $@...)
-	$(call check_pkgs,build-essential)
-	$(call check_binary,ninja gettext cmake unzip curl)
+	@# -j not needed w/ ninja
 	make -C $(_src) \
-		-j $(_nproc) \
 		CMAKE_BUILD_TYPE=Release \
 		CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$(PREFIX)"
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
+	@# -j not needed w/ ninja
 	make -C $(_src) \
-		-j $(_nproc) \
 		install

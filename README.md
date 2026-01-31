@@ -18,7 +18,7 @@ make neovim tmux rust bash    # the essentials
 ## REQUIREMENTS
 
 Dependencies are specific to the target, but:
-```
+```bash
 bash make gcc gpg git git-lfs wget perl    # basic requirements
 cmake clang llvm                           # these take a while so prefer your package manager
 ```
@@ -35,23 +35,23 @@ So if you're not working with me I don't recommend using it.
 However, here are some tips:
 
 You can use the defaults:
-```
+```bash
 make all            # neovim, rust, python, tmux, etc.
 ```
 
 Rules are provided for each program, and it's dependencies are listed in it's pre-reqs.
-```
+```bash
 make neovim         # neovim, and also installs lua, rust, etc.
 ```
 
 Compiling a program from a sub folder won't compile it's dependencies.
-```
+```bash
 cd neovim
 make all install    # neovim, but not lua and etc
 ```
 
 Everything is installed to `$HOME/.local`, so you _must_ update your paths accordingly.
-```
+```bash
 make bashrc         # updates PATH, LD_LIBRARY_PATH, etc.
 ```
 

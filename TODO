@@ -86,6 +86,7 @@
     [x] pkgconf
     [ ]
 
+[ ] rework ripgrep
 [ ] fix rules using git to call autogen.sh for the target Makefile.in (if it uses that)
     (instead of in the rule creating Makefile)
 
