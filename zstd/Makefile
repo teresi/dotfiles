@@ -4,6 +4,12 @@
 
 # file compression tool
 
+# BINARIES
+# zstd zstdgrep zstdless
+
+# LIBRARIES
+# libzstd
+
 include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local

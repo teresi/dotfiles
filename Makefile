@@ -9,11 +9,11 @@
 
 # FUTURE add dependency checker:  golang-go luarocks xsel git make cargo node
 
-# TODO specify by path to binary: lua, during calls
+# TODO: specify by path to binary: lua, during calls
 #      b/c we can't depend on having ~/.local/bin in the PATH
-# TODO move from using `which <program>` to using `command -v <program>` to test
+# TODO: move from using `which <program>` to using `command -v <program>` to test
 #      if a binary exists
-# TODO add something to test or ensure lua (or another binary) is in the path
+# TODO: add something to test or ensure lua (or another binary) is in the path
 
 
 SHELL := /bin/bash
@@ -764,7 +764,7 @@ container:               ## run docker image for testing interactively
 
 
 .PHONY: cmake
-cmake: pkg-config                 ## compile CMake
+cmake: pkg-config openssl  ## compile CMake
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -899,6 +899,12 @@ diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
 	fi
 
 .PHONY: zstd
-zstd: make          ## parallel bzip
+zstd: make          ## zstd, libzstd (compression bin/lib)
 	$(call log_info,installing $@...)
-	$(MAKE) -k -C $@ all install
+	$(call make_all_install_if_not_on_host,$@)
+
+
+.PHONY: openssl
+openssl: make zstd  ## openssl, libssl
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)

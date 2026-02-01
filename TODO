@@ -86,6 +86,9 @@
     [x] pkgconf
     [ ]
 
+[ ] compile openssl (libssl-dev), add as prereq to libevent and cmake
+    https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
+
 [ ] add cpanm, add as prereq for autoconf
 
     requires bash configs:
@@ -107,8 +110,6 @@
 
 [ ] compile libfreetype6, add as prereq to alacritty
     https://www.linuxfromscratch.org/blfs/view/svn/general/freetype2.html
-[ ] compile openssl (libssl-dev), add as prereq to libevent
-    https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
 [~] compile vim from source (skipping this, it has a lot of pre-requisites, and is usually pre-installed)
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
