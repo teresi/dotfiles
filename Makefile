@@ -550,9 +550,10 @@ zathura:             ## zathura pdf reader config
 
 
 .PHONY: lua
-lua:                 ## install Lua
+lua: libreadline     ## install Lua
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
+	@# BUG: lua is not linking to libreadline correctly
 
 
 .PHONY: luajit
@@ -576,7 +577,7 @@ tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
 
 
 .PHONY: nvim
-nvim: gettext lua luajit luarocks cmake ninja  ## neovim binary
+nvim: gettext luajit luarocks cmake ninja  ## neovim binary
 	$(MAKE) -ik -C neovim all install
 
 
@@ -907,4 +908,5 @@ zstd: make          ## zstd, libzstd (compression bin/lib)
 .PHONY: openssl
 openssl: make zstd  ## openssl, libssl
 	$(call log_info,installing $@...)
-	$(call make_all_install_if_not_on_host,$@)
+	@# compile even if on host b/c we also need libssl
+	$(MAKE) -k -C $@ all install

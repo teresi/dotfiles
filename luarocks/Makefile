@@ -46,7 +46,6 @@ $(_install): $(_bin)
 $(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
 	$(call check_binary, unzip lua)
-	$(call check_pkgs, build-essential libreadline-dev)
 	cd $(_src) \
 		&& ./configure --prefix=$(PREFIX) --with-lua-include=$(PREFIX)/include --with-lua=$(PREFIX)
 	$(MAKE) -ik -C $(_src)
