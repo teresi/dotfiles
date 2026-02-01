@@ -54,7 +54,6 @@ $(_src)/.git: | repo
 
 $(_bin): $(_src)/.git $(PREFIX)/lib/libevent_core.so $(PREFIX)/lib/libncursesw.so
 	$(call log_info,compiling $@...)
-	$(call check_binary,bison aclocal autoconf automake gettext libtool)
 	@# NB depends on libevent/libncurses SOs in order to enforce a rebuild,
 	@#    but this assumes that they are built locally
 	@# NB use `--enable-static` so LD_LIBRARY_PATH doesn't have to be set to run

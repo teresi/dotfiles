@@ -78,7 +78,6 @@ NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 
 CARGO_HOME := $(HOME)/.cargo
 CARGO_BIN := $(HOME)/.cargo/bin
-RIPGREP_BIN := $(CARGO_BIN)/rg
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
@@ -302,7 +301,7 @@ vim_plugins: | vundle pip  ## download vim plugins
 
 
 .PHONY: tmux
-tmux: | m4 autoconf automake pkgconf libtool bison cmake libevent xsel xclip  ## add tmux config and plugins
+tmux:  gettext m4 autoconf automake autoconf pkgconf libtool bison cmake libevent xsel xclip  ## add tmux config and plugins
 	$(call log_info,updating $@...)
 	$(call check_pkgs,screen)
 	$(MAKE) -ik -C ./tmux
@@ -637,8 +636,9 @@ rust:                        ## install rust compiler
 	@# to avoid compiling extra stuff like libpsl (which needs python)
 	$(call make_all_install_if_not_on_host,curl)
 	$(MAKE) -k -C $@ all install
-	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
-	# NB call :MasonUninstall rust-analyzer if necessary
+	# NB: install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
+	# NB: call :MasonUninstall rust-analyzer if necessary
+	# NB: source rust in case user hasn't done it yet
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain stable
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain nightly
 	which rustc || . $(CARGO_HOME)/env && rustup update
@@ -655,11 +655,7 @@ sccache:                     ## caches compilation artifacts for C, Rust, etc
 
 
 .PHONY: rg
-rg: $(RIPGREP_BIN)
-
-
-.PHONY: $(RIPGREP_BIN)  # phony b/c cargo manages the version
-$(RIPGREP_BIN): | rust
+rg: rust                     ## search a directory for a regex
 	$(call log_info,installing $@...)
 	which rustc || . $(CARGO_HOME)/env && cargo install ripgrep
 

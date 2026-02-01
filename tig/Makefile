@@ -50,6 +50,8 @@ $(_src)/.git: | repo
 $(_bin): $(_src)/.git
 	$(call log_info,updating $@...)
 	$(MAKE) -C $(_src) prefix=$(PREFIX) -j
+	@# BUG: needs ncursesw but can't find the headers? does it need CFLAGS?
+	@# LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
 
 
 $(_install): $(_bin)

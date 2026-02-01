@@ -36,19 +36,19 @@ However, one can:
 
 Use the top level Makefile to compile one program (and it's dependencies):
 ```bash
-make neovim                 # neovim, and also installs lua, rust, etc.
+make neovim                     # neovim, and also installs lua, rust, etc.
 ```
 
 Subfolders house individual programs (but it won't auto compile dependencies):
 ```bash
 cd neovim
-make all install            # neovim, but not lua and etc.
+make all install                # neovim, but not lua and etc.
 ```
 
 Installs to `$HOME/.local`, so update your paths!
 ```bash
-export PATH+=:$HOME/.local  # for this session
-make bashrc                 # for future sessions
+export PATH+=:$HOME/.local/bin  # for this session
+make bashrc                     # for future sessions
 ```
 
 Display your branch and hash in your PS1:
