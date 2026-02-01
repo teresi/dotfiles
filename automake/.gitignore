@@ -1,5 +1,6 @@
 *.tar.gz
 *.tar.gz.sig
+*.tar.gz.id
 *.gpg
 automake
 .prev-version
