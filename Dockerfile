@@ -9,9 +9,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
     && apt-get update -y \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install -y \
+        ca-certificates \
         make \
         git \
+        git-lfs \
         curl \
         wget \
         gcc \

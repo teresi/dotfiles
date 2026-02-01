@@ -232,7 +232,7 @@ libidn2: makeinfo      ##  internationalized strings in C (for psl)
 
 
 .PHONY: libpsl
-libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 ## libpsl, handling Public Suffix List (for curl)
+libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 cpython  ## libpsl, handling Public Suffix List (for curl)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -625,14 +625,17 @@ pip:                    ## install pip
 
 
 .PHONY: cpython
-cpython:  pkgconf zstd       ## compile cpython
+cpython:  pkgconf zstd openssl libncurses      ## compile cpython
 	$(call log_info,compiling $@...)
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
 
 .PHONY: rust
-rust: curl                   ## install rust compiler
+rust:                        ## install rust compiler
 	$(call log_info,installing $@...)
+	@# we just need the curl binary, so call here instead of a pre-req
+	@# to avoid compiling extra stuff like libpsl (which needs python)
+	$(call make_all_install_if_not_on_host,curl)
 	$(MAKE) -k -C $@ all install
 	# NB install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
 	# NB call :MasonUninstall rust-analyzer if necessary

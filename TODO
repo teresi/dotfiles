@@ -89,7 +89,9 @@
 [x] compile openssl (libssl-dev), add as prereq to libevent and cmake
     https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
 
-[ ] updater Make to use new tarball functions
+[ ] check if libssl exists for cmake (don't need openssl binary)
+
+[ ] update Make to use new tarball functions
 
 [ ] add cpanm, add as prereq for autoconf
 

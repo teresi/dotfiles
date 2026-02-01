@@ -8,10 +8,11 @@
 #
 # dependency of CURL
 
-# requires
+# REQUIRES
 #	libidn2
 #	libunistring
 #	pkg-config (installed to HOME!)
+#	python
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local

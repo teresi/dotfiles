@@ -74,4 +74,4 @@ $(_bin): $(_src)/Makefile
 
 $(_install): $(_bin)
 	$(call log_info,installing $@...)
-	make -C $(_src) install
+	make -j -C $(_src) install
