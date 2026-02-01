@@ -175,7 +175,7 @@ autoconf: m4          ## M4 macros to configure sources (part of autotools-dev)
 
 
 .PHONY: automake
-automake: gawk        ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
+automake: gawk autoconf  ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 

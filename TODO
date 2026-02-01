@@ -96,7 +96,7 @@
     https://www.linuxfromscratch.org/blfs/view/svn/general/freetype2.html
 [ ] compile openssl (libssl-dev), add as prereq to libevent
     https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
-[ ] compile vim from source
+[~] compile vim from source (skipping this, it has a lot of pre-requisites, and is usually pre-installed)
 [ ] enable more projects to compile during clang, openmp? libc? clang-tools-extra?
 [ ] move from vundle to vim-plug and use it's parallel downloads (PlugUpdate)
 [ ] add mold linker
