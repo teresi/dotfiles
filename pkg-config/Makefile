@@ -47,11 +47,11 @@ git-hash: download
 
 
 $(_src)/Makefile.in: git-hash
-	cd $(_src) && ./autogen.sh --with-internal-glib --prefix=$(HOME)/.local
+	cd $(_src) && ./autogen.sh --prefix=$(PREFIX) --with-internal-glib
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
-	cd $(_src) && ./configure --prefix=$(PREFIX)
+	cd $(_src) && ./configure --prefix=$(PREFIX) --with-internal-glib
 
 
 $(_bin): $(_src)/Makefile

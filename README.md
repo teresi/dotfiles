@@ -65,7 +65,6 @@ user@host:~/dotfiles$ make HOST_ALIAS=COMPY host_alias bashrc && source ~/.bashr
 ## DESIGN
 
 - does *not* use sudo
-- default installs to `$HOME/.local`
 - top level Makefile
     + has rules for various programs
     + lists a programs dependencies in the prerequisites
@@ -83,6 +82,7 @@ user@host:~/dotfiles$ make HOST_ALIAS=COMPY host_alias bashrc && source ~/.bashr
 - setup neovim, tmux, python, rust
 - vi mode for the terminal, and a better PS1
 - support SSH, copy/paste, autostart SSH agent, etc.
+- installs to `$HOME/.local` by default
 
 
 ----
