@@ -86,6 +86,19 @@
     [x] pkgconf
     [ ]
 
+[ ] add cpanm, add as prereq for autoconf
+
+    requires bash configs:
+    export PATH+=:/home/teresi/perl5/bin/
+    PERL5LIB="/home/teresi/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+    PERL_LOCAL_LIB_ROOT="/home/teresi/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+    PERL_MB_OPT="--install_base \"/home/teresi/perl5\""; export PERL_MB_OPT;
+    PERL_MM_OPT="INSTALL_BASE=/home/teresi/perl5"; export PERL_MM_OPT;
+
+[ ] install File::Compare Perl module, add as a prereq for autoconf
+    (rhel docker image doesn't have the module)
+    (check if exists with perl -MFile::Compare -e 1)
+
 [ ] rework ripgrep
 [ ] fix rules using git to call autogen.sh for the target Makefile.in (if it uses that)
     (instead of in the rule creating Makefile)

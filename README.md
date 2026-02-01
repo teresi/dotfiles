@@ -7,9 +7,9 @@ I work on machines with missing or out of date packages, but I don't have sudo.
 I found it was easier to just compile everything from scratch.
 
 ```bash
-make help                                  # show programs to compile
-make all                                   # install default programs & configs
-make neovim tmux rust bash                 # the essentials
+make help                                     # show programs to compile
+make all                                      # install default programs & configs
+make neovim tmux rust bash                    # the essentials
 ```
 
 
@@ -19,8 +19,8 @@ make neovim tmux rust bash                 # the essentials
 
 Dependencies are specific to the target, but:
 ```bash
-bash make gcc gpg git git-lfs wget perl    # basics
-cmake clang llvm                           # prefer your package manager due to long compilation times
+bash make gcc g++ gpg git git-lfs curl perl wget
+cmake clang llvm                              # prefer your package manager due to long compilation times
 ```
 
 

@@ -12,6 +12,7 @@
 #
 # requires M4 (1.4.16 +)
 # requires Perl (5.006 +)
+# requires File::Compare Perl module
 
 
 include ../helpers.mk

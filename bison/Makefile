@@ -66,7 +66,7 @@ $(_tarball_id):
 		&& echo $(_gpg_id) > $@
 
 
-$(_src): $(_targball) $(_targball_sig) $(_targball_id)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
 $(_src)/Makefile.in: | $(_src)

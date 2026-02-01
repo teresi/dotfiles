@@ -3,6 +3,10 @@
 # compile Gnu Awk
 
 # text processor
+#
+# REQUIRES
+# gcc g++ make
+# curl (for downloading)
 
 
 include ../helpers.mk
