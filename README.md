@@ -7,9 +7,9 @@ I work on machines with missing or out of date packages, but I don't have sudo.
 I found it was easier to just compile everything from scratch.
 
 ```bash
-make help                     # show programs to compile
-make all                      # install default programs & configs
-make neovim tmux rust bash    # the essentials
+make help                                  # show programs to compile
+make all                                   # install default programs & configs
+make neovim tmux rust bash                 # the essentials
 ```
 
 
@@ -19,8 +19,8 @@ make neovim tmux rust bash    # the essentials
 
 Dependencies are specific to the target, but:
 ```bash
-bash make gcc gpg git git-lfs wget perl    # basic requirements
-cmake clang llvm                           # these take a while so prefer your package manager
+bash make gcc gpg git git-lfs wget perl    # basics
+cmake clang llvm                           # prefer your package manager due to long compilation times
 ```
 
 
@@ -28,56 +28,61 @@ cmake clang llvm                           # these take a while so prefer your p
 
 ## USAGE
 
-This compiles _a lot_ from scratch and could interact with other software in fun ways.
+This compiles _a lot_ from scratch, and will interact with other software in ✨fun✨ ways.
 
-So if you're not working with me I don't recommend using it.
+So I don't recommend using it if you're not working with me.
 
-However, here are some tips:
+However, one can:
 
-You can use the defaults:
+Use the top level Makefile to compile one program (and it's dependencies):
 ```bash
-make all            # neovim, rust, python, tmux, etc.
+make neovim                 # neovim, and also installs lua, rust, etc.
 ```
 
-Rules are provided for each program, and it's dependencies are listed in it's pre-reqs.
-```bash
-make neovim         # neovim, and also installs lua, rust, etc.
-```
-
-Compiling a program from a sub folder won't compile it's dependencies.
+Subfolders house individual programs (but it won't auto compile dependencies):
 ```bash
 cd neovim
-make all install    # neovim, but not lua and etc
+make all install            # neovim, but not lua and etc.
 ```
 
-Everything is installed to `$HOME/.local`, so you _must_ update your paths accordingly.
+Installs to `$HOME/.local`, so update your paths!
 ```bash
-make bashrc         # updates PATH, LD_LIBRARY_PATH, etc.
+export PATH+=:$HOME/.local  # for this session
+make bashrc                 # for future sessions
 ```
+
+Display your branch and hash in your PS1:
+```
+user@host:~/dotfiles$ make HOST_ALIAS=COMPY host_alias bashrc && source ~/.bashrc
+[20:32 COMPY][master]->(5d0d):~/dotfiles
+[ins]▸$
+```
+
 
 
 ----
 
 ## DESIGN
 
-
-Design
-- programs are divided into sub folders
-- Makefile rules are written to compile everything
-- the top level Makefile delegates to the sub folders
-- the top level Makefile lists program dependencies as pre-reqs
-- git hashes are used to see if the programs needs recompiling
-- Ubuntu is the main OS, but I'm trying Red Hat slowly
-- programs are added as I need them, it's not meant to automate everything for you
-
-Goals
 - does *not* use sudo
-- sets up a new machine automatically
-- compiles a good editor & supporting tools
-- compiles a good terminal & terminal multiplexer
-- displays git branch/hash in the PS1
-- sets up vi motions for terminal & tmux
-- sets up copy and paste over ssh
+- default installs to `$HOME/.local`
+- top level Makefile
+    + has rules for various programs
+    + lists a programs dependencies in the prerequisites
+    + delegates to sub folders
+- sub folders:
+    + compiles one program
+    + assumes you have the dependencies
+- uses git, pulls master or main, recompiles if the commit changes
+- downloads `tar` files for 'releases', use gpg to verify
+- tested on Ubuntu, future support for RedHat
+
+
+## FEATURES
+
+- setup neovim, tmux, python, rust
+- vi mode for the terminal, and a better PS1
+- support SSH, copy/paste, autostart SSH agent, etc.
 
 
 ----
