@@ -64,8 +64,11 @@ $(_src)/Makefile: git-hash
 
 $(_bin): $(_src)/Makefile
 	$(call log_info,updating $@...)
-	make -C $(_src) -j all
-	make -C $(_src) -j test
+	@# one less core so as to not lock the machine while compiling
+	make -C $(_src) all \
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+	make -C $(_src) test \
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 
 
 $(_install): $(_bin)

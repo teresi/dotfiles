@@ -52,7 +52,9 @@ git-hash: download
 
 $(_bin): git-hash
 	$(call log_info,updating $@...)
-	make -C ${_src} -j prefix=${PREFIX} all
+	make -C ${_src} all \
+		prefix=${PREFIX} \
+		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	@# disabling the tests as it requires docker, but we might not have docker access
 	@#make -C ${_src} -j check
 
