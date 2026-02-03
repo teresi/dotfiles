@@ -37,13 +37,20 @@ uninstall:
 
 
 .PHONY: download
-download: repo
+download:
+	@# creates or updates repo at $(_src)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_bin): $(_src)/.git
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
+
+
+$(_bin): git-hash
 	$(call log_info,updating $@...)
 	cd $(_src) \
-	&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
+		&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
 		./configure --prefix=$(HOME)/.local
 	make -C $(_src) all -j
 
@@ -51,17 +58,3 @@ $(_bin): $(_src)/.git
 $(_install): $(_bin)
 	$(call log_info,installing $@...)
 	make -C $(_src) install
-	@# for some strange reason, the `install` target of fio touches the `fio/.git` folder
-	@# how? not sure, using `set -x` didn't reveal anything obvious
-	@# so touch the targets/folder so the timestamps work properly
-	@# if we don't do this, the install target will always rebuild even if it's up to date
-	touch $(_bin)
-	touch $(_install)
-
-
-.PHONY: repo
-repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
-
-
-$(_src)/.git: repo
