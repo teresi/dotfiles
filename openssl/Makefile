@@ -60,6 +60,7 @@ git-hash: download
 
 $(_src)/Makefile: git-hash
 	cd $(_src) && ./Configure --prefix=$(PREFIX)
+	touch $@
 
 
 $(_bin): $(_src)/Makefile
