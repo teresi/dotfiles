@@ -78,6 +78,7 @@
     [x] libedit
     [x] libevent
     [x] libzstd
+    [x] fzf
     [ ] fio
     [ ] libaio
     [ ] fonts

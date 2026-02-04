@@ -7,44 +7,41 @@ include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-_src := fzf
 _url := https://github.com/junegunn/fzf.git
-_bin := $(HOME)/.fzf.bash
+_branch := master
+_src := fzf
+_install := $(HOME)/.fzf.bash
 
 
 .PHONY: all
-all: $(_src)/.git
+all: git-hash
 
 
 .PHONY: clean
 clean:
-	rm -rf *.zip
 
 
 .PHONY: uninstall
 uninstall:
 	$(call log_info,uninstalling fzf...)
-	rm -rf $(_src)
+	$(_src)/uninstall
 
 
 .PHONY: install
-install: all $(_bin)
+install: $(_install)
 
 
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+$(_install): git-hash
+	$(_src)/install --all
 
 
 .PHONY: download
-download: repo
+download:
+	@# creates or updates repo at $(_src)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
-
-
-$(_bin): $(_src)/.git
-	$(_src)/install --all
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
