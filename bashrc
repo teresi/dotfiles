@@ -19,6 +19,13 @@ _warn() {
 if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME"/.local/bin:$PATH
 fi
+
+# TODO: may need to compile SSH if installing openssl here,
+# as git will fail if it wasn't build with this new openssl
+#if [ -d "$HOME/.local/lib64" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib64:"* ]]; then
+#    export LD_LIBRARY_PATH+=:"$HOME"/.local/lib64
+#fi
+
 if [ -d "$HOME/.local/lib" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib:"* ]]; then
     export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
 fi

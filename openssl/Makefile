@@ -22,7 +22,7 @@ SHELL ?= /bin/bash
 
 
 _url := https://github.com/openssl/openssl.git
-_branch := master
+_branch := openssl-3.6.1
 _src := openssl
 _bin := $(_src)/apps/openssl
 _install := $(PREFIX)/bin/openssl
@@ -70,6 +70,7 @@ $(_bin): $(_src)/Makefile
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	make -C $(_src) test \
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+	touch $@
 
 
 $(_install): $(_bin)

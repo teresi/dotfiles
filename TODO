@@ -88,6 +88,8 @@
     [x] pkgconf
     [ ]
 
+[ ] double check git compilation and update the pre-requisites
+
 [ ] prepend tex binaries to PATH instead of append
     to prefer local over global tex install
 

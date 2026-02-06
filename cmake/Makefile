@@ -53,7 +53,13 @@ $(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
 	cd $(_build) \
 		&& LDFLAGS+=" -L${HOME}/.local/lib" CFLAGS+=" -L${HOME}/.local/include" PKG_CONFIG_PATH+=":${HOME}/.local/lib/pkgconfig" \
-		../bootstrap --prefix=$(PREFIX) --parallel=$(shell nproc)
+		../bootstrap \
+			--prefix=$(PREFIX) \
+			--parallel=$(shell nproc) \
+			-- \
+			-DCMAKE_BUILD_TYPE=RELEASE \
+			-DCMAKE_PREFIX_PATH=$(PREFIX)
+
 	@# NB using a low core count b/c cmake uses a lot of ram per core
 	$(MAKE) -ik -C $(_build) -j 3
 	$(call log_info,updating $@...    COMPLETE!)

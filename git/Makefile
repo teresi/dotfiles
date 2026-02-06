@@ -13,7 +13,7 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 _url := $ https://git.kernel.org/pub/scm/git/git.git
-_branch := v2.48.1
+_branch := v2.53.0
 _src := git
 _bin := $(_src)/git
 _install := $(PREFIX)/bin/git
@@ -38,26 +38,27 @@ clean:
 uninstall:
 
 
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+.PHONY: download
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_src)/.git: | repo
-
-
-$(_bin): $(_src)/.git
-	$(call check_binary, gettext)
-	@# NOTE xz-utils is nedded if downloading tar.xz
-	$(call check_pkgs, dh-autoreconf libcurl4-gnutls-dev libexpat1-dev zlib1g-dev libssl-dev)
-	@# BUG exit if libcurl is not installed? https is necessary
+$(_src)/configure: git-hash
 	cd $(_src) \
-		&& make configure \
+		&& make configure
+
+
+$(_bin): $(_src)/configure
+	@# TODO: double check depencies and install, these should now be compiled but need to check and add to prereq
+	@#$(call check_pkgs, dh-autoreconf libcurl4-gnutls-dev libexpat1-dev zlib1g-dev libssl-dev)
+	@# TODO: exit if libcurl is not installed? https is necessary
+	cd $(_src) \
 		&& ./configure --prefix=$(PREFIX) \
 		&& make -j all
 

@@ -48,12 +48,16 @@ uninstall:
 install: all $(FC_CACHE)
 
 
+$(SHARE):
+	mkdir -p $(SHARE)
+
+
 %.zip:
 	$(call log_info,downloading font $@...)
 	curl -L -O -C - $(PARENT)/$@
 
 
-$(SHARE)/% : %.zip
+$(SHARE)/% : %.zip | $(SHARE)
 	$(call log_info,installing font $@...)
 	unzip -o $< -d $(SHARE)/$*
 
