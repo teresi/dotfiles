@@ -75,7 +75,7 @@ update_repo_to_master() {
     notify "    local commit is at  $_local"
     notify "    remote commit is at $_remote"
     if [ "${_local}" != "${_remote}" ]; then
-        notify "    checking if branch $_branch is up to date... NO"
+        warn "    checking if branch $_branch is up to date... NO"
         git -C $_dest remote set-branches origin ${_branch}
         git -C $_dest fetch origin $_branch
         git -C $_dest fetch origin --tags --force || true

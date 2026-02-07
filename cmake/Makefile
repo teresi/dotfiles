@@ -67,5 +67,5 @@ $(_bin): git-hash | $(_build)
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_build) -j install
+	$(MAKE) -ik -C $(_build) -j install && touch $(_bin)
 	$(call log_info,updating $@...    COMPLETE!)

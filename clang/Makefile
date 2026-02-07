@@ -16,8 +16,8 @@ _url := https://github.com/llvm/llvm-project.git
 # it's ok to compile and install both
 _branch ?= release/18.x
 _src := llvm-project
-_build := build
-_bin := $(_src)/$(_build)/bin/clang
+_build := $(_src)/build
+_bin := $(_build)/bin/clang
 _install := $(PREFIX)/bin/clang
 
 # use fewer cores b/c compiling/linkng llvm uses a lot of cpu/ram
@@ -55,13 +55,14 @@ git-hash: download
 	$(call check_commit, $(_src))
 
 
-$(_bin): git-hash
+$(_build):
+	mkdir -p ./$(_build)
+
+$(_bin): git-hash | $(_build)
 	$(call log_info,compiling $@...)
 	$(call log_warn,this may take a few minutes...)
 	$(call log_info,please wait...)
 	$(call check_pkgs,gcc-multilib)
-	$(call check_binary,cmake)
-	$(call check_binary,ninja)
 	@# see `LLVM_ALL_PROJECTS`, see llvm.org
 	@# test with `ninja -C build check-llvm`
 	@# DLLVM_INSTALL_UTILS=ON needed to build FileCheck
@@ -84,5 +85,7 @@ $(_bin): git-hash
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
+	@# touch the output to prevent repeated installs
 	cd $(_src) \
-		&& ninja -C build install
+		&& ninja -C build install \
+		&& touch $(_install)
