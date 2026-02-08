@@ -4,14 +4,17 @@
 
 # HTOP provides a TUI process viewer
 
+# REQUIRES
+# make, autoconf, automake, gettext, libtool, pkgconf, libncurses
+
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
 _url := https://github.com/htop-dev/htop.git
-_src := htop/htop
-_bin := $(_src)/htop
 _branch := main
+_src := htop
+_bin := $(_src)/htop
 _install := $(PREFIX)/bin/htop
 
 
@@ -23,37 +26,43 @@ all: $(_bin)
 install: $(_install)
 
 
+.PHONY: uninstall
+uninstall:
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) PREFIX=$(PREFIX) uninstall; fi
+
+
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
-.PHONY: uninstall
-uninstall:
-	$(MAKE) -ik -C $(_src) uninstall
-
-
 .PHONY: download
-download: repo
+download:
+	@# creates or updates repo at $(_src)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
+
+
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
+
+
+$(_src)/Makefile.in: git-hash
+	cd $(_src) \
+		&& ./autogen.sh
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	cd $(_src) \
+		&& ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	make -C $(_src) -j all
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_src) install
-
-
-$(_bin): $(_src)/.git
-	$(call log_info,updating $@...)
-	$(call check_binary, autoconf automake gettext libtool pkgconf)
-	$(call check_pkgs, libncurses-dev)
-	cd $(_src) && ./autogen.sh && ./configure --prefix=$(PREFIX)
-	$(MAKE) -ik -C $(_src)
-
-
-.PHONY: repo
-repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
-
-
-$(_src)/.git: | repo
+	make -C $(_src) PREFIX=$(PREFIX) install

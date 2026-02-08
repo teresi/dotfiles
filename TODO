@@ -88,6 +88,7 @@
     [x] pkgconf
     [ ]
 
+[ ] enable more options in htop
 [ ] double check git compilation and update the pre-requisites
 
 [ ] prepend tex binaries to PATH instead of append
@@ -99,6 +100,10 @@
 
 [x] compile openssl (libssl-dev), add as prereq to libevent and cmake
     https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
+
+[ ] compile openssh? https://github.com/openssh/openssh-portable
+    needs PREFIX/lib64 in LD_LIBRARY_PATH with custom openssl
+    pre-req for git if using new openssl
 
 [ ] bzip2/pbzip need python but it's not a prereq
 

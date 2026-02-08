@@ -788,11 +788,9 @@ makeinfo: autoconf libtool  ## compile texinfo (texindex, makeinfo, etc.)
 
 
 .PHONY: htop
-htop: autoconf automake gettext libtool  ## compile htop
-	@# TODO compiling libncurses and using /usr/bin/htop may result
-	@# in a 'no version info available' b/c of a version mismatch (?)
+htop: autoconf automake gettext libtool libncurses  ## compile htop
 	$(call log_info,installing $@...)
-	$(call make_all_install_if_not_on_host,$@)
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: tig
