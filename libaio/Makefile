@@ -9,20 +9,14 @@ include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
 _url := https://pagure.io/libaio.git
-_src := libaio
 _branch := master
+_src := libaio
 _bin := $(_src)/src/libaio.a
 _install := $(PREFIX)/lib/libaio.a
 
 
 .PHONY: all
 all: $(_bin)
-
-
-.PHONY: clean
-clean:
-	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: install
@@ -35,22 +29,27 @@ uninstall:
 	rm -rf $(PREFIX)/include/libaio*
 
 
+.PHONY: clean
+clean:
+	$(call log_info,clean $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+
+
 .PHONY: download
-download: repo
+download:
+	@# creates or updates repo at $(_src)
+	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_bin): $(_src)/.git
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
+
+
+$(_bin): git-hash
 	$(call log_info,updating $@...)
 	make -C $(_src) prefix=$(PREFIX) all
 
 
 $(_install): $(_bin)
 	make -C $(_src) prefix=$(PREFIX) install
-
-
-.PHONY: repo
-repo:
-	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
-
-
-$(_src)/.git: | repo
