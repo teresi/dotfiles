@@ -1,2 +1,4 @@
-libidn2*
-gnu-keyring.gpg
+*.tar.gz
+*.tar.gz.sig
+*.tar.gz.id
+libidn2

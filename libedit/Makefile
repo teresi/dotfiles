@@ -27,16 +27,15 @@ all: $(_bin)
 install: $(_install)
 
 
+.PHONY: uninstall
+uninstall:
+	if [ -f "$(_manifest)" ]; then xargs rm -f < $(_manifest); fi
+
+
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
 	if [ -f "$(_src)/Makefile" ]; then make -C $(_build) clean; fi
-
-
-.PHONY: uninstall
-uninstall:
-
-	if [ -f "$(_manifest)" ]; then xargs rm -f < $(_manifest); fi
 
 
 .PHONY: download
