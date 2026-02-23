@@ -13,6 +13,11 @@ vim.keymap.set(
 	{ silent = true, buffer = bufnr }
 )
 
+-- improve synatx highlighting in rust
+-- fixes issue (in wildcharm) where variables and functions are the same color
+vim.api.nvim_command("hi! link @lsp.type.variable.rust Variable")
+vim.api.nvim_command("hi! link @variable.rust Variable")
+
 -- SEE: (:help lsp-semantic-highlight)
 -- SEE: https://www.reddit.com/r/neovim/comments/12rc7h4/issue_with_syntax_highlighting_in_rust_with/
 --
