@@ -572,6 +572,7 @@ tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
 	$(call log_info,updating $@...)
 	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
 	@# TODO: just need libclang, not the whole thing, add a libclang target/option?
+	@# needed for nvim-treesitter: `:checkhealth nvim-treesitter`
 	$(CARGO_BIN)/cargo install tree-sitter-cli
 
 
@@ -598,6 +599,13 @@ nvimrc:              ## neovim config and plugins
 
 	$(call log_info,updating lazy...)
 	nvim --headless "+Lazy! sync" +qa
+
+	$(call log_info,updating parsers...)
+	@# workaround for autoinstalling languages from nvim-treesitter
+	@# this was fixed, but run manually here just in case
+	nvim --headless -c ':TSUpdate' -c 'qa'
+	nvim --headless -c ':TSInstall lua' -c 'qa'
+	nvim --headless -c ':TSInstall rust' -c 'qa'
 
 	$(call log_info,updating mason...)
 	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
