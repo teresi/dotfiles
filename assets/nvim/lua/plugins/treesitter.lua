@@ -42,10 +42,11 @@ return { -- Highlight, edit, and navigate code
 				-- Enable native Neovim treesitter highlighting
 				vim.treesitter.start()
 
-				-- Configure code folding
-				vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+				-- code folding (e.g. zm/zr)
 				vim.wo.foldmethod = "expr"
-				vim.wo.foldlevel = 99
+				vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+				vim.wo.foldtext = "" -- show the line, not a folding message
+				vim.wo.foldcolumn = "0" -- number chars on lefthand side to display fold level
 
 				-- Enable treesitter-based indentation
 				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"

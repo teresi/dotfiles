@@ -41,6 +41,11 @@ vim.api.nvim_set_hl( -- fill for non-buffer space in cokeline
 	"TabLineFill",
 	{ fg = "#000000" }
 )
+vim.api.nvim_set_hl( -- background to folded lines
+	0,
+	"Folded",
+	{ bg = "#000000" }
+)
 
 -- [[ tabs vs spaces ]]
 vim.opt.expandtab = true -- use spaces not tabs
@@ -91,22 +96,15 @@ vim.o.inccommand = "split"
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 8
 
+-- [[ folding ]]
+-- NOTE: folding is set in treesitter.lua but needed these settings here
+vim.opt.foldlevel = 005 -- starting fold (0 means all levels are folded)
+vim.opt.foldnestmax = 5 -- max level to close, treat as one chunk
+
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
-
--- [[ folding zm/zr]]
--- fold level 0 means all levels are folded
-vim.opt.foldmethod = "expr" -- use treesitter for folding
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- use treesetter for folding
-vim.opt.foldlevelstart = 99 -- fold level on opening a file,
-vim.opt.foldlevel = 99 -- current level for folds not manually set
-vim.opt.foldnestmax = 4 -- max level to close, treat as one chunk
-vim.opt.foldtext = "" -- show the line, not a folding message
-vim.opt.foldcolumn = "0" -- number chars on lefthand side to display fold level
-
--- todo don't reset fold level on buffer change, use autocmd to save/load views
 
 vim.cmd([[
 augroup MyColors
