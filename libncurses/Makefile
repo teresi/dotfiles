@@ -12,15 +12,14 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
 
-_release_ver := 6.5
-_release_tar := ncurses-$(_release_ver).tar.gz
-_release_tar_url := https://invisible-mirror.net/archives/ncurses/ncurses-6.5.tar.gz
-_md5_sum := ac2d2629296f04c8537ca706b6977687
-
 _src := ncurses
-_bin := $(_src)/lib/libncursesw.so.${_release_ver}
-_install := $(PREFIX)/lib/libncursesw.so.${_release_ver}
+_bin := $(_src)/lib/libncursesw.so.6.6
+_install := $(PREFIX)/lib/libncursesw.so.6.6
 
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := 19882D92DDA4C400C22C0D56CC2AF4472167BE03
 
 .PHONY: all
 all: $(_bin)
@@ -33,33 +32,30 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	@# not removing the tarball etc here so it builds without having to download
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	@# remove the makefile so configure runs
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_src) uninstall
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) uninstall; fi
 
 
-.PHONY: download
-download: $(_src)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
+		&& echo $(_gpg_id) > $@
 
 
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
 
 
-$(_src):  $(_release_tar)
-	[[ `md5sum < $(_release_tar)` = "$(_md5_sum)  -" ]] \
-		|| (echo "md5sum check failed: $(_release_tar)"; exit 1) \
-		&& rm -rf $(_src) \
-		&& tar -xf $(_release_tar) \
-		&& mv $(_src)-$(_release_ver) $(_src) \
-		&& touch $(_src)
+$(_src)/Makefile.in: | $(_src)
 
 
-$(_bin): $(_src)
-	$(call log_info,compiling $@...)
+$(_src)/Makefile: $(_src)/Makefile.in
 	@# --disable-widec:  ncurses
 	@# --enable-widec:   ncursesw
 	@# --with-termlib:   build tinfo.so seperately
@@ -71,8 +67,13 @@ $(_bin): $(_src)
 		--enable-pc-files \
 		--with-versioned-syms \
 		--with-pkg-config-libdir=${PREFIX}/lib/pkgconfig
-	make -C $(_src) -j
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,compiling $@...)
+	make -j -C $(_src)
 
 
 $(_install): $(_bin)
-	make -C $(_src) -j install
+	$(call log_info,installing $@...)
+	make -j -C $(_src) install

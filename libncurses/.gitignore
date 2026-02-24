@@ -1,2 +1,4 @@
-ncurses
 *.tar.gz
+*.tar.gz.sig
+*.tar.gz.id
+ncurses
