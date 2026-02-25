@@ -131,7 +131,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik git_config
 	$(MAKE) -ik virtualenvwrapper
 	$(MAKE) -ik fzf
-	$(MAKE) -ik rust
+	$(MAKE) -ik rust-analyzer
 	$(MAKE) -ik alacritty
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
@@ -644,12 +644,20 @@ rust:                        ## install rust compiler
 	@# to avoid compiling extra stuff like libpsl (which needs python)
 	$(call make_all_install_if_not_on_host,curl)
 	$(MAKE) -k -C $@ all install
-	# NB: install rust-analyzer via rustup (b/c installing w/ Mason conflicts w/ rustaceanvim)
-	# NB: call :MasonUninstall rust-analyzer if necessary
-	# NB: source rust in case user hasn't done it yet
-	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain stable
-	which rustc || . $(CARGO_HOME)/env && rustup component add rust-analyzer --toolchain nightly
+	@# NB: don't install rust-analyzer via Mason or npm as it conflicts w/ rustaceanvim
+	@# NB: call :MasonUninstall rust-analyzer if necessary
+	@# NB: source rust in case user hasn't done it yet
 	which rustc || . $(CARGO_HOME)/env && rustup update
+	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain stable
+	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain nightly
+
+
+.PHONY: rust-analyzer
+rust-analyzer: rust
+	$(call log_info,installing $@...)
+	@# could call with cargo install --git, *but* it always rebuilds each time from scratch
+	@# which rustc || . $(CARGO_HOME)/env && cargo install --force --git https://github.com/rust-lang/rust-analyzer.git rust-analyzer
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: sccache
