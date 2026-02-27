@@ -12,8 +12,10 @@
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
+# MAGIC: using stable, as master had issues w/ displaying diagnostics
+
 _url := https://github.com/neovim/neovim.git
-_branch := master
+_branch := stable
 _src := neovim
 _bin := $(_src)/build/bin/nvim
 _install := $(PREFIX)/bin/nvim
