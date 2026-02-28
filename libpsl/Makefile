@@ -16,10 +16,10 @@
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
+SHELL ?= /bin/bash
 
 _url := https://github.com/rockdaboot/libpsl.git
 _branch := master
-
 _src := libpsl
 _bin := $(_src)/tools/psl
 _install := $(PREFIX)/bin/psl
@@ -33,38 +33,44 @@ all: $(_bin)
 install: $(_install)
 
 
-.PHONY: clean
-clean:
-	make -C $(_src) clean
-
-
 .PHONY: uninstall
 uninstall:
-	make -C $(_src) uninstall
+	$(call log_info,uninstall $(_src))
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) PREFIX=$(PREFIX) uninstall; fi
+
+
+.PHONY: clean
+clean:
+	$(call log_info,clean $(_src))
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: download
-download: repo
-
-
-.PHONY: repo
-repo:
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/.git
-	$(call log_info,compiling $@...)
-	$(call log_info,    checking submodules...)
+$(_src)/Makefile.in: git-hash
 	cd $(_src) \
-		&& git submodule update --init --recursive
+		&& ./autogen.sh
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
 	@# using `autoreconf -fi` fails, but `autoreconf -i` succeeds
 	cd $(_src) \
-		&& ./autogen.sh \
 		&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
 			./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,compiling $@...)
+	$(call log_info,    checking submodules...)
 	make -C $(_src) -j
 	make -C $(_src) -j check
 
