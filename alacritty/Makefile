@@ -19,7 +19,7 @@ _depends := libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-
 _url := https://github.com/alacritty/alacritty.git
 _src := alacritty
 _bin := $(_src)/target/release/alacritty
-_branch := master
+_branch := v0.16.1
 
 # MAGIC this is typically where font config installs fontconfig.pc
 _pkg_conf := $(shell echo /usr/lib/`gcc -dumpmachine`/pkgconfig)
