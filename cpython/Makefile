@@ -60,9 +60,9 @@ $(_src)/Makefile: $(_src)/Makefile.pre.in
 	$(call log_info,updating $@...)
 	@# NB: openssl 3.6.1 was installed to $(PREFIX)/lib64 (NOT lib)
 	cd $(_src) \
-		&&  LDFLAGS="-L$$HOME/.local/lib64" \
-			CPPFLAGS="-I$$HOME/.local/include" \
-			PKG_CONFIG_PATH=$(PREFIX)/lib64/pkgconfig:$(PKG_CONFIG_PATH) \
+		&& LDFLAGS=-L$(PREFIX)/.local/lib64 \
+		   CPPFLAGS=-I$(PREFIX)/.local/include \
+		   PKG_CONFIG_PATH=$(PREFIX)/lib64/pkgconfig:$(PKG_CONFIG_PATH) \
 		./configure \
 			--prefix=$(PREFIX) \
 			--with-openssl=$(PREFIX) \

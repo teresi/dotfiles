@@ -28,16 +28,10 @@ _src := readline
 _bin := $(_src)/libreadline.a
 _install := $(PREFIX)/lib/libreadline.a
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-# MAGIC Chet Ramey's ID, see `gpg -d *sig`
-_gpg_id  := 7C0135FB088AAF6C66C650B9BB5869F064EA74AB
-
-_release_tar := readline-$(_release_ver).tar.gz
-_release_sig := $(_release_tar).sig
-
-_release_tar_url := https://ftp.gnu.org/gnu/readline/readline-$(_release_ver).tar.gz
-_release_sig_url := $(_release_tar_url).sig
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := 7C0135FB088AAF6C66C650B9BB5869F064EA74AB
 
 
 .PHONY: all
@@ -51,55 +45,45 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	if [ -f "$(_src)/Makefile.in" ]; then touch $(_src)/Makefile.in; fi
 
 
 .PHONY: uninstall
 uninstall:
-	$(MAKE) -ik -C $(_src) uninstall
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) uninstall; fi
 
 
 .PHONY: download
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
-
-
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
-
-
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
-
-
-$(_src):  $(_release_sig) $(_release_tar) $(_gpg_key)
-
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
 	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
-		|| gpg --import $(_gpg_key)
-
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid signature"; exit 1)
-
-	$(call log_info,extracting source directory $@...)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-
-	touch $(_src)
+		&& echo $(_gpg_id) > $@
 
 
-$(_bin): $(_src)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
+
+
+$(_src)/Makefile.in: | $(_src)
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
 	$(call log_info,compiling $@...)
 	@# SHLIB_LIBS="-lncursesw" forces it to link against ncurses
 	cd $(_src) \
-		&& LDFLAGS+="-L$$HOME/.local/lib" CFLAGS+="-I$$HOME/.local/include" \
+		&&  LDFLAGS=-L$(PREFIX)/.local/lib \
+			CFLAGS=-I$(PREFIX)/.local/include \
 			./configure \
-			--prefix=$(PREFIX) \
-			--with-curses \
-		&& make SHLIB_LIBS="-lncursesw" -j
+				--prefix=$(PREFIX) \
+				--with-curses \
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,compiling $@...)
+	make -C $(_src) SHLIB_LIBS="-lncursesw" -j
 
 
 $(_install): $(_bin)
