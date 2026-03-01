@@ -30,6 +30,7 @@ install: $(_install)
 clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then make -C $(_src) clean; fi
+	rm -f git-hash
 
 
 .PHONY: uninstall
@@ -51,14 +52,21 @@ git-hash: download
 
 
 $(_src)/Makefile.pre.in: git-hash
+	@# update input file mtime to force a rebuild
 	touch $@
 
 
 $(_src)/Makefile: $(_src)/Makefile.pre.in
 	$(call log_info,updating $@...)
+	@# NB: openssl 3.6.1 was installed to $(PREFIX)/lib64 (NOT lib)
 	cd $(_src) \
-		&& ./configure \
+		&&  LDFLAGS="-L$$HOME/.local/lib64" \
+			CPPFLAGS="-I$$HOME/.local/include" \
+			PKG_CONFIG_PATH=$(PREFIX)/lib64/pkgconfig:$(PKG_CONFIG_PATH) \
+		./configure \
 			--prefix=$(PREFIX) \
+			--with-openssl=$(PREFIX) \
+			--with-openssl-rpath=$(PREFIX)/lib64 \
 			--enable-optimizations \
 			--with-lto \
 			--with-ensurepip=upgrade
@@ -72,5 +80,5 @@ $(_bin): $(_src)/Makefile
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	@# using altinstall so previous versions are not overwritten
+	@# NB: use altinstall so previous versions are not overwritten
 	make -C $(_src) altinstall -j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
