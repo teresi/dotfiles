@@ -74,11 +74,12 @@ $(_src)/Makefile: $(_src)/Makefile.in
 	$(call log_info,compiling $@...)
 	@# SHLIB_LIBS="-lncursesw" forces it to link against ncurses
 	cd $(_src) \
-		&&  LDFLAGS=-L$(PREFIX)/.local/lib \
-			CFLAGS=-I$(PREFIX)/.local/include \
+		&&  LDFLAGS=-L$(PREFIX)/lib \
+		    CFLAGS=-I$(PREFIX)/include \
+		    PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig:"$$PKG_CONFIG_PATH" \
 			./configure \
 				--prefix=$(PREFIX) \
-				--with-curses \
+				--with-curses
 
 
 $(_bin): $(_src)/Makefile
