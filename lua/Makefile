@@ -4,6 +4,16 @@
 
 # Lua is a lightweight scripting language
 
+# NOTE: nvim needs lua 5.1, BUT luajit is preferred
+
+
+# TODO: need ncurses, termcap, readline to compile
+# minor success, need termcap and regular ncurses, and a way to getthe flgs into lua
+#root@b2ac6b4b605e:~/dotfiles/lua/lua/src# make all MYCFLAGS="-DLUA_USE_LINUX -I/root/.local/include"   MYLIBS="-Wl,-E -ldl -L/root/.local/lib -lreadline -lhistory -lncurses -ltermcap"
+#gcc -o lua  lua.o liblua.a -lm -Wl,-E -ldl -L/root/.local/lib -lreadline -lhistory -lncurses -ltermcap
+#/usr/bin/ld: cannot find -lncurses: No such file or directory
+#/usr/bin/ld: cannot find -ltermcap: No such file or directory
+
 
 include ../helpers.mk
 SHELL := /bin/bash
