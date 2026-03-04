@@ -79,15 +79,16 @@
     [x] libevent
     [x] libzstd
     [x] fzf
-    [ ] fio
-    [ ] libaio
-    [ ] fonts
+    [x] fio
+    [x] libaio
     [x] gawk
-    [ ] htop
-    [ ] lua
+    [x] htop
     [x] pkgconf
+    [ ] luajit
+    [ ] luarocks
     [ ]
 
+[ ] libedit can't find ncurses
 [ ] enable more options in htop
 [ ] double check git compilation and update the pre-requisites
 

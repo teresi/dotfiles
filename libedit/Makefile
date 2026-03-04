@@ -52,6 +52,9 @@ $(_src)/Makefile.in: git-hash
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
+	@# TODO: needs ncurses (not ncursesw)
+	@# compile both or use symlinks?
+	@# https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
 	cd $(_src) && ./configure --prefix=$(PREFIX)
 
 

@@ -833,14 +833,18 @@ tree:                 ## compile tree
 
 
 # TODO: libedit can't find ncurses
+# compile both ncursesw or use symlinks?
+# SEE https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
 .PHONY: libedit
 libedit: automake     ## compile libedit
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 
 
+# TODO: clang requires python3.6+
+# TODO: clang uses ncurses for some functionality, but doesn't require it
 .PHONY: clang
-clang: libedit cmake ninja  ## compile clang via LLVM
+clang: cmake ninja  ## compile clang via LLVM
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
