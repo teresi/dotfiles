@@ -601,11 +601,11 @@ nvimrc:              ## neovim config and plugins
 	$(call log_info,updating lazy...)
 	nvim --headless "+Lazy! sync" +qa
 
-	$(call log_info,updating parsers...)
-	nvim --headless -c ':TSUpdate' -c 'qa'
-
 	$(call log_info,updating mason...)
 	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
+
+	$(call log_info,updating parsers...)
+	nvim --headless +TSUpdate +qa
 
 
 .PHONY: fonts
