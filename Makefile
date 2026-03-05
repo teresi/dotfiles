@@ -209,8 +209,14 @@ libevent: cmake       ## callback library
 	$(MAKE) -ik -C $@ all install
 
 
+.PHONY: libncursesw
+libncursesw: pkgconf   ## ncurses6 with wide character support
+	$(call log_info,updating $@...)
+	$(MAKE) -ik -C $@ all install
+
+
 .PHONY: libncurses
-libncurses: pkgconf   ## tui library
+libncurses: pkgconf   ## ncurses5 *without* wide character support
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 
@@ -596,11 +602,7 @@ nvimrc:              ## neovim config and plugins
 	nvim --headless "+Lazy! sync" +qa
 
 	$(call log_info,updating parsers...)
-	@# workaround for autoinstalling languages from nvim-treesitter
-	@# this was fixed, but run manually here just in case
 	nvim --headless -c ':TSUpdate' -c 'qa'
-	nvim --headless -c ':TSInstall lua' -c 'qa'
-	nvim --headless -c ':TSInstall rust' -c 'qa'
 
 	$(call log_info,updating mason...)
 	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
@@ -627,7 +629,7 @@ pip:                    ## install pip
 
 
 .PHONY: cpython
-cpython:  pkgconf zstd openssl libncurses      ## compile cpython
+cpython:  pkgconf zstd openssl libncursesw      ## compile cpython
 	$(call log_info,compiling $@...)
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
@@ -799,7 +801,7 @@ makeinfo: autoconf libtool  ## compile texinfo (texindex, makeinfo, etc.)
 
 
 .PHONY: htop
-htop: autoconf automake gettext libtool libncurses  ## compile htop
+htop: autoconf automake gettext libtool libncursesw  ## compile htop
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -832,11 +834,8 @@ tree:                 ## compile tree
 	$(call make_all_install_if_not_on_host,$@)
 
 
-# TODO: libedit can't find ncurses
-# compile both ncursesw or use symlinks?
-# SEE https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
 .PHONY: libedit
-libedit: automake     ## compile libedit
+libedit: automake libncurses    ## compile libedit
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -844,7 +843,7 @@ libedit: automake     ## compile libedit
 # TODO: clang requires python3.6+
 # TODO: clang uses ncurses for some functionality, but doesn't require it
 .PHONY: clang
-clang: cmake ninja  ## compile clang via LLVM
+clang: libedit cmake ninja  ## compile clang via LLVM
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -875,7 +874,7 @@ zig: clang ## install curl
 
 
 .PHONY: libreadline
-libreadline: m4 libncurses  ## libreadline
+libreadline: m4 libncursesw  ## libreadline
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -895,7 +894,7 @@ pbzip2: bzip2       ## parallel bzip
 
 
 .PHONY: cmatrix
-cmatrix: autoconf libncurses  ## displays the matrix
+cmatrix: autoconf libncursesw  ## displays the matrix
 	$(call log_info,installing $@...)
 	$(MAKE) -k -C $@ all install
 

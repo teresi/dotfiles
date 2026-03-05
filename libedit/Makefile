@@ -52,10 +52,13 @@ $(_src)/Makefile.in: git-hash
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
-	@# TODO: needs ncurses (not ncursesw)
-	@# compile both or use symlinks?
-	@# https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
-	cd $(_src) && ./configure --prefix=$(PREFIX)
+	@# SEE: https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
+	@# need both include and include/ncurses to find all the headers, see configure.log
+	cd $(_src) && \
+		LDFLAGS=-L$(PREFIX)/lib \
+		CFLAGS="-I$(PREFIX)/include -I$(PREFIX)/include/ncurses" \
+		PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig:"$$PKG_CONFIG_PATH" \
+		./configure --prefix=$(PREFIX)
 
 
 $(_bin): $(_src)/Makefile

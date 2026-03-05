@@ -1,15 +1,7 @@
 #!/usr/bin/env make -S -f
 
 
-# ncurses
-#
-# this is ncurses without wide character support (abi version 5)
-#
-# NOTE: this is a copy of libncursesw, but with changes to the configure step
-# this was done as a copy as ncursesw and ncurses can both be installed
-# and compiling both in one step would require a distclean prior to the new configure
-# though an alternative may be to create a symlink, with the link of ncurses pointing to ncursesw
-
+# ncursesw
 
 # draws to terminal
 # requires pkgconf
@@ -21,14 +13,13 @@ PREFIX ?= $(HOME)/.local/
 
 
 _src := ncurses
-_bin := $(_src)/lib/libncurses.so
-_install := $(PREFIX)/lib/libncurses.so
+_bin := $(_src)/lib/libncursesw.so
+_install := $(PREFIX)/lib/libncursesw.so
 
 _tarball     := $(_src).tar.gz
 _tarball_sig := $(_src).tar.gz.sig
 _tarball_id  := $(_src).tar.gz.id
 _gpg_id      := 19882D92DDA4C400C22C0D56CC2AF4472167BE03
-
 
 .PHONY: all
 all: $(_bin)
@@ -75,7 +66,6 @@ $(_src)/Makefile: $(_src)/Makefile.in
 		--without-debug \
 		--enable-pc-files \
 		--with-versioned-syms \
-		--disable-widec \
 		--with-pkg-config-libdir=${PREFIX}/lib/pkgconfig
 
 
