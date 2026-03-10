@@ -2,7 +2,7 @@
 
 # libunistring
 
-# libunistring.so		# lib
+# libunistring.so
 
 # unicode strings in C
 #
@@ -18,13 +18,10 @@ _src := libunistring
 _lib := $(_src)/lib/.libs/libunistring.so
 _install := $(PREFIX)/lib/libunistring.so
 
-_gpg_key := gnu-keyring.gpg
-_gpg_url := https://ftp.gnu.org/gnu/gnu-keyring.gpg
-_release_ver := 1.3
-_release_tar := libunistring-$(_release_ver).tar.gz
-_release_sig := libunistring-$(_release_ver).tar.gz.sig
-_release_tar_url := https://ftp.gnu.org/gnu/libunistring/libunistring-$(_release_ver).tar.gz
-_release_sig_url := https://ftp.gnu.org/gnu/libunistring/libunistring-$(_release_ver).tar.gz.sig
+_tarball     := $(_src).tar.gz
+_tarball_sig := $(_src).tar.gz.sig
+_tarball_id  := $(_src).tar.gz.id
+_gpg_id      := 9001B85AF9E1B83DF1BDA942F5BE8B267C6A406D
 
 
 .PHONY: all
@@ -38,7 +35,10 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	$(MAKE) -ik -C $(_src) clean
+	@# not removing the tarball etc here so it builds without having to download
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	@# remove the makefile so configure runs
+	rm -f $(_src)/Makefile
 
 
 .PHONY: uninstall
@@ -50,33 +50,25 @@ uninstall:
 download: $(_src)
 
 
-$(_gpg_key):
-	curl -C - -o $(_gpg_key) $(_gpg_url)
-
-
-$(_release_sig):
-	curl -C - -o $(_release_sig) $(_release_sig_url)
-
-
-$(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
-
-
-$(_src): $(_release_sig) $(_release_tar) $(_gpg_key)
-	$(call log_info,unpacking $@...)
+$(_tarball_id):
+	@# empty target signifying that the key has been pulled
 	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys $(_gpg_id) \
-		|| gpg --import $(_gpg_key)
-	gpg --verify --keyring $(_root_dir)/$(_gpg_key) $(_root_dir)/$(_release_sig) \
-		|| (echo "invalid libidn2 sig"; exit 1)
-	gpg --verify $(_root_dir)/$(_release_sig) $(_root_dir)/$(_release_tar) \
-		|| (echo "invalid libidn2 tar"; exit 1) \
-		&& (mkdir -p $(_src) && tar -xzvf $(_release_tar) -C $(_src)/ --strip-components=1)
-	touch $(_src)
+		&& echo $(_gpg_id) > $@
 
 
-$(_lib): $(_src)
+$(_src): $(_tarball) $(_tarball_sig) $(_tarball_id)
+
+
+$(_src)/Makefile.in: | $(_src)
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
 	$(call log_info,compiling $@...)
 	cd $(_src) && ./configure --prefix=$(PREFIX)
+
+
+$(_lib): $(_src)/Makefile
+	$(call log_info,compiling $@...)
 	make -C $(_src) -j
 	make -C $(_src) -j check
 

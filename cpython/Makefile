@@ -29,8 +29,8 @@ install: $(_install)
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then make -C $(_src) clean; fi
-	rm -f git-hash
+	rm -rf git-hash
+	if [ -f "$(_src)/Makefile" ]; then make -C $(_src) clean; fi
 
 
 .PHONY: uninstall
@@ -51,12 +51,12 @@ git-hash: download
 	$(call check_commit, $(_src))
 
 
-$(_src)/Makefile.pre.in: git-hash
+$(_src)/Makefile.pre: git-hash
 	@# update input file mtime to force a rebuild
 	touch $@
 
 
-$(_src)/Makefile: $(_src)/Makefile.pre.in
+$(_src)/Makefile: $(_src)/Makefile.pre
 	$(call log_info,updating $@...)
 	@# NB: openssl 3.6.1 was installed to $(PREFIX)/lib64 (NOT lib)
 	cd $(_src) \
@@ -68,7 +68,7 @@ $(_src)/Makefile: $(_src)/Makefile.pre.in
 			--with-openssl=$(PREFIX) \
 			--with-openssl-rpath=$(PREFIX)/lib64 \
 			--enable-optimizations \
-			--with-lto \
+			--without-lto \
 			--with-ensurepip=upgrade
 
 

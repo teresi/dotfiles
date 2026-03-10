@@ -15,7 +15,8 @@ SHELL ?= /bin/bash
 
 
 _url := https://github.com/pkgconf/pkgconf.git
-_branch := master
+# 2.5.1 was release Jun 2025
+_branch := pkgconf-2.5.1
 _src := pkgconf
 _bin := $(_src)/pkgconf
 _install := $(PREFIX)/bin/pkgconf

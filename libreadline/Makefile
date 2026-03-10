@@ -14,6 +14,8 @@
 # requires M4 (1.4.16 +)
 # requires Perl (5.006 +)
 
+# FUTURE: move to git repo?
+# https://git.savannah.gnu.org/git/readline.git/
 
 include ../helpers.mk
 SHELL := /bin/bash
