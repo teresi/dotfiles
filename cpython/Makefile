@@ -68,17 +68,18 @@ $(_src)/Makefile: $(_src)/Makefile.pre
 			--with-openssl=$(PREFIX) \
 			--with-openssl-rpath=$(PREFIX)/lib64 \
 			--enable-optimizations \
-			--without-lto \
+			--with-lto \
 			--with-ensurepip=upgrade
 
 
 $(_bin): $(_src)/Makefile
 	$(call log_info,updating $@...)
 	$(call check_pkgs, $(_dep))
-	make -C $(_src) all -j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+	@# NB: --with-lto resulted in compilation segfaults (?) if using all cores on some machines
+	make -C $(_src) all -j $(shell echo $$(( `nproc` <= 3 ? 1 : `nproc` -3 )))
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
 	@# NB: use altinstall so previous versions are not overwritten
-	make -C $(_src) altinstall -j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+	make -C $(_src) altinstall -j $(shell echo $$(( `nproc` <= 3 ? 1 : `nproc` -3 )))
