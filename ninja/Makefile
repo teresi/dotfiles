@@ -1,16 +1,22 @@
 #!/usr/bin/env make -S -f
 
 # compile ninja
-
+#
 # ninja is yet another build system
 # ninja is similar to CMAKE
+
+# BINARIES PROVIDED
+# ninja
+
+# REQUIRES
+# cmake
 
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
 _url := https://github.com/ninja-build/ninja.git
-_branch := master
+_branch := release
 _src := ninja
 _build := build
 _bin := $(_src)/$(_build)/ninja
@@ -21,14 +27,17 @@ _install := $(PREFIX)/bin/ninja
 all: $(_bin)
 
 
-.PHONY: install
-install: $(_install)
-
-
 .PHONY: clean
 clean:
 	$(call log_info,clean $(_src))
-	if [ -d "$(_src)" ]; then cmake --build $(_src)/$(_build) --target clean; fi
+	@# the only way to be sure a cmake project is clean is by deleting the build folder
+	rm -rf $(_src)/$(_build)
+	@# always force a rebuild
+	rm -f $(_bin)
+
+
+.PHONY: install
+install: $(_install)
 
 
 .PHONY: uninstall
@@ -36,22 +45,23 @@ uninstall:
 	xargs rm -f < $(_src)/$(_build)/install_manifest.txt
 
 
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+.PHONY: download
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_src)/.git: repo
+$(_build):
+	mkdir -p $(_build)
 
 
-$(_bin): $(_src)/.git
+$(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
-	$(call check_pkgs, cmake)
 	@# if `ninja` is up to date but older, the other targets will build
 	@# but the timestamp of `ninja` won't update
 	@# so update the timestamp manually

@@ -44,6 +44,12 @@ _install := $(PREFIX)/bin/EXAMPLE
 all: $(_bin)
 
 
+.PHONY: clean
+clean:
+	$(call log_info,clean $(_src))
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+
+
 .PHONY: install
 install: $(_install)
 
@@ -51,12 +57,6 @@ install: $(_install)
 .PHONY: uninstall
 uninstall:
 	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) PREFIX=$(PREFIX) uninstall; fi
-
-
-.PHONY: clean
-clean:
-	$(call log_info,clean $(_src))
-	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
 .PHONY: download
