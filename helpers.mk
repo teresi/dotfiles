@@ -68,7 +68,7 @@ endef
 # used to determine whether the commit of a repo has changed
 #
 define check_commit
-	@if [ "$(shell git -C $(1) rev-parse HEAD)" != "$(shell cat git-hash)" ]; then \
+	@if [ "$(shell git -C $(1) rev-parse HEAD)" != "$(shell cat git-hash 2>/dev/null)" ]; then \
 		git -C $(1) rev-parse HEAD > git-hash; \
 	fi
 endef

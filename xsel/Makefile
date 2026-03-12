@@ -13,10 +13,10 @@ PREFIX ?= $(HOME)/.local/
 include ../helpers.mk
 
 _src := xsel
+_branch := master
 _bin := $(_src)/src/xsel
 _install := $(PREFIX)/bin/xsel
 _url := https://github.com/kfish/xsel.git
-_branch := master
 
 
 # https://tgebarowski.github.io/2008/08/31/problem-with-pkg_check_modules-under-mac-os-x/
@@ -38,6 +38,12 @@ all: $(_bin)
 install: $(_install)
 
 
+.PHONY: uninstall
+uninstall:
+	$(call log_info,uninstall $(_src))
+	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) uninstall; fi
+
+
 .PHONY: check
 check:
 	@# TODO xsel requires x11 libraries
@@ -52,32 +58,32 @@ clean:
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
-.PHONY: uninstall
-uninstall:
-	$(call log_info,uninstall $(_src))
-	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) uninstall; fi
-
-
 .PHONY: download
-download: repo
-
-
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-$(_src)/.git: | repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/.git
+$(_src)/Makefile.in: git-hash
+	cd $(_src) \
+		&& ./autogen.sh
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
 	$(call log_info,updating $@...)
-	export PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
-		&& cd $(_src) \
-		&& sh autogen.sh \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j
+	PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
+	cd $(_src) \
+		&& ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	make -C $(_src) -j all
 
 
 $(_install): $(_bin)
