@@ -8,7 +8,7 @@ PREFIX ?= $(HOME)/.local
 
 _url := https://github.com/Kitware/CMake.git
 _src := cmake
-_branch := release
+_branch := v4.2.3
 _build := $(_src)/build
 _bin := $(_build)/bin/cmake
 _install := $(PREFIX)/bin/cmake
