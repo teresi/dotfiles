@@ -779,7 +779,7 @@ container:               ## run docker image for testing interactively
 .PHONY: cmake
 cmake: pkg-config openssl  ## compile CMake
 	$(call log_info,installing $@...)
-	$(call make_all_install_if_not_on_host,$@)
+	$(MAKE) -ik -C $@ all install
 
 
 .PHONY: ninja
