@@ -13,11 +13,15 @@ _warn() {
 ################################################################################
 # PATH  ########################################################################
 
-# MAGIC $HOME/.local/bin is a standard location for binaries
+# MAGIC: $HOME/.local/bin is a standard location for binaries
 # NB prepend the location so we prefer our builds
-
 if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME"/.local/bin:$PATH
+fi
+
+# MAGIC: go installs to ~/go/bin by default
+if [ -w "$HOME/go/bin" ] && [[ ":$PATH:" != *":$HOME/go/bin:"* ]]; then
+    export PATH+=:"$HOME"/go/bin
 fi
 
 # TODO: may need to compile SSH if installing openssl here,

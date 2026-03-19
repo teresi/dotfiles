@@ -411,6 +411,12 @@ conda:                ## miniconda python distribution & package manager
 	@$(ROOT_DIR)/install_miniconda.sh
 
 
+# TODO: lf requires go
+.PHONY: lf
+lf:                       ## file explorer in go
+	env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
+
+
 .PHONY: ranger
 ranger: pipx              ## ranger configuration
 	$(call log_info,updating $@...)

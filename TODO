@@ -88,6 +88,10 @@
     [ ] luarocks
     [ ]
 
+[ ] add `lf` file explorer (using go) (and add ~/go/bin to PATH)
+[ ] add go
+[ ] add image preview to lf (maybe this one https://github.com/thimc/lfimg)
+
 [ ] libedit can't find ncurses
 [ ] enable more options in htop
 [ ] double check git compilation and update the pre-requisites
