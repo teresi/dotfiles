@@ -19,7 +19,7 @@ if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME"/.local/bin:$PATH
 fi
 
-# MAGIC: go installs to ~/go/bin by default
+# MAGIC: go installs binaries to ~/go/bin by default (e.g. the `lf` file explorer)
 if [ -w "$HOME/go/bin" ] && [[ ":$PATH:" != *":$HOME/go/bin:"* ]]; then
     export PATH+=:"$HOME"/go/bin
 fi

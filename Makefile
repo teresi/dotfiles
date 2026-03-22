@@ -132,7 +132,7 @@ all:                  ## install programs and configs
 	$(MAKE) -ik alacritty
 	$(MAKE) -ik gnome
 	$(MAKE) -ik cinnamon
-	$(MAKE) -ik ranger
+	$(MAKE) -ik lf
 	$(MAKE) -ik rxvt.conf
 	$(MAKE) -ik docker  # checks group membership, needs sudo
 	$(MAKE) -ik tig
@@ -411,14 +411,18 @@ conda:                ## miniconda python distribution & package manager
 	@$(ROOT_DIR)/install_miniconda.sh
 
 
-# TODO: lf requires go
+.PHONY: go
+go:                   ## go language
+	$(MAKE) -ik -C $@ all install
+
+
 .PHONY: lf
-lf:                       ## file explorer in go
+lf: go                ## terminal file explorer in go
 	env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
 
 
 .PHONY: ranger
-ranger: pipx              ## ranger configuration
+ranger: pipx          ## ranger configuration
 	$(call log_info,updating $@...)
 	pipx install ranger-fm
 	@# NOTE installing ranger via pipx b/c the Makefile for ranger doesn't allow specifying PREFIX
