@@ -12,10 +12,8 @@ SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 include ../helpers.mk
 
-_root_dir := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-
 _url := https://github.com/astrand/xclip.git
-_branch := master
+_branch := 0.13
 _src := xclip
 _bin := $(_src)/xclip
 _install := $(PREFIX)/bin/xclip
@@ -29,11 +27,10 @@ all: $(_bin)
 install: $(_install)
 
 
-.PHONY: check
-check:
-	@# libx11-dev, libxt-dev, libxmu-dev...
-	@# NOTE other dependencis may be required
-	ldconfig -p | grep -q libXmu || (echo libxmu-dev is required, not found; exit 1;)
+.PHONY: uninstall
+uninstall:
+	rm -rf $(PREFIX)/bin/xclip*
+	rm -rf $(PREFIX)/share/man/man1/xclip*
 
 
 .PHONY: clean
@@ -42,32 +39,34 @@ clean:
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 
 
-.PHONY: uninstall
-uninstall:
-	rm -rf $(PREFIX)/bin/xclip*
-	rm -rf $(PREFIX)/share/man/man1/xclip*
-
-
-.PHONY: repo
-repo:
-	$(call log_info,updating $@...)
+.PHONY: download
+download:
+	@# creates or updates repo at $(_src)
 	$(call git_clone_fetch_reset,$(_url),$(_src),$(_branch))
 
 
-.PHONY: download
-download: repo
+git-hash: download
+	@# git-hash is updated when the local repo commit is changed
+	$(call check_commit, $(_src))
 
 
-$(_src)/.git: | repo
-
-
-$(_bin): $(_src)/.git
-	export PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
-		&& cd $(_src) \
+$(_src)/Makefile.in: git-hash
+	PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
+		cd $(_src) \
 		&& autoreconf -fiv \
-		&& autoupdate \
-		&& ./configure --prefix=$(PREFIX) \
-		&& make -j
+		&& autoupdate
+
+
+$(_src)/Makefile: $(_src)/Makefile.in
+	PKG_CONFIG_PATH+=:${PREFIX}/lib/pkgconfig \
+		cd $(_src) \
+		&& ./configure --prefix=$(PREFIX)
+
+
+$(_bin): $(_src)/Makefile
+	$(call log_info,updating $@...)
+	ldconfig -p | grep -q libXmu || (echo libxmu-dev is required, not found; exit 1;)
+	make -C $(_src) -j all
 
 
 $(_install): $(_bin)

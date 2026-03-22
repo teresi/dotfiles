@@ -86,12 +86,16 @@
     [x] htop
     [x] pkgconf
     [x] luajit
+    [x] xclip
     [ ] luarocks
-    [ ]
+    [ ] tig
+    [ ] pv
 
 [x] add `lf` file explorer (using go) (and add ~/go/bin to PATH)
 [x] add go
+[ ] add ueberzug
 [ ] add image preview to lf (maybe this one https://github.com/thimc/lfimg)
+
 [ ] add go LSP
 [ ] add go formatter (?)
 
