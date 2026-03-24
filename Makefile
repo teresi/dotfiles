@@ -544,7 +544,6 @@ git_config:           ## sensible git (install LFS, add credential helper)
 	@# just need to call once after installing `git-lfs` from apt
 	git lfs install || echo -e "\e[91mERROR\t git lfs init failed, git LFS is not installed! \e[39m"
 	git config --global credential.helper store  # we use oath tokens, so it needs to persist
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/tigrc $(HOME)/.tigrc
 
 
 .PHONY: host_alias
@@ -817,10 +816,10 @@ htop: autoconf automake gettext libtool libncursesw  ## compile htop
 
 
 .PHONY: tig
-tig:                  ## compile tig
+tig: libreadline            ## compile tig
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
-
+	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/tigrc $(HOME)/.tigrc
 
 .PHONY: xsel
 xsel: pkgconf autoconf automake libtool m4  ## compile xsel
