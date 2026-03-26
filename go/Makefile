@@ -4,9 +4,10 @@ include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local/
 
-_src := go
+# MAGIC: unpackng go to $HOME appears to be the standard
+_src := $(HOME)/.local/go
+_src_dir := $(dir $(_src))
 _bin := $(_src)/bin/go
-_install := $(PREFIX)/bin/go
 
 _release_tar := go1.26.1.linux-amd64.tar.gz
 _release = $(basename $(basename $(_release_tar)))
@@ -18,13 +19,20 @@ _release_sig := 031f088e5d955bab8657ede27ad4e3bc5b7c1ba281f05f245bcc304f327c987a
 all: $(_release_tar)
 
 
+.PHONY: clean
+clean:
+	rm -r $(_release_tar)
+
 .PHONY: install
-install: $(_install)
+install: $(_bin)
+	@# MAGIC: since we unpack the tarball directly, bin==install
 
 
 .PHONY: uninstall
 uninstall:
-	rm -rf $(_install)
+	rm -rf $(_src)
+	@# MAGIC: $HOME/go is the default install path for binaries installed via `go install`
+	rm -rf $(HOME)/go
 
 
 .PHONY: download
@@ -38,20 +46,10 @@ $(_release_tar):
 		|| (echo "checksum failed: $(_release_tar)"; rm $(_release_tar); exit 1)
 
 
-$(_src):  $(_release_tar)
+$(_bin):  $(_release_tar)
+	$(call log_info,installing $@...)
 	@# the go tarball unpacks to `go` by default
 	echo "$(_release_sig) $(_release_tar)" | sha256sum --check --status \
 		|| (echo "checksum failed: $(_release_tar)"; exit 1) \
 		&& rm -rf $(_src) \
-		&& tar -xzf $(_release_tar)
-
-
-$(_bin): $(_src)
-	$(call log_info,unpacking $@...)
-
-
-$(_install): $(_release_tar)
-	$(call log_info,installing $@...)
-	rm -f $(_install)
-	ln -s $(realpath $(_bin)) $(_install)
-	touch $(_install)
+		&& tar -xzf $(_release_tar) -C $(_src_dir)

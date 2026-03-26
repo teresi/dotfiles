@@ -19,11 +19,6 @@ if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME"/.local/bin:$PATH
 fi
 
-# MAGIC: go installs binaries to ~/go/bin by default (e.g. the `lf` file explorer)
-if [ -w "$HOME/go/bin" ] && [[ ":$PATH:" != *":$HOME/go/bin:"* ]]; then
-    export PATH+=:"$HOME"/go/bin
-fi
-
 # TODO: may need to compile SSH if installing openssl here,
 # as git will fail if it wasn't build with this new openssl
 #if [ -d "$HOME/.local/lib64" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib64:"* ]]; then
@@ -45,6 +40,22 @@ fi
 # this will prevent pkg-config from finding normal packages, so add the normal path
 if [[ -x /usr/bin/pkg-config ]] && [[ -x "$HOME/.local/bin/pkg-config" ]] && [[ -z "$PKG_CONFIG_PATH" ]]; then
     export PKG_CONFIG_PATH=$(/usr/bin/pkg-config --variable pc_path pkg-config)
+fi
+
+################################################################################
+# GO    ########################################################################
+
+# MAGIC: by our convention go is unpacked to $HOME/.local/go
+export GOROOT=$HOME/.local/go
+# MAGIC: GOROOT is not actually the path were binaries are so append /bin
+if [ -w "$GOROOT/bin" ] && [[ ":$PATH:" != *":$GOROOT/bin:"* ]]; then
+    export PATH+=:$GOROOT/bin
+fi
+# MAGIC: go installs binaries to ~/go/bin by default (e.g. the `lf` file explorer)
+export GOPATH=$HOME/go
+# MAGIC: GPATH is not actually the path where the binaries are so append /bin
+if [ -w "$GOPATH/bin" ] && [[ ":$PATH:" != *":$GOPATH/bin:"* ]]; then
+    export PATH+=:$GOPATH/bin
 fi
 
 ################################################################################
