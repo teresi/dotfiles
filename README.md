@@ -53,7 +53,7 @@ make bashrc                     # for future sessions
 
 Display your branch and hash in your PS1:
 ```
-user@host:~/dotfiles$ make HOST_ALIAS=COMPY host_alias bashrc && source ~/.bashrc
+user@host:~/dotfiles$ make HOST_ALIAS=COMPY host_alias ps1 && source ~/.bashrc
 [20:32 COMPY][master]->(5d0d):~/dotfiles
 [ins]▸$
 ```

@@ -56,7 +56,8 @@ CPYTHON ?= 3.14
 BIN_DIR := $(PREFIX)/bin
 BASHRC := $(HOME)/.bashrc
 BASHPROFILE := $(HOME)/.bash_profile
-HOST_ALIAS_RC := $(HOME)/.config/host_alias
+HOST_ALIAS_NAME := $(HOME)/.config/host_alias
+PS1_RC := $(HOME)/.config/ps1.bash
 INPUTRC := $(HOME)/.inputrc
 TMUX_CONF := $(HOME)/.tmux.conf
 VIMRC := $(HOME)/.vimrc
@@ -340,6 +341,7 @@ tpm:                  ## tmux plugin manager
 bash:                 ## bash: bashrc, inputrc, bashrprofile, functions, aliases
 	$(MAKE) -ik inputrc
 	$(MAKE) -ik bashrc
+	$(MAKE) -ik ps1
 	$(MAKE) -ik bashprofile
 	$(MAKE) -ik functions
 	$(MAKE) -ik aliases
@@ -549,8 +551,18 @@ git_config:           ## sensible git (install LFS, add credential helper)
 .PHONY: host_alias
 host_alias:           ## set the nickname for this machine
 	$(call log_info,updating $@...)
-	@mkdir -p `dirname $(HOST_ALIAS_RC)`
-	@echo $(HOST_ALIAS) > $(HOST_ALIAS_RC)
+	@mkdir -p `dirname $(HOST_ALIAS_FILE)`
+	@echo $(HOST_ALIAS) > $(HOST_ALIAS_FILE)
+
+
+PHONY: ps1
+ps1: $(PS1_RC)  # update your PS1
+	$(call source_file,$(BASHRC),CUSTOM_PS1,$(PS1_RC))
+	$(call comment_line,$(BASHRC),CUSTOM_PS1,$(INSTALL_RC))
+
+
+$(PS1_RC): ps1.bash
+	cp $< $@
 
 
 .PHONY: zathura
