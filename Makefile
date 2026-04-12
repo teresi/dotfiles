@@ -551,8 +551,8 @@ git_config:           ## sensible git (install LFS, add credential helper)
 .PHONY: host_alias
 host_alias:           ## set the nickname for this machine
 	$(call log_info,updating $@...)
-	@mkdir -p `dirname $(HOST_ALIAS_FILE)`
-	@echo $(HOST_ALIAS) > $(HOST_ALIAS_FILE)
+	@mkdir -p `dirname $(HOST_ALIAS_NAME)`
+	@echo $(HOST_ALIAS) > $(HOST_ALIAS_NAME)
 
 
 PHONY: ps1
