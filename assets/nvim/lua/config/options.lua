@@ -78,14 +78,6 @@ vim.g.loaded_netrwPlugin = 1 -- disable netrw at start of init.lua
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-	vim.o.clipboard = "unnamedplus"
-end)
-
 -- Configure how new splits should be opened
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -115,3 +107,26 @@ augroup end
 
 -- [[ spell check ]]
 vim.opt.spelllang = "en_US"
+
+-- [[ copy/paste ]]
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  Remove this option if you want your OS clipboard to remain independent.
+--  See `:help 'clipboard'`
+vim.schedule(function()
+	vim.o.clipboard = "unnamedplus"
+end)
+
+-- setup clipboard over ssh using the OSC-52 escapoe
+-- for primary (*) and clipboard (+) register
+vim.g.clipboard = {
+	name = "OSC 52",
+	copy = {
+		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+	},
+	paste = {
+		["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+		["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+	},
+}
