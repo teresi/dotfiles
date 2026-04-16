@@ -56,7 +56,9 @@ update_repo_to_master() {
     notify "    fetching..."
     # fetch, checkout, reset if necessary
     # fetch the tags in case new tags have been added (or moved)
-    git -C $_dest fetch --tags --force
+    # remove broken tags if this fails and try again
+    git -C $_dest fetch --tags --force ||
+        (git -C $_dest config --unset-all remote.origin.fetch && git -C $_dest fetch --tags --force)
     # set the origin for the branch in case a shallow clone was used
     # fetch the branch specifically in case a shallow clone was used
     git -C $_dest fetch origin $_branch

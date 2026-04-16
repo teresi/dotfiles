@@ -34,6 +34,9 @@ clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) distclean; fi
+	@# MAGIC: ninja uses cmake and uses src/build for the build
+	@# the only way to truly clean a cmake project is to delete the build folder
+	if [ -d "$(_src)/build" ]; then rm -rf $(_src)/build; fi
 
 
 .PHONY: uninstall
