@@ -55,10 +55,11 @@ update_repo_to_master() {
 
     notify "    fetching..."
     # fetch, checkout, reset if necessary
+    # fetch the tags in case new tags have been added (or moved)
+    git -C $_dest fetch --tags --force
     # set the origin for the branch in case a shallow clone was used
     # fetch the branch specifically in case a shallow clone was used
-    # fetch the tags in case new tags have been added
-    git -C $_dest fetch --tags origin $_branch
+    git -C $_dest fetch origin $_branch
 
     notify "    checking if branch $_branch is up to date..."
     _local=$(git -C $_dest rev-list -n 1 HEAD)
