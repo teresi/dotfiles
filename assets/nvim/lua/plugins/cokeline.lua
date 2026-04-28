@@ -15,6 +15,9 @@ return {
 	config = function()
 		require("cokeline").setup({
 			show_if_buffers_are_at_least = 1,
+			buffers = {
+				new_buffers_position = "number", -- 'number' is sorted by bufnr, 'last' adds new to the end
+			},
 
 			-- The default highlight group values.
 			-- The `fg`, `bg`, and `sp` keys are either colors in hexadecimal format or
