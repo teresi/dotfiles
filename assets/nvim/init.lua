@@ -60,7 +60,7 @@ require("lazy").setup({
 	require("plugins.colorizer"),
 	require("plugins.conform"),
 	require("plugins.debug"),
-	require("plugins.doge"),
+	--require("plugins.doge"),
 	require("plugins.gitsigns"),
 	require("plugins.guess_indent"),
 	--require("plugins.heraldish"),
