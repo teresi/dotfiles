@@ -15,7 +15,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- TODO: add codelldb / dap for rustaceanvim
 -- TODO: add additional treesitter plugins (see bottom of treesitter.lua)
 -- TODO: clean up this file
 
@@ -76,6 +75,8 @@ require("lazy").setup({
 	require("plugins.moonfly"),
 	require("plugins.neogen"),
 	require("plugins.neo-tree"),
+	require("plugins.nvim_dap_projects"),
+	require("plugins.nvim_dap_ui"),
 	--require("plugins.oxocarbon"),
 	--require("plugins.rosepine"),
 	require("plugins.rustacean"),

@@ -668,6 +668,8 @@ rust:                        ## install rust compiler
 	which rustc || . $(CARGO_HOME)/env && rustup update
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain stable
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain nightly
+	@# install taplo formatter for yamls, not necessary for the analyzer but we use the formatter often
+	which rustc || . $(CARGO_HOME)/env && cargo install taplo-cli
 
 
 .PHONY: rust-analyzer
