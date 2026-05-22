@@ -945,3 +945,9 @@ openssl: make zstd  ## openssl, libssl
 	$(call log_info,installing $@...)
 	@# compile even if on host b/c we also need libssl
 	$(MAKE) -k -C $@ all install
+
+
+.PHONY: image_magick
+image_magick:
+	$(call log_info,installing $@...)
+	$(call make_all_install_if_not_on_host,$@)
