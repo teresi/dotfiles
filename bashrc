@@ -31,9 +31,10 @@ fi
 if [ -w "$HOME/.local/include" ] && [[ ":$CFLAGS:" != *" -I$HOME/.local/include:"* ]]; then
     export CFLAGS+=" -I$HOME/.local/include"
 fi
-if [ -w "$HOME/.local/include" ] && [[ ":$CPATH:" != *":$HOME/.local/include:"* ]]; then
-    export CPATH+=:"$HOME/.local/include"
-fi
+
+#if [ -w "$HOME/.local/include" ] && [[ ":$CPATH:" != *":$HOME/.local/include:"* ]]; then
+#    export CPATH+=:"$HOME/.local/include"
+#fi
 
 # NOTE: by default, pkg-config searches at <prefix>/lib/pkgconfig (and others)
 # if it's compiled to a non-standard path, it won't have the normal /usr/lib!

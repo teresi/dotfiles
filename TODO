@@ -93,6 +93,9 @@
 
 [x] add `lf` file explorer (using go) (and add ~/go/bin to PATH)
 [x] add go
+
+[ ] add kbd (for setfont, add kbd as prereq for cmatrix)
+[ ] remove CPATH from bashrc, not needed?
 [ ] add ueberzug
 [ ] add image preview to lf (maybe this one https://github.com/thimc/lfimg)
 

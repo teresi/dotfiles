@@ -107,38 +107,38 @@ help:                 ## usage
 
 .PHONY: all
 all:                  ## install programs and configs
-	$(MAKE) -ik check_packages
-	$(MAKE) -ik m4
-	$(MAKE) -ik autoconf
-	$(MAKE) -ik automake
-	$(MAKE) -ik libtool
-	$(MAKE) -ik gettext
-	$(MAKE) -ik make
-	$(MAKE) -ik ctags
-	$(MAKE) -ik cmatrix
-	$(MAKE) -ik tree
-	$(MAKE) -ik pip
-	$(MAKE) -ik pipx
-	$(MAKE) -ik meson
-	$(MAKE) -ik vim
-	$(MAKE) -ik neovim
-	$(MAKE) -ik tmux
-	$(MAKE) -ik bash
-	$(MAKE) -ik pv
-	$(MAKE) -ik fio
-	$(MAKE) -ik git_config
-	$(MAKE) -ik virtualenvwrapper
-	$(MAKE) -ik fzf
-	$(MAKE) -ik rust-analyzer
-	$(MAKE) -ik alacritty
-	$(MAKE) -ik gnome
-	$(MAKE) -ik cinnamon
-	$(MAKE) -ik lf
-	$(MAKE) -ik rxvt.conf
-	$(MAKE) -ik docker  # checks group membership, needs sudo
-	$(MAKE) -ik tig
-	$(MAKE) -ik pbzip2
-	$(MAKE) -ik check_packages
+	$(MAKE) check_packages
+	$(MAKE) m4
+	$(MAKE) autoconf
+	$(MAKE) automake
+	$(MAKE) libtool
+	$(MAKE) gettext
+	$(MAKE) make
+	$(MAKE) ctags
+	$(MAKE) cmatrix
+	$(MAKE) tree
+	$(MAKE) pip
+	$(MAKE) pipx
+	$(MAKE) meson
+	$(MAKE) vim
+	$(MAKE) neovim
+	$(MAKE) tmux
+	$(MAKE) bash
+	$(MAKE) pv
+	$(MAKE) fio
+	$(MAKE) git_config
+	$(MAKE) virtualenvwrapper
+	$(MAKE) fzf
+	$(MAKE) rust-analyzer
+	$(MAKE) alacritty
+	$(MAKE) gnome
+	$(MAKE) cinnamon
+	$(MAKE) lf
+	$(MAKE) rxvt.conf
+	$(MAKE) docker  # checks group membership, needs sudo
+	$(MAKE) tig
+	$(MAKE) pbzip2
+	$(MAKE) check_packages
 
 
 .PHONY: clean
@@ -247,7 +247,7 @@ curl: autoconf automake libtool libpsl zstd  ## install curl
 
 
 .PHONY: ctags
-ctags:                ## indexes source files
+ctags: pkg-config     ## indexes source files
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $@ all install
 

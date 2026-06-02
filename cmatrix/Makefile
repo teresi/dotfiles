@@ -45,10 +45,14 @@ git-hash: download
 
 $(_bin): git-hash
 	$(call log_info,updating $@...)
-	cd $(_src) \
-		&& autoreconf -i \
-		&& ./configure --prefix $(PREFIX) \
-		&& make LIBS=-lncursesw -j
+	cd $(_src) && \
+	autoreconf -i && \
+	LDFLAGS=-L$(PREFIX)/lib \
+	CPPFLAGS="-I$(PREFIX)/include/ncursesw -I$(PREFIX)/include" \
+	PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig:"$$PKG_CONFIG_PATH" \
+	LIBS=-lncursesw \
+			./configure --prefix $(PREFIX) \
+			&& make  -j
 
 
 $(_install): $(_bin)
