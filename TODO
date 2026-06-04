@@ -93,6 +93,7 @@
 
 [x] add `lf` file explorer (using go) (and add ~/go/bin to PATH)
 [x] add go
+[x] update `tree` to use git (not tarball) to reduce dependencies
 
 [ ] add kbd (for setfont, add kbd as prereq for cmatrix)
 [ ] remove CPATH from bashrc, not needed?

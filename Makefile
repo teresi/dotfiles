@@ -852,7 +852,7 @@ xclip: pkgconf autoconf automake libtool m4  ## compile xclip
 
 
 .PHONY: tree
-tree:                 ## compile tree
+tree:                          ## compile tree
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
@@ -906,6 +906,7 @@ libreadline: m4 libncursesw  ## libreadline
 bzip2: cmake pkg-config  ## bzip2, libbz2
 	$(call log_info,installing $@...)
 	@# install even if bzip2 is on the host b/c we need the library for pbzip2
+	@# TODO: needs zlib (zlib1g-dev)
 	$(MAKE) -k -C $@ all install
 
 

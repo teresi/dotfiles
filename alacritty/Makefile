@@ -19,6 +19,8 @@ _depends := libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-
 _url := https://github.com/alacritty/alacritty.git
 _src := alacritty
 _bin := $(_src)/target/release/alacritty
+# NOTE: 0.17.0 still has the IME / vi mode bug
+# where if you toggle vi mode enough eventually it doesn't show input
 _branch := v0.16.1
 
 # MAGIC this is typically where font config installs fontconfig.pc
