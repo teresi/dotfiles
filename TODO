@@ -94,9 +94,12 @@
 [x] add `lf` file explorer (using go) (and add ~/go/bin to PATH)
 [x] add go
 [x] update `tree` to use git (not tarball) to reduce dependencies
+[x] remove CPATH from bashrc, not needed?
+
+[ ] add gnu parallel
 
 [ ] add kbd (for setfont, add kbd as prereq for cmatrix)
-[ ] remove CPATH from bashrc, not needed?
+
 [ ] add ueberzug
 [ ] add image preview to lf (maybe this one https://github.com/thimc/lfimg)
 

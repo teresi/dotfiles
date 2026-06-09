@@ -4,6 +4,9 @@
 
 # displays contents of a directory
 
+# NOTE: using git to download this b/c the tar uses bz2,
+# and that requires a lot of dependencies
+
 
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local/

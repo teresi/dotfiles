@@ -117,9 +117,6 @@ all:                  ## install programs and configs
 	$(MAKE) ctags
 	$(MAKE) cmatrix
 	$(MAKE) tree
-	$(MAKE) pip
-	$(MAKE) pipx
-	$(MAKE) meson
 	$(MAKE) vim
 	$(MAKE) neovim
 	$(MAKE) tmux
@@ -127,16 +124,19 @@ all:                  ## install programs and configs
 	$(MAKE) pv
 	$(MAKE) fio
 	$(MAKE) git_config
-	$(MAKE) virtualenvwrapper
+	$(MAKE) tig
 	$(MAKE) fzf
+	$(MAKE) lf
+	$(MAKE) pip
+	$(MAKE) pipx
+	$(MAKE) meson
+	$(MAKE) virtualenvwrapper
 	$(MAKE) rust-analyzer
 	$(MAKE) alacritty
 	$(MAKE) gnome
 	$(MAKE) cinnamon
-	$(MAKE) lf
 	$(MAKE) rxvt.conf
 	$(MAKE) docker  # checks group membership, needs sudo
-	$(MAKE) tig
 	$(MAKE) pbzip2
 	$(MAKE) check_packages
 
@@ -738,7 +738,7 @@ make:                    ## install make
 # TODO pipx needs pip first
 # TODO need to use $(BIN_DIR)/pipx
 .PHONY: pipx
-pipx:                    ## install pip extension 'pipx'
+pipx: pip                   ## install pip extension 'pipx'
 	$(call log_info,updating $@...)
 	pip install --user --upgrade pipx
 	pipx ensurepath
