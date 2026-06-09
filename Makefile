@@ -107,7 +107,7 @@ help:                 ## usage
 
 .PHONY: all
 all:                  ## install programs and configs
-	$(MAKE) check_packages
+	$(MAKE) -ik check_packages
 	$(MAKE) m4
 	$(MAKE) autoconf
 	$(MAKE) automake

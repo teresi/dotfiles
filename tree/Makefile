@@ -50,7 +50,7 @@ git-hash: download
 	$(call check_commit, $(_src))
 
 
-$(_bin): $(_src)/Makefile git-hash
+$(_bin): git-hash
 	$(call log_info,updating $@...)
 	make -C $(_src) -j
 
