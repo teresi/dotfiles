@@ -9,7 +9,7 @@ PREFIX ?= $(HOME)/.local
 
 
 _url := https://github.com/junegunn/fzf.git
-_branch := master
+_branch := v0.73.0
 _src := fzf
 _install := $(HOME)/.fzf.bash
 
