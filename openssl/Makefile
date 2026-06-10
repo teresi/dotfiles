@@ -65,9 +65,9 @@ $(_src)/Makefile: git-hash
 
 $(_bin): $(_src)/Makefile
 	$(call log_info,updating $@...)
-	@# one less core so as to not lock the machine while compiling
+	@# don't use all the cores so we don't overload or run out of memory
 	make -C $(_src) all \
-		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
+		-j $(shell echo $$(( `nproc` <= 2 ? 1 : `nproc` -2 )))
 	make -C $(_src) test \
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	touch $@
