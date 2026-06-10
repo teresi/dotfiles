@@ -127,12 +127,12 @@ all:                  ## install programs and configs
 	$(MAKE) tig
 	$(MAKE) fzf
 	$(MAKE) lf
+	$(MAKE) rust-analyzer
+	$(MAKE) alacritty
 	$(MAKE) pip
 	$(MAKE) pipx
 	$(MAKE) meson
 	$(MAKE) virtualenvwrapper
-	$(MAKE) rust-analyzer
-	$(MAKE) alacritty
 	$(MAKE) gnome
 	$(MAKE) cinnamon
 	$(MAKE) rxvt.conf
@@ -420,7 +420,10 @@ go:                   ## go language
 
 .PHONY: lf
 lf: go                ## terminal file explorer in go
-	env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
+	@# MAGIC: go is typically installed to ~/.local/go/bin or ~/go/bin
+	@# other variables/locations are available
+	which go || export PATH+=:$(HOME)/.local/go/bin && \\
+		env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
 
 
 .PHONY: ranger

@@ -51,4 +51,6 @@ git-hash: download
 
 $(_install): git-hash
 	$(call log_info,updating $@...)
-	cd $(_src) && cargo xtask install --server
+	cd $(_src) && \
+	which rustc || . $(HOME)/.cargo/env && \
+		cargo xtask install --server
