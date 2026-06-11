@@ -9,7 +9,9 @@
 include ../helpers.mk
 PREFIX ?= $(HOME)/.local
 
-_url := https://gitlab.freedesktop.org/pkg-config/pkg-config.git
+# NOTE: had better luck with github compared to gitlab, ymmv
+#_url := https://gitlab.freedesktop.org/pkg-config/pkg-config.git
+_url := https://github.com/pkgconf/pkgconf
 _src := pkg-config
 _branch := master
 _bin := $(_src)/pkg-config
@@ -47,7 +49,7 @@ git-hash: download
 
 
 $(_src)/Makefile.in: git-hash
-	cd $(_src) && ./autogen.sh --prefix=$(PREFIX) --with-internal-glib
+	cd $(_src) && ./autogen.sh
 
 
 $(_src)/Makefile: $(_src)/Makefile.in

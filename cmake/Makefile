@@ -61,11 +61,11 @@ $(_bin): git-hash | $(_build)
 			-DCMAKE_PREFIX_PATH=$(PREFIX)
 
 	@# NB using a low core count b/c cmake uses a lot of ram per core
-	$(MAKE) -ik -C $(_build) -j 3
+	$(MAKE) -ik -j 3 -C $(_build)
 	$(call log_info,updating $@...    COMPLETE!)
 
 
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $(_build) -j install && touch $(_bin)
+	$(MAKE) -ik j 3 -C $(_build) install && touch $(_bin)
 	$(call log_info,updating $@...    COMPLETE!)
