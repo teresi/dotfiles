@@ -38,6 +38,9 @@ return { -- Autoformat
 			-- Conform can also run multiple formatters sequentially
 			-- NB: don't use isort, it moves custom libs into the third party group
 			python = { "black" },
+			-- use tex-fmt first, fallback to latexindent
+			tex = { "tex-fmt", "latexindent" },
+			plaintex = { "tex-fmt", "latexindent" },
 			--
 			-- You can use 'stop_after_first' to run the first available formatter from the list
 			-- javascript = { "prettierd", "prettier", stop_after_first = true },

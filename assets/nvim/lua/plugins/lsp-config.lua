@@ -258,6 +258,7 @@ return {
 			"bash-language-server", -- shell/bash
 			"yq", -- yaml
 			"jq", -- json
+			"tex-fmt", -- LaTeX format
 			"basedpyright", -- python
 			"black", -- python
 			--			"ruff", -- python

@@ -95,6 +95,10 @@
 [x] add go
 [x] update `tree` to use git (not tarball) to reduce dependencies
 [x] remove CPATH from bashrc, not needed?
+[x] add LaTeX formatter
+
+[ ] pip requires python3
+[ ] pbzip2 requires python3
 
 [ ] add gnu parallel
 
