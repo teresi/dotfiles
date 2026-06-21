@@ -63,6 +63,7 @@ require("lazy").setup({
 	--require("plugins.doge"),
 	require("plugins.gitsigns"),
 	require("plugins.guess_indent"),
+	--require("plugins.harpoon"),
 	--require("plugins.heraldish"),
 	require("plugins.indent_line"),
 	require("plugins.lazydev"),

@@ -49,10 +49,32 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 --  See `:help hlsearch`
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- Diagnostic keymaps
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
-vim.keymap.set("n", "]g", vim.diagnostic.goto_next)
-vim.keymap.set("n", "[g", vim.diagnostic.goto_prev)
+-- [[ Diagnostic keymaps ]]
+
+-- Jump to next diagnostic (already a default)
+--vim.keymap.set('n', ']d', function()
+--  vim.diagnostic.jump({ count = 1, float = true })
+--end, { desc = 'Next diagnostic' })
+
+-- Jump to previous diagnostic (already a default)
+--vim.keymap.set('n', '[d', function()
+--  vim.diagnostic.jump({ count = -1, float = true })
+--end, { desc = 'Previous diagnostic' })
+
+-- Toggle Quickfix list
+vim.keymap.set("n", "<leader>q", function()
+	local qf_exists = false
+	for _, win in pairs(vim.fn.getwininfo()) do
+		if win.quickfix == 1 then
+			qf_exists = true
+		end
+	end
+	if qf_exists then
+		vim.cmd("cclose")
+	else
+		vim.cmd("copen")
+	end
+end, { desc = "Toggle [Q]uickfix List" })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -84,3 +106,5 @@ vim.api.nvim_set_keymap(
 	":lua require('neogen').generate()<CR>",
 	{ noremap = true, silent = true, desc = "[N]eogen [G]enerate docs" }
 )
+
+-- HARPOON

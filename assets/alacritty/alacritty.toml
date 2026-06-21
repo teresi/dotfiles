@@ -2,7 +2,7 @@ general.import = ["~/.config/alacritty/hyper.toml"]
 
 [[keyboard.bindings]]
 key = "F11"
-command = "fullscreen"  # 'wmctrl -ir $(xdotool getwindowfocus) -b toggle,fullscreen'
+command = "fullscreen" # 'wmctrl -ir $(xdotool getwindowfocus) -b toggle,fullscreen'
 
 [font]
 size = 10.5
