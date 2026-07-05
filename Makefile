@@ -422,7 +422,7 @@ go:                   ## go language
 lf: go                ## terminal file explorer in go
 	@# MAGIC: go is typically installed to ~/.local/go/bin or ~/go/bin
 	@# other variables/locations are available
-	which go || export PATH+=:$(HOME)/.local/go/bin && \\
+	which go || export PATH+=:$(HOME)/.local/go/bin && \
 		env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
 
 
