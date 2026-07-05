@@ -240,6 +240,11 @@ libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 cpytho
 	$(MAKE) -k -C $@ all install
 
 
+.PHONY: xz
+xz:                   ## xz utils, e.g. xz and liblzma
+	$(call make_all_install_if_not_on_host,$@)
+
+
 .PHONY: curl
 curl: autoconf automake libtool libpsl zstd  ## install curl
 	$(call log_info,installing $@...)
