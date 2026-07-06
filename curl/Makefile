@@ -28,7 +28,9 @@ install: $(_install)
 
 .PHONY: clean
 clean:
-	make -C $(_src) clean
+	$(call log_info,clean $(_src))
+	if [ -f "$(_src)/Makefile" ]; then $(MAKE) -ik -C $(_src) clean; fi
+	touch $(_src)/Makefile.in
 
 
 .PHONY: uninstall
@@ -51,10 +53,18 @@ $(_src)/Makefile.in: git-hash
 
 $(_src)/Makefile: $(_src)/Makefile.in
 	@# need to include the pkg_config_path in case we have a local dependency (e.g. libzstd)
+	@# the new openssl installs to lib64, not lib
 	cd $(_src) \
 		&& autoreconf -fi \
-		&& LDFLAGS+=" -L${HOME}/.local/lib" CFLAGS+=" -L${HOME}/.local/include" PKG_CONFIG_PATH+=":${HOME}/.local/lib/pkgconfig" \
-			./configure --with-openssl --prefix=$(PREFIX)
+		&& \
+			PKG_CONFIG_PATH="${HOME}/.local/lib64/pkgconfig:${HOME}/.local/lib/pkgconfig:${PKG_CONFIG_PATH}" \
+			./configure \
+				--with-openssl="${HOME}/.local" \
+				--with-libpsl="${HOME}/.local" \
+				--enable-versioned-symbols \
+				--prefix=$(PREFIX) \
+			LDFLAGS="-L${HOME}/.local/lib64 -L${HOME}/.local/lib -Wl,-rpath,${HOME}/.local/lib64 -Wl,-rpath,${HOME}/.local/lib" \
+			CFLAGS="-I${HOME}/.local/include"
 
 
 $(_bin): $(_src)/Makefile

@@ -98,6 +98,8 @@
 [x] add LaTeX formatter
 [x] add xz utils for python
 
+[ ] neovim needs to be cleaned if tree-sitter is updated
+
 [ ] pip requires python3
 [ ] pbzip2 requires python3
 
