@@ -96,6 +96,7 @@
 [x] update `tree` to use git (not tarball) to reduce dependencies
 [x] remove CPATH from bashrc, not needed?
 [x] add LaTeX formatter
+[x] add xz utils for python
 
 [ ] pip requires python3
 [ ] pbzip2 requires python3
@@ -112,7 +113,6 @@
 
 [ ] add `sysz` for handling systemctl
     + https://github.com/joehillen/sysz?tab=readme-ov-file
-
 
 [ ] libedit can't find ncurses
 [ ] enable more options in htop
@@ -136,8 +136,6 @@
 
 [ ] check if libssl exists for cmake (instead of openssl )
 
-[ ] add libzlma (for zstd) (or use xz utils?)
-    https://www.linuxfromscratch.org/lfs/view/12.4/chapter08/xz.html
 [ ] add liblz4 (for zstd)
 
 [ ] add cpanm, add as prereq for autoconf

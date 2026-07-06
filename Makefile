@@ -658,7 +658,7 @@ pip:                    ## install pip
 
 
 .PHONY: cpython
-cpython:  pkgconf zstd openssl libncursesw      ## compile cpython
+cpython:  pkgconf zstd xz openssl libncursesw      ## compile cpython
 	$(call log_info,compiling $@...)
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
