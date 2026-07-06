@@ -51,14 +51,20 @@ $(_build):
 
 $(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
+	@# the new openssl installs to lib64
+	@# use the system curl else the cmake's curl will use the wrong headers for openssl
 	cd $(_build) \
-		&& LDFLAGS+=" -L${HOME}/.local/lib" CFLAGS+=" -L${HOME}/.local/include" PKG_CONFIG_PATH+=":${HOME}/.local/lib/pkgconfig" \
+		&& PKG_CONFIG_PATH="${HOME}/.local/lib64/pkgconfig:${HOME}/.local/lib/pkgconfig:${PKG_CONFIG_PATH}" \
 		../bootstrap \
 			--prefix=$(PREFIX) \
 			--parallel=$(shell nproc) \
+			--system-curl \
 			-- \
 			-DCMAKE_BUILD_TYPE=RELEASE \
-			-DCMAKE_PREFIX_PATH=$(PREFIX)
+			-DCMAKE_PREFIX_PATH=$(PREFIX) \
+			-DCMAKE_C_FLAGS="-I${HOME}/.local/include" \
+			-DCMAKE_CXX_FLAGS="-I${HOME}/.local/include" \
+			-DCMAKE_EXE_LINKER_FLAGS="-L${HOME}/.local/lib64 -L${HOME}/.local/lib -Wl,-rpath,${HOME}/.local/lib64 -Wl,-rpath,${HOME}/.local/lib"
 
 	@# NB using a low core count b/c cmake uses a lot of ram per core
 	$(MAKE) -ik -j 3 -C $(_build)
