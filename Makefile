@@ -808,10 +808,14 @@ container:               ## run docker image for testing interactively
 
 
 .PHONY: cmake
-cmake: pkg-config openssl  ## compile CMake
+cmake: pkg-config openssl libz  ## compile CMake
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C $@ all install
 
+.PHONY: libz
+libz:                 ## zlib de/compression
+	$(call log_info,installing $@...)
+	$(MAKE) -ik -C $@ all install
 
 .PHONY: ninja
 ninja: cmake          ## compile ninja-build

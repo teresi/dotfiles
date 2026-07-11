@@ -1,6 +1,6 @@
 #!/usr/bin/env make -S -f
 
-# compile latest release of CMake
+# compile CMake
 
 
 include ../helpers.mk

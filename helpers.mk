@@ -41,6 +41,13 @@ endef
 	curl -C - -o $@ $(shell cat $<)
 
 
+# download a signature file given it's url
+#
+# %.tar.gz.sig.url is file (by our convention) with the url stored in it
+%.tar.gz.asc: %.tar.gz.asc.url
+	curl -C - -o $@ $(shell cat $<)
+
+
 # verify and unpack a tarball, exit if unsuccessful
 #
 # %            is the destination directory
@@ -54,6 +61,27 @@ endef
 %: %.tar.gz %.tar.gz.sig %.tar.gz.id
 	$(call log_info,verify $< using signature $(word 2, $^)...)
 	gpg --verify $(word 2, $^) $< || (echo -e "\e[91mERROR\tcouldn't verify tarball $< using $(word 2, $^), check the key ID stored here: $(word 3, $^)\e[39m"; exit 1)
+	$(call log_info,verify $< using signature $(word 2, $^)... successful)
+	$(call log_info,unpacking contents of $< to $@/...)
+	mkdir -p $@ && tar -xzvf $< -C $@/ --strip-components=1
+	@# update timestamp b/c it's originally based on the packed time
+	touch $@
+
+
+# verify and unpack a tarball, exit if unsuccessful
+#
+# %            is the destination directory
+# %.tar.gz     is the tarball
+# %.tar.gz.asc is the signature
+# %.tar.gz.id  is an empty target for whether the key has been downloaded
+#
+# see `gpg --recv-keys <ID>` to download the key given the ID
+# see also `gpg -d <SIG>` to find the key ID from the signature file
+#
+%: %.tar.gz %.tar.gz.asc %.tar.gz.id
+	$(call log_info,verify $< using signature $(word 2, $^)...)
+	gpg --verify $(word 2, $^) $< || (echo -e "\e[91mERROR\tcouldn't verify tarball $< using $(word 2, $^), check the key ID stored here: $(word 3, $^)\e[39m"; exit 1)
+	$(call log_info,verify $< using signature $(word 2, $^)... successful)
 	$(call log_info,unpacking contents of $< to $@/...)
 	mkdir -p $@ && tar -xzvf $< -C $@/ --strip-components=1
 	@# update timestamp b/c it's originally based on the packed time

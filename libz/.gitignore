@@ -1,0 +1,4 @@
+*.tar.gz
+*.tar.gz.asc
+*.tar.gz.id
+zlib
