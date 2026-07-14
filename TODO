@@ -98,6 +98,11 @@
 [x] add LaTeX formatter
 [x] add xz utils for python
 
+[ ] add curl as prereq for CMake, link Cmake to it
+
+[ ] add lzma, add as prereq to zstd
+[ ] add lz4, add as prereq to zstd
+
 [ ] neovim needs to be cleaned if tree-sitter is updated
 
 [ ] add cpanm

@@ -10,6 +10,9 @@
 # LIBRARIES
 # libzstd
 
+# DEPENDENCIES
+# lzma, lz4, libz
+
 include ../helpers.mk
 SHELL := /bin/bash
 PREFIX ?= $(HOME)/.local
@@ -52,7 +55,13 @@ git-hash: download
 
 $(_bin): git-hash
 	$(call log_info,updating $@...)
-	make -C ${_src} all \
+	@# HAVE_ZLIB, enable zlib support
+	@# MOREFLAGS is a zstd custom variable to pass flags down to it's command line program
+	make -C ${_src} zstd lib-release \
+		HAVE_ZLIB=1 \
+		ZSTDLIB_FLAGS="-I$(PREFIX)/include" \
+		ZSTDLIB_LDFLAGS="-L$(PREFIX)/lib -Wl,-rpath,/root/.local/lib" \
+		MOREFLAGS="-I/root/.local/include -L/root/.local/lib -Wl,-rpath,/root/.local/lib -lz" \
 		prefix=${PREFIX} \
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	@# disabling the tests as it requires docker, but we might not have docker access

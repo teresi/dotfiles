@@ -13,6 +13,7 @@ return { -- Highlight, edit, and navigate code
 			"gowork",
 			"gotmpl",
 			"html",
+			"latex",
 			"lua",
 			"luadoc",
 			"make",

@@ -162,19 +162,19 @@ gawk:                 ## GNU awk
 .PHONY: m4
 m4: gawk              ## GNU M4 macro processor
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C $@ all install
+	$(MAKE) -C $@ all install
 
 
 .PHONY: autoconf
 autoconf: m4          ## M4 macros to configure sources (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C $@ all install
+	$(MAKE) -C $@ all install
 
 
 .PHONY: automake
 automake: gawk autoconf  ## generates Makefiles for use with autoconf (aclocal, automake) (part of autotools-dev)
 	$(call log_info,updating $@...)
-	$(MAKE) -k -C $@ all install
+	$(MAKE) -C $@ all install
 
 
 .PHONY: gettext
@@ -182,7 +182,7 @@ gettext:              ## tools to translate human languages (part of autotools-d
 	$(call log_info,updating $@...)
 	@# NB installing even if installed to /usr/bin b/c we need it for libpsl
 	@# and `autopoint` is not installed w/ gettext
-	$(MAKE) -k -C $@ all install
+	$(MAKE) -C $@ all install
 
 
 .PHONY: libtool
@@ -948,7 +948,7 @@ diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
 	fi
 
 .PHONY: zstd
-zstd: make          ## zstd, libzstd (compression bin/lib)
+zstd: make libz         ## zstd, libzstd (compression bin/lib)
 	$(call log_info,installing $@...)
 	$(call make_all_install_if_not_on_host,$@)
 
