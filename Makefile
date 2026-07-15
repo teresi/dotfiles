@@ -295,7 +295,7 @@ vundle:               ## vim package manager
 # FUTURE consider parallel vundle installer?
 # https://github.com/jdevera/parallel-vundle-installer
 .PHONY: vim_plugins
-vim_plugins: | vundle pip  ## download vim plugins
+vim_plugins: | vundle ## download vim plugins
 	$(call log_info,updating $@...)
 	curl -kfLo $(HOME)/.vim/autoload/plug.vim --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
