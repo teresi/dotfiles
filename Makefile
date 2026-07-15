@@ -496,7 +496,6 @@ gnome:                ## gnome desktop
 	@# gsettings or similar appear to call nvm, so unset prefix
 	bash -l -c 'unset PREFIX; ./kb_shortcuts_gnome.bash'
 
-	# NOTE testing on 18.04
 	gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 	# switch windows instead of applications w/ alt-tab
 	gsettings set org.gnome.desktop.wm.keybindings switch-applications "[]"
@@ -510,10 +509,11 @@ gnome:                ## gnome desktop
 	# scrolling direction (false = drag up to view content above)
 	gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 	# gedit
-	gsettings set org.gnome.gedit.preferences.editor display-line-numbers true
-	gsettings set org.gnome.gedit.preferences.editor display-right-margin true
-	gsettings set org.gnome.gedit.preferences.editor tabs-size 4
-	gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
+	# TODO: gedit needs updates for 24.04
+	#gsettings set org.gnome.gedit.preferences.editor display-line-numbers true
+	#gsettings set org.gnome.gedit.preferences.editor display-right-margin true
+	#gsettings set org.gnome.gedit.preferences.editor tabs-size 4
+	#gsettings set org.gnome.gedit.preferences.editor scheme 'oblivion'
 
 	# don't create clicks that aren't actually pressed
 	gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation false
