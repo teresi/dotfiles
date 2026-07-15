@@ -15,7 +15,7 @@ _install := $(PREFIX)/bin/unzip
 
 _release_ver := 60
 _release_tar := unzip.tar.gz
-_release_tar_url :=  ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz
+_release_tar_url := https://downloads.sourceforge.net/infozip/unzip60.tar.gz
 _md5_sum := 62b490407489521db863b523a7f86375
 
 
@@ -43,7 +43,7 @@ download: $(_src)
 
 
 $(_release_tar):
-	curl -C - -o $(_release_tar) $(_release_tar_url)
+	wget -O $(_release_tar) $(_release_tar_url)
 
 
 $(_src):  $(_release_tar)
