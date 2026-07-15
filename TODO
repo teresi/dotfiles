@@ -98,6 +98,8 @@
 [x] add LaTeX formatter
 [x] add xz utils for python
 
+[ ] add rpath to everything so we don't need to update LD_LIBRARY_PATH
+
 [ ] add curl as prereq for CMake, link Cmake to it
 
 [ ] add lzma, add as prereq to zstd

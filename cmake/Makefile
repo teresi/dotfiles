@@ -52,13 +52,13 @@ $(_build):
 $(_bin): git-hash | $(_build)
 	$(call log_info,updating $@...)
 	@# the new openssl installs to lib64
-	@# use the system curl else the cmake's curl will use the wrong headers for openssl
+	@# NOTE: previously used system curl else the cmake's curl will use the wrong headers for openssl
+	@#         using the flag --system-curl
 	cd $(_build) \
 		&& PKG_CONFIG_PATH="${HOME}/.local/lib64/pkgconfig:${HOME}/.local/lib/pkgconfig:${PKG_CONFIG_PATH}" \
 		../bootstrap \
 			--prefix=$(PREFIX) \
 			--parallel=$(shell nproc) \
-			--system-curl \
 			-- \
 			-DCMAKE_BUILD_TYPE=RELEASE \
 			-DCMAKE_PREFIX_PATH=$(PREFIX) \

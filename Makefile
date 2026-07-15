@@ -230,7 +230,7 @@ libidn2: makeinfo      ##  internationalized strings in C (for psl)
 
 
 .PHONY: libpsl
-libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 cpython  ## libpsl, handling Public Suffix List (for curl)
+libpsl: gettext autoconf automake libtool pkg-config libunistring libidn2 python3 ## libpsl, handling Public Suffix List (for curl)
 	$(call log_info,updating $@...)
 	$(MAKE) -k -C $@ all install
 
@@ -632,6 +632,13 @@ cpython:  pkgconf zstd xz openssl libncursesw      ## compile cpython
 	$(MAKE) _branch=$(CPYTHON) -k -C $@ all install
 
 
+.PHONY: python3
+python3:                     ## python3
+	$(call log_info,installing $@...)
+	@# systems usually have python3 on the host, compile if not available
+	@which python3 || $(MAKE) cpython
+
+
 .PHONY: rust
 rust:                        ## install rust compiler
 	$(call log_info,installing $@...)
@@ -767,6 +774,8 @@ container:               ## run docker image for testing interactively
 		dotfiles-test
 
 
+# FUTURE: reconsider if we need to compile curl before cmake
+# curl needs libpsl, and libpsl needs python, so it can take a while
 .PHONY: cmake
 cmake: pkg-config openssl libz  ## compile CMake
 	$(call log_info,installing $@...)
