@@ -26,7 +26,7 @@ SUB_PROJECTS := $(dir $(wildcard */Makefile))
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim screen lm-sensors libssl-dev dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev rxvt-unicode
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim screen lm-sensors libssl-dev dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -328,11 +328,10 @@ tmux.conf:            ## add tmux config file
 
 
 .PHONY: tmux_plugins
-tmux_plugins: | pip   ## download tmux plugins
+tmux_plugins:         ## download tmux plugins
 	$(call log_info,updating $@...)
 	-@LD_LIBRARY_PATH+=:$(PREFIX)/lib $(HOME)/.tmux/plugins/tpm/scripts/install_plugins.sh
 	-@LD_LIBRARY_PATH+=:$(PREFIX)/lib $(HOME)/.tmux/plugins/tpm/scripts/update_plugin.sh
-	pip install --user psutil  # for tmux cpu info
 
 
 .PHONY: tpm
@@ -400,16 +399,6 @@ alacritty: rust fonts      ## compile alacritty terminal
 	$(MAKE) -ik -C alacritty all install
 	$(MAKE) -ik alacritty.yml
 	$(call check_pkgs,wmctrl xdotool)
-
-
-# TODO install pip w/o apt (python3-pip)
-.PHONY: virtualenvwrapper
-virtualenvwrapper: pip   ## python virtual environments (virtualenvwrapper)
-	$(call log_info,updating $@...)
-	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/python_venv ~/.config/python_venv
-	-bash -c "python3 -m pip install --user -UI setuptools pip virtualenv virtualenvwrapper"
-	$(call source_file,$(BASHRC),CUSTOM_PYTHON,~/.config/python_venv)
-	$(call comment_line,$(BASHRC),CUSTOM_PYTHON,$(INSTALL_RC))
 
 
 .PHONY: conda
@@ -585,6 +574,13 @@ unzip:                  ## install unzip
 	$(call make_all_install_if_not_on_host,$@)
 
 
+.PHONY: nvim
+nvim: gettext luajit luarocks cmake ninja  ## neovim binary
+	$(MAKE) -ik -C neovim all install
+
+
+# TODO: need to add tree-sitter-cli into the neovim compilation,
+# need to clean nvim if tree-sitter changes
 .PHONY: tree-sitter-cli
 tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
 	$(call log_info,updating $@...)
@@ -592,11 +588,6 @@ tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
 	@# TODO: just need libclang, not the whole thing, add a libclang target/option?
 	@# needed for nvim-treesitter: `:checkhealth nvim-treesitter`
 	$(CARGO_BIN)/cargo install tree-sitter-cli
-
-
-.PHONY: nvim
-nvim: gettext luajit luarocks cmake ninja  ## neovim binary
-	$(MAKE) -ik -C neovim all install
 
 
 .PHONY: neovim
@@ -638,13 +629,7 @@ check_packages:         ## warn if missing packages
 	@bash -l -c 'source $(ROOT_DIR)/helpers.bash && are_packages_missing_warn $(DEPENDENCIES_LONGRUN)'
 
 
-.PHONY: pip
-pip:                    ## install pip
-	$(call log_info,checking for $@...)
-	@#NOTE `ensurepip` is disabled in ubuntu so use get-pip
-	@which pip || { wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py --user; }
-
-
+# TODO: change to python3, install if not on host to simplify
 .PHONY: cpython
 cpython:  pkgconf zstd xz openssl libncursesw      ## compile cpython
 	$(call log_info,compiling $@...)
@@ -731,17 +716,6 @@ make:                    ## install make
 	$(MAKE) -k -C $@ all install
 
 
-# TODO pipx needs pip first
-# TODO need to use $(BIN_DIR)/pipx
-.PHONY: pipx
-pipx: pip                   ## install pip extension 'pipx'
-	$(call log_info,updating $@...)
-	pip install --user --upgrade pipx
-	pipx ensurepath
-	pipx completions
-	grep -q "eval.*argcomplete pipx)" $(BASHRC) || echo 'eval "$(register-python-argcomplete pipx)"' >> $(BASHRC)
-
-
 .PHONY: uv
 uv: curl                 ## uv python manager
 	$(call log_info,installing $@...)
@@ -751,10 +725,12 @@ uv: curl                 ## uv python manager
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 
-.PHONY: meson
-meson: | pipx            ## install meson
-	$(call log_info,updating $@...)
-	pipx install meson
+# FUTURE: add meson back, but download the release instead?
+# need to redo the way 'system wide' python installs are handled in 24.04
+#.PHONY: meson
+#meson: | pipx            ## install meson
+#	$(call log_info,updating $@...)
+#	pipx install meson
 
 
 .PHONY: zephyr
