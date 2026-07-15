@@ -128,13 +128,9 @@ all:                  ## install programs and configs
 	$(MAKE) lf
 	$(MAKE) rust-analyzer
 	$(MAKE) alacritty
-	$(MAKE) pip
-	$(MAKE) pipx
-	$(MAKE) meson
 	$(MAKE) virtualenvwrapper
 	$(MAKE) gnome
 	$(MAKE) cinnamon
-	$(MAKE) rxvt.conf
 	$(MAKE) docker  # checks group membership, needs sudo
 	$(MAKE) pbzip2
 	$(MAKE) check_packages
@@ -776,10 +772,12 @@ cmake: pkg-config openssl libz  ## compile CMake
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C $@ all install
 
+
 .PHONY: libz
 libz:                 ## zlib de/compression
 	$(call log_info,installing $@...)
 	$(MAKE) -ik -C $@ all install
+
 
 .PHONY: ninja
 ninja: cmake          ## compile ninja-build
@@ -910,6 +908,7 @@ diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
 				"\tto compile locally anyways:  cd diffutils && make all install"\
 				"\e[39m";\
 	fi
+
 
 .PHONY: zstd
 zstd: make libz         ## zstd, libzstd (compression bin/lib)

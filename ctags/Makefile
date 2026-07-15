@@ -11,7 +11,7 @@ PREFIX ?= $(HOME)/.local/
 
 
 _url := https://github.com/universal-ctags/ctags.git
-_branch := master
+_branch := v6.2.1
 _src := ctags
 _bin := $(_src)/ctags
 _install := $(PREFIX)/bin/ctags
