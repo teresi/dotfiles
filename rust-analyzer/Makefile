@@ -14,7 +14,7 @@ SHELL ?= /bin/bash
 
 
 _url := https://github.com/rust-lang/rust-analyzer.git
-_branch := master
+_branch := release
 _src := rust-analyzer
 _install := $(PREFIX)/bin/rust-analyzer
 
