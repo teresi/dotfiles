@@ -13,7 +13,7 @@ PREFIX ?= $(HOME)/.local
 #_url := https://gitlab.freedesktop.org/pkg-config/pkg-config.git
 _url := https://github.com/pkgconf/pkgconf
 _src := pkg-config
-_branch := master
+_branch := pkgconf-3.0.3
 _bin := $(_src)/pkg-config
 _install := $(PREFIX)/bin/pkg-config
 
@@ -53,7 +53,7 @@ $(_src)/Makefile.in: git-hash
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
-	cd $(_src) && ./configure --prefix=$(PREFIX) --with-internal-glib
+	cd $(_src) && ./configure --prefix=$(PREFIX)
 
 
 $(_bin): $(_src)/Makefile
