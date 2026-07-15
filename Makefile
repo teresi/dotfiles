@@ -69,7 +69,6 @@ ALACRITTY_CFG_DIR := $(HOME)/.config/alacritty
 ALACRITTY_YML := $(ALACRITTY_CFG_DIR)/alacritty.yml
 RXVT_CONF := $(HOME)/.Xresources
 RXVT_CONF_D := $(HOME)/.Xresources.d
-RC_CONF := $(HOME)/.config/ranger/rc.conf
 GOGH_THEMES_URL := https://github.com/Gogh-Co/Gogh.git
 GOGH_THEMES := $(HOME)/Gogh
 NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
@@ -429,17 +428,6 @@ lf: go                ## terminal file explorer in go
 	@# other variables/locations are available
 	which go || export PATH+=:$(HOME)/.local/go/bin && \
 		env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
-
-
-.PHONY: ranger
-ranger: pipx          ## ranger configuration
-	$(call log_info,updating $@...)
-	pipx install ranger-fm
-	@# NOTE installing ranger via pipx b/c the Makefile for ranger doesn't allow specifying PREFIX
-	@# b/c it appends `local` to whatever PREFIX you use (so $HOME/.local becomes $HOME/.local/local)
-	ranger --copy-config=all
-	-sed -i 's/set\ preview_images\ false/set\ preview_images\ true/' $(RC_CONF)
-	-sed -i 's/set\ preview_images_method\ .*/set\ preview_images_method\ w3m/' $(RC_CONF)
 
 
 .PHONY: rxvt.conf
