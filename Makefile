@@ -26,7 +26,7 @@ SUB_PROJECTS := $(dir $(wildcard */Makefile))
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs vim screen lm-sensors libssl-dev dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs screen lm-sensors dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3 mold
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake
@@ -75,6 +75,7 @@ NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 
 CARGO_HOME := $(HOME)/.cargo
 CARGO_BIN := $(HOME)/.cargo/bin
+CARGO_CFG := $(HOME)/.cargo/config.toml
 
 # export our bin dir so rules that require a target from a predecessor can execute it
 export PATH := $(BIN_DIR):$(PATH)
@@ -127,6 +128,7 @@ all:                  ## install programs and configs
 	$(MAKE) fzf
 	$(MAKE) lf
 	$(MAKE) rust-analyzer
+	$(MAKE) rust-config
 	$(MAKE) alacritty
 	$(MAKE) virtualenvwrapper
 	$(MAKE) gnome
@@ -652,8 +654,20 @@ rust:                        ## install rust compiler
 	which rustc || . $(CARGO_HOME)/env && rustup update
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain stable
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain nightly
-	@# install taplo formatter for yamls, not necessary for the analyzer but we use the formatter often
+
+
+.PHONY: rust-config
+rust-config:  $(CARGO_CFG)  ## cargo config.toml and sundry tools
+	@# taplo formats yamls
 	which rustc || . $(CARGO_HOME)/env && cargo install taplo-cli
+	@# sccache caches compilation artifacts
+	which rustc || . $(CARGO_HOME)/env && cargo install sccache
+	@# cargo machete detects unused dependencies
+	which rustc || . $(CARGO_HOME)/env && cargo install cargo-machete
+
+
+$(CARGO_CFG): ./assets/cargo/config.toml
+	cp $^ $@
 
 
 .PHONY: rust-analyzer
@@ -662,16 +676,6 @@ rust-analyzer: rust
 	@# could call with cargo install --git, *but* it always rebuilds each time from scratch
 	@# which rustc || . $(CARGO_HOME)/env && cargo install --force --git https://github.com/rust-lang/rust-analyzer.git rust-analyzer
 	$(MAKE) -k -C $@ all install
-
-
-.PHONY: sccache
-sccache:                     ## caches compilation artifacts for C, Rust, etc
-	$(call log_info,installing $@...)
-	$(call log_warn,compiling $@ will take a few minutes... this is ok...)
-	# TODO: should use release tarball, this takes a while to build
-	# TODO: update ~/.cargo/config.toml to use sccache ([build] rustc-wrapper = "sccache")
-	sleep 1
-	cargo install sccache
 
 
 .PHONY: rg
