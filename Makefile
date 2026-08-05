@@ -74,7 +74,7 @@ GOGH_THEMES := $(HOME)/Gogh
 NVM := $(shell test -f "$(HOME)/.nvm/nvm.sh"; echo $$?)
 
 CARGO_HOME := $(HOME)/.cargo
-CARGO_BIN := $(HOME)/.cargo/bin
+CARGO := $(CARGO_HOME)/bin/cargo
 CARGO_CFG := $(HOME)/.cargo/config.toml
 
 # export our bin dir so rules that require a target from a predecessor can execute it
@@ -128,9 +128,8 @@ all:                  ## install programs and configs
 	$(MAKE) fzf
 	$(MAKE) lf
 	$(MAKE) rust-analyzer
-	$(MAKE) rust-config
+	$(MAKE) rust-tools
 	$(MAKE) alacritty
-	$(MAKE) virtualenvwrapper
 	$(MAKE) gnome
 	$(MAKE) cinnamon
 	$(MAKE) docker  # checks group membership, needs sudo
@@ -585,7 +584,7 @@ tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
 	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
 	@# TODO: just need libclang, not the whole thing, add a libclang target/option?
 	@# needed for nvim-treesitter: `:checkhealth nvim-treesitter`
-	$(CARGO_BIN)/cargo install tree-sitter-cli
+	$(CARGO) install tree-sitter-cli
 
 
 .PHONY: neovim
@@ -642,7 +641,7 @@ python3:                     ## python3
 
 
 .PHONY: rust
-rust:                        ## install rust compiler
+rust: $(CARGO_CFG)           ## install rust compiler
 	$(call log_info,installing $@...)
 	@# we just need the curl binary, so call here instead of a pre-req
 	@# to avoid compiling extra stuff like libpsl (which needs python)
@@ -656,17 +655,18 @@ rust:                        ## install rust compiler
 	which rustc || . $(CARGO_HOME)/env && rustup component add rust-src clippy --toolchain nightly
 
 
-.PHONY: rust-config
-rust-config:  $(CARGO_CFG)  ## cargo config.toml and sundry tools
+.PHONY: rust-tools
+rust-tools:  $(CARGO_CFG)  ## cargo config.toml and sundry tools
 	@# taplo formats yamls
-	which rustc || . $(CARGO_HOME)/env && cargo install taplo-cli
+	$(CARGO) install taplo-cli
 	@# sccache caches compilation artifacts
-	which rustc || . $(CARGO_HOME)/env && cargo install sccache
+	$(CARGO) install sccache
 	@# cargo machete detects unused dependencies
-	which rustc || . $(CARGO_HOME)/env && cargo install cargo-machete
+	$(CARGO) install cargo-machete
 
 
 $(CARGO_CFG): ./assets/cargo/config.toml
+	mkdir -p $(CARGO_HOME)
 	cp $^ $@
 
 
