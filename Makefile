@@ -515,10 +515,12 @@ gnome:                ## gnome desktop
 	# don't create clicks that aren't actually pressed
 	gsettings set org.gnome.desktop.peripherals.mouse middle-click-emulation false
 
-	$(call git_clone_fetch_reset,$(GOGH_THEMES_URL),$(GOGH_THEMES))
-	TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
+	# FUTURE: gogh themes will need a profile for gnome-terminal to function
+	#$(call git_clone_fetch_reset,$(GOGH_THEMES_URL),$(GOGH_THEMES))
+	#TERMINAL=gnome-terminal $(GOGH_THEMES)/installs/dark-pastel.sh
 
-	@$(ROOT_DIR)/install_wintile.bash
+	# FUTURE: move wintil to it's own folder
+	#@$(ROOT_DIR)/install_wintile.bash
 
 
 .PHONY: git_config
