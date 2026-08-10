@@ -62,6 +62,10 @@ return {
 				--  Most Language Servers support renaming across files, etc.
 				map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
 
+				-- Show docs on hover
+				map("gh", vim.lsp.buf.hover, "[G]to [H]over")
+				map("gk", vim.lsp.buf.hover, "[G]to [H]over")
+
 				-- Execute a code action, usually your cursor needs to be on top of an error
 				-- or a suggestion from your LSP for this to activate.
 				map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
@@ -263,6 +267,7 @@ return {
 			"black", -- python
 			--			"ruff", -- python
 			--			"pylsp", -- python
+			"gopls", -- golang
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -309,7 +314,6 @@ return {
 			----				capabilities = capabilities, -- If you have custom capabilities
 			----			}),
 
-			vim.lsp.enable("basedpyright"),
 			vim.lsp.config("basedpyright", {
 				settings = {
 					-- SEE: https://docs.basedpyright.com/v1.20.0/configuration/language-server-settings/
@@ -348,6 +352,34 @@ return {
 					},
 				},
 			}),
+			vim.lsp.enable("basedpyright"),
+
+			vim.lsp.config("gopls", {
+				settings = {
+					gopls = {
+						["ui.inlayhint.hints"] = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+						analyses = {
+							unusedparams = true,
+						},
+						staticcheck = true,
+					},
+				},
+				on_attach = function(client, bufnr)
+					-- Enable inlay hints
+					if client.server_capabilities.inlayHintProvider then
+						vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+					end
+				end,
+			}),
+			vim.lsp.enable("gopls"),
 		})
 	end,
 }
