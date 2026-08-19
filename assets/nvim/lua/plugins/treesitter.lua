@@ -10,8 +10,8 @@ return { -- Highlight, edit, and navigate code
 			"diff",
 			"go",
 			"gomod",
-			"gowork",
 			"gotmpl",
+			"gowork",
 			"html",
 			"latex",
 			"lua",
@@ -25,6 +25,7 @@ return { -- Highlight, edit, and navigate code
 			"vim",
 			"vimdoc",
 			"yaml",
+			"wgsl",
 		}
 		-- NB: make sure to install tree-sitter-cli (cargo install tree-sitter-cli)
 		ts.setup({})
