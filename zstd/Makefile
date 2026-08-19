@@ -61,7 +61,7 @@ $(_bin): git-hash
 		HAVE_ZLIB=1 \
 		ZSTDLIB_FLAGS="-I$(PREFIX)/include" \
 		ZSTDLIB_LDFLAGS="-L$(PREFIX)/lib -Wl,-rpath,/root/.local/lib" \
-		MOREFLAGS="-I/root/.local/include -L/root/.local/lib -Wl,-rpath,/root/.local/lib -lz" \
+		MOREFLAGS="-I$(PREFIX)/include -L$(PREFIX)/lib -Wl,-rpath,$(PEFIX)/lib -lz" \
 		prefix=${PREFIX} \
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	@# disabling the tests as it requires docker, but we might not have docker access
