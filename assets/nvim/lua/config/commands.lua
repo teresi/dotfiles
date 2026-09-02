@@ -104,3 +104,15 @@ vim.api.nvim_create_autocmd("FileType", {
 -- [[ spelling ]]
 -- spelling causes too many false positives, so turn it off
 vim.cmd("autocmd Filetype yaml,json,markdown,text setlocal nospell")
+
+-- [[ syntax highlighting ]]
+-- Force tree sitter to handle syntax highlighting by disabling lsp semantic tokens
+-- This has been faster, and provided better colors for some languages
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client then
+			client.server_capabilities.semanticTokensProvider = nil
+		end
+	end,
+})

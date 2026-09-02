@@ -98,6 +98,9 @@
 [x] add LaTeX formatter
 [x] add xz utils for python
 
+[ ] compile neovim after tree-sitter-cli and if it changes
+[ ] add rg, python3-pip, to neovim config pre-req (or to those expected for the host)
+
 [ ] add nmon
 
 [ ] add rpath to everything so we don't need to update LD_LIBRARY_PATH
