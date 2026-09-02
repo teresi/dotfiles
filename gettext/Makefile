@@ -38,6 +38,9 @@ clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 	rm -f $(_src)/Makefile
+	rm -f $(_tarball)
+	rm -f $(_tarball_sig)
+	rm -f $(_tarball_id)
 
 
 .PHONY: uninstall
@@ -62,13 +65,13 @@ $(_src)/Makefile.in: | $(_src)
 
 
 $(_src)/Makefile: $(_src)/Makefile.in
-	cd $(_src) && ./configure --prefix=$(PREFIX)
+	cd $(_src) && \
+		./configure --prefix=$(PREFIX)
 
 
 $(_bin): $(_src)/Makefile
 	$(call log_info,compiling $@...)
 	$(call log_warn,compiling $@ this may take a few minutes... this is ok...)
-	sleep 1
 	make -j -C $(_src) all
 
 

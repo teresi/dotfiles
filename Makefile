@@ -574,14 +574,26 @@ unzip:                  ## install unzip
 
 
 .PHONY: nvim
-nvim: gettext luajit luarocks cmake ninja  ## neovim binary
+nvim: luajit luarocks cmake ninja  ## neovim binary
+	@# we don't need a specific version of cmake or ninja
+	@# so check here instead of pre-req
+	$(call log_info,checking for cmake...)
+	@which cmake || $(MAKE) cmake
+	$(call log_info,checking for ninja...)
+	@which cmake || $(MAKE) cmake
+
 	$(MAKE) -ik -C neovim all install
 
 
 # TODO: need to add tree-sitter-cli into the neovim compilation,
 # need to clean nvim if tree-sitter changes
 .PHONY: tree-sitter-cli
-tree-sitter-cli: rust clang   ## tree-sitter cli (for code navigation)
+tree-sitter-cli: rust ## tree-sitter cli (for code navigation)
+	@# check for clang here and not pre-reqs b/c we don't need a custom clang
+	@# and all it's dependencies if it's on the host (cmake, libedit, ninja)
+	$(call log_info,checking for clang...)
+	@which clang || $(MAKE) clang
+
 	$(call log_info,updating $@...)
 	@# cargo install tree-sitter-cli, for the lsp's, b/c it's more reliable than npm
 	@# TODO: just need libclang, not the whole thing, add a libclang target/option?

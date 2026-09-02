@@ -34,6 +34,9 @@ clean:
 	$(call log_info,clean $(_src))
 	if [ -d "$(_src)" ]; then $(MAKE) -ik -C $(_src) clean; fi
 	rm -f $(_src)/Makefile
+	rm -f $(_tarball)
+	rm -f $(_tarball_sig)
+	rm -f $(_tarball_id)
 
 
 .PHONY: uninstall

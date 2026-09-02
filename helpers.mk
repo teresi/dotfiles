@@ -209,6 +209,10 @@ endef
 #	1 the program name / makefile directory
 define make_all_install_if_not_on_host
 	@if [[ "" == "$(shell which $(1))" || "$(PREFIX)/bin/$(1)" == "$(shell which $(1))" ]]; then\
+		echo -e "\e[32m"\
+				"\t$(1) not found in your PATH or $(PREFIX),\n"\
+				"\tcompiling $(1) locally..."\
+				"\e[39m";\
 		$(MAKE) -C $(1) all install;\
 	else \
 		echo -e "\e[32m"\
