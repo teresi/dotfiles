@@ -256,8 +256,6 @@ return {
 		vim.list_extend(ensure_installed, {
 			"stylua",
 			"codelldb",
-			"markdownlint-cli2",
-			"markdownlint",
 			"shfmt", -- shell/bash
 			"bash-language-server", -- shell/bash
 			"yq", -- yaml

@@ -80,6 +80,7 @@ require("lazy").setup({
 	require("plugins.nvim_dap_ui"),
 	--require("plugins.oxocarbon"),
 	--require("plugins.rosepine"),
+	require("plugins.quickmark"),
 	require("plugins.rustacean"),
 	require("plugins.telescope"),
 	--require("plugins.themery"),
