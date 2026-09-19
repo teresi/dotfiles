@@ -1,11 +1,9 @@
 return { -- Highlight, edit, and navigate code
 	"nvim-treesitter/nvim-treesitter",
 	lazy = false,
-	build = ":TSUpdate",
 	branch = "main",
-	config = function()
-		local ts = require("nvim-treesitter")
-		local languages = {
+	opts = {
+		languages = {
 			"bash",
 			"c",
 			"diff",
@@ -27,7 +25,17 @@ return { -- Highlight, edit, and navigate code
 			"vimdoc",
 			"yaml",
 			"wgsl",
-		}
+		},
+	},
+	build = function(plugin)
+		-- On branch main, we call the installer directly
+		local ts = require("nvim-treesitter")
+		ts.install(plugin.opts.languages)
+	end,
+	config = function(_, opts)
+		local ts = require("nvim-treesitter")
+		local languages = opts.languages
+
 		-- NB: make sure to install tree-sitter-cli (cargo install tree-sitter-cli)
 		ts.setup({})
 		ts.install(languages)
