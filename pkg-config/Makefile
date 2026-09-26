@@ -14,8 +14,8 @@ PREFIX ?= $(HOME)/.local
 _url := https://github.com/pkgconf/pkgconf
 _src := pkg-config
 _branch := pkgconf-3.0.3
-_bin := $(_src)/pkg-config
-_install := $(PREFIX)/bin/pkg-config
+_bin := $(_src)/pkgconf
+_install := $(PREFIX)/bin/pkgconf
 
 
 .PHONY: all

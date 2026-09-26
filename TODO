@@ -98,8 +98,10 @@
 [x] add LaTeX formatter
 [x] add xz utils for python
 [x] replace markdown-cli with quickmark
-[ ] enable virtual text for markdon lint errors
+[x] pkg-config rebuilds unecessarily
 
+[ ] enable virtual text for markdon lint errors
+[ ] add bufflint
 [ ] add cpanm
 
 [ ] compile neovim after tree-sitter-cli and if it changes
