@@ -743,6 +743,7 @@ npm: node_version_manager ## install nvm and Node
 		{ source ~/.nvm/nvm.sh && nvm install 24; exit 0; }'
 
 
+# TODO: move mdpdf to markdown2pdf, ironpress, pdfrs, or etc to remove npm dependency
 .PHONY: mdpdf
 mdpdf: npm               ## install Markdown to PDF converter
 	$(call log_info,installing $@...)
@@ -767,12 +768,10 @@ uv: curl                 ## uv python manager
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 
-# FUTURE: add meson back, but download the release instead?
-# need to redo the way 'system wide' python installs are handled in 24.04
-#.PHONY: meson
-#meson: | pipx            ## install meson
-#	$(call log_info,updating $@...)
-#	pipx install meson
+.PHONY: meson
+meson: uv                ## meson build system
+	$(call log_info,updating $@...)
+	uv tool install meson
 
 
 .PHONY: zephyr
