@@ -601,8 +601,29 @@ tree-sitter-cli: rust ## tree-sitter cli (for code navigation)
 	$(CARGO) install tree-sitter-cli
 
 
+.PHONY: basedpyright
+basedpyright: uv    ## python LSP
+	uv tool install basedpyright
+
+
+.PHONY: black
+black: uv           ## python formatter
+	uv tool install black
+
+
+.PHONY: quickmark
+quickmark:          ## markdown LSP
+	cargo install quickmark-server
+
+
+.PHONY: bashls
+bashls:             ## bash LSP
+	@# NOTE: bashls requires shellcheck and shfmt (installed in the lsp-config using mason)
+	cargo install bashls
+
+
 .PHONY: neovim
-neovim: nvim rg npm tree-sitter-cli  ## neovim binary, config, and plugins
+neovim: nvim rg tree-sitter-cli basedpyright black quickmark-server bashls ## neovim binary, config, and plugins
 	$(call log_info,updating $@...)
 	@# neovim requires lua 5.1 (preferably luajit)
 	@# lsp's require node
