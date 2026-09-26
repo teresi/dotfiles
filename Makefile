@@ -618,12 +618,12 @@ quickmark:          ## markdown LSP
 
 .PHONY: bashls
 bashls:             ## bash LSP
-	@# NOTE: bashls requires shellcheck and shfmt (installed in the lsp-config using mason)
+	@# bashls requires shellcheck and shfmt (installed in the lsp-config using mason)
 	cargo install bashls
 
 
 .PHONY: neovim
-neovim: nvim rg tree-sitter-cli basedpyright black quickmark-server bashls ## neovim binary, config, and plugins
+neovim: nvim tree-sitter-cli   ## neovim binary, config, and plugins
 	$(call log_info,updating $@...)
 	@# neovim requires lua 5.1 (preferably luajit)
 	@# lsp's require node
@@ -634,7 +634,7 @@ neovim: nvim rg tree-sitter-cli basedpyright black quickmark-server bashls ## ne
 
 
 .PHONY: nvimrc
-nvimrc:              ## neovim config and plugins
+nvimrc: rg basedpyright black quickmark bashls             ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/nvim $(HOME)/.config/nvim
 
