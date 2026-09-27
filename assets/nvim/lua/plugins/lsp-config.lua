@@ -329,15 +329,16 @@ return {
 		-- NOTE: do _not_ install bash-language-server, bashls is manually installed instead (doesn't require npm)
 		require("mason-tool-installer").setup({
 			ensure_installed = {
-				"stylua", -- lua formatting
-				"lua-language-server", -- lua lsp server (lua_ls)
+				"checkmake", -- make linter
 				"codelldb",
-				"shfmt", -- bash formatting
-				"shellcheck", -- bash diagnostics
-				"yq",
-				"jq",
-				"tex-fmt",
 				"gopls",
+				"jq",
+				"lua-language-server", -- lua lsp server (lua_ls)
+				"shellcheck", -- bash diagnostics
+				"shfmt", -- bash formatting
+				"stylua", -- lua formatting
+				"tex-fmt",
+				"yq",
 			},
 		})
 	end,

@@ -29,6 +29,7 @@ return { -- Autoformat
 			end
 		end,
 		formatters_by_ft = {
+			--make = { "bake" },  -- make formatter
 			lua = { "stylua" },
 			-- not using 'yq' for yaml, yamlls works better
 			json = { "jq" },

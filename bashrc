@@ -21,7 +21,13 @@ fi
 
 # MAGIC: $HOME/.luarocks is the default for luarocks
 if [ -w "$HOME/.luarocks/bin" ] && [[ ":$PATH:" != *":$HOME/.luarocks/bin:"* ]]; then
-    export PATH="$HOME"/.luarocks/bin:$PATH
+    export PATH=$PATH:"$HOME"/.luarocks/bin
+fi
+
+# MAGIC: $HOME/.local/share/nvim/mason/bin/ is the default for binaries installed by mason
+# formatting/linting tools are typically installed here (e.g. shellcheck)
+if [ -w "$HOME/.local/share/nvim/mason/bin" ] && [[ ":$PATH:" != *":$HOME/.local/share/nvim/mason/bin:"* ]]; then
+    export PATH=$PATH:"$HOME"/.local/share/nvim/mason/bin
 fi
 
 # TODO: may need to compile SSH if installing openssl here,
