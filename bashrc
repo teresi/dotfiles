@@ -19,6 +19,11 @@ if [ -w "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     export PATH="$HOME"/.local/bin:$PATH
 fi
 
+# MAGIC: $HOME/.luarocks is the default for luarocks
+if [ -w "$HOME/.luarocks/bin" ] && [[ ":$PATH:" != *":$HOME/.luarocks/bin:"* ]]; then
+    export PATH="$HOME"/.luarocks/bin:$PATH
+fi
+
 # TODO: may need to compile SSH if installing openssl here,
 # as git will fail if it wasn't build with this new openssl
 #if [ -d "$HOME/.local/lib64" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib64:"* ]]; then

@@ -41,6 +41,7 @@ download: repo
 $(_install): $(_bin)
 	$(call log_info,updating $@...)
 	$(MAKE) -ik -C $(_src) install
+	$(_install) config --local lua_dir $(PREFIX)
 
 
 $(_bin): $(_src)/.git

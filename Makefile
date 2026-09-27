@@ -622,6 +622,17 @@ bashls:             ## bash LSP
 	cargo install bashls
 
 
+.PHONY: luacheck
+luacheck: luarocks  ## Lua linter
+	$(call log_info,installing $@...)
+	luarocks install --local luacheck
+
+
+.PHONY: taplo-cli
+taplo-cli: rust  ## toml formatter
+	$(CARGO) install taplo-cli
+
+
 .PHONY: neovim
 neovim: nvim tree-sitter-cli   ## neovim binary, config, and plugins
 	$(call log_info,updating $@...)
@@ -634,7 +645,7 @@ neovim: nvim tree-sitter-cli   ## neovim binary, config, and plugins
 
 
 .PHONY: nvimrc
-nvimrc: rg basedpyright black quickmark bashls             ## neovim config and plugins
+nvimrc: rg basedpyright black quickmark bashls luacheck taplo-cli  ## neovim config and plugins
 	$(call log_info,updating $@...)
 	@$(ROOT_DIR)/update_symlink.bash $(ROOT_DIR)/assets/nvim $(HOME)/.config/nvim
 
@@ -692,8 +703,6 @@ rust: $(CARGO_CFG)           ## install rust compiler
 
 .PHONY: rust-tools
 rust-tools:  $(CARGO_CFG)  ## cargo config.toml and sundry tools
-	@# taplo formats yamls
-	$(CARGO) install taplo-cli
 	@# sccache caches compilation artifacts
 	$(CARGO) install sccache
 	@# cargo machete detects unused dependencies

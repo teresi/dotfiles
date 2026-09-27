@@ -78,6 +78,7 @@ require("lazy").setup({
 	require("plugins.neo-tree"),
 	require("plugins.nvim_dap_projects"),
 	require("plugins.nvim_dap_ui"),
+	require("plugins.nvim-lint"),
 	--require("plugins.oxocarbon"),
 	--require("plugins.rosepine"),
 	require("plugins.rustacean"),
