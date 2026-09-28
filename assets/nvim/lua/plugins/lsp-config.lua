@@ -294,7 +294,7 @@ return {
 			},
 
 			bashls = {
-				cmd = { "bashls" },
+				cmd = { "bashls" }, -- NB: installed via cargo (cargo install bashls), not mason
 				filetypes = { "sh", "bash" },
 				root_markers = { ".git" },
 			},

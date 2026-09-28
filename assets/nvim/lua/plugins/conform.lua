@@ -34,8 +34,8 @@ return { -- Autoformat
 			-- not using 'yq' for yaml, yamlls works better
 			json = { "jq" },
 			toml = { "taplo" },
-			sh = { "shfmt", "shellcheck" },
-			bash = { "shfmt", "shellcheck" },
+			sh = { "shfmt" },
+			bash = { "shfmt" },
 			-- Conform can also run multiple formatters sequentially
 			-- NB: don't use isort, it moves custom libs into the third party group
 			python = { "black" },
