@@ -100,6 +100,8 @@
 [x] replace markdown-cli with quickmark
 [x] pkg-config rebuilds unecessarily
 
+[ ] unzip requires bzip2
+
 [ ] enable virtual text for markdon lint errors
 [ ] add bufflint
 [ ] add cpanm
