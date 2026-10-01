@@ -14,7 +14,10 @@ return {
 					["rust-analyzer"] = {
 						check = { command = "clippy", allTargets = true },
 						checkOnSave = true,
-						cargo = { targetDir = true },
+						cargo = {
+							targetDir = true,
+							features = "all",
+						},
 						diagnostics = {
 							enable = true,
 							styleLints = true,
