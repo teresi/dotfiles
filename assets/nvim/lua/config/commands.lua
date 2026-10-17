@@ -71,7 +71,11 @@ vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
 	pattern = { "*" },
 	callback = function()
 		-- Only save view for valid files
-		if vim.bo.buftype == "" and vim.bo.filetype ~= "" and vim.fn.filereadable(vim.api.nvim_buf_get_name(0)) then
+		if
+			vim.bo.buftype == ""
+			and vim.bo.filetype ~= ""
+			and vim.fn.filereadable(vim.api.nvim_buf_get_name(0))
+		then
 			vim.cmd("mkview")
 		end
 	end,
@@ -80,7 +84,11 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
 	pattern = { "*" },
 	callback = function()
 		-- Only load view for valid files
-		if vim.bo.buftype == "" and vim.bo.filetype ~= "" and vim.fn.filereadable(vim.api.nvim_buf_get_name(0)) then
+		if
+			vim.bo.buftype == ""
+			and vim.bo.filetype ~= ""
+			and vim.fn.filereadable(vim.api.nvim_buf_get_name(0))
+		then
 			vim.cmd("silent! loadview")
 		end
 	end,
@@ -99,6 +107,13 @@ vim.api.nvim_create_autocmd("FileType", {
 			},
 		})
 	end,
+})
+
+-- [[ register filetypes by extension ]]
+vim.filetype.add({
+	extension = {
+		pyx = "python",
+	},
 })
 
 -- [[ spelling ]]
