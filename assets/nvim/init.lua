@@ -56,6 +56,7 @@ require("lazy").setup({
 	require("plugins.bclose"),
 	--require("plugins.catppuccin"),
 	--require("plugins.citruszest"),
+	require("plugins.codecompanion"),
 	require("plugins.cokeline"),
 	require("plugins.colorizer"),
 	require("plugins.conform"),
