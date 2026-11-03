@@ -288,6 +288,25 @@ return {
 					},
 				},
 			},
+			clangd = {
+				cmd = {
+					"clangd",
+					"--background-index",
+					"--clang-tidy",
+				},
+				filetypes = {
+					"c",
+					"cpp",
+					"objc",
+					"objcpp",
+				},
+				root_markers = {
+					"compile_commands.json",
+					"compile_flags.txt",
+					"CMakeLists.txt",
+					".git",
+				},
+			},
 
 			quickmark = {
 				cmd = { vim.fn.expand("$HOME/.cargo/bin/quickmark-server") },
@@ -331,6 +350,7 @@ return {
 		-- NOTE: do _not_ install rust_analyzer, it is installed manually (for more control over the version)
 		-- NOTE: do _not_ install basedpyright, it is installed by uv (to remove dependency on python3.XX-venv)
 		-- NOTE: do _not_ install bash-language-server, bashls is manually installed instead (doesn't require npm)
+		-- NOTE: not installing clangd here, as I either install via apt or compile locally
 		require("mason-tool-installer").setup({
 			ensure_installed = {
 				"checkmake", -- make linter

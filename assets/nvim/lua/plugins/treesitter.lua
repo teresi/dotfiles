@@ -6,6 +6,8 @@ return { -- Highlight, edit, and navigate code
 		languages = {
 			"bash",
 			"c",
+			"cpp",
+			"cmake",
 			"diff",
 			"go",
 			"gomod",

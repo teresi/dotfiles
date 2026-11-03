@@ -66,6 +66,11 @@ $(_bin): git-hash | $(_build)
 	@# see `LLVM_ALL_PROJECTS`, see llvm.org
 	@# test with `ninja -C build check-llvm`
 	@# DLLVM_INSTALL_UTILS=ON needed to build FileCheck
+	@# LLVM projects:
+	@#   clang             - C/C++ compiler and clang-format
+	@#   clang-tools-extra - clangd, clang-tidy, etc.
+	@#   lld               - LLVM linker
+	@#   lldb              - LLVM debugger
 	cd $(_src) \
 		&& cmake \
 			-B build \
@@ -76,7 +81,7 @@ $(_bin): git-hash | $(_build)
 			-DCLANG_ENABLE_STATIC_ANALYZER=1 \
 			-DLLVM_ENABLE_LIBCXX=1 \
 			-DLLVM_ENABLE_RUNTIMES=all \
-			-DLLVM_ENABLE_PROJECTS="clang;lld;lldb;" \
+			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;" \
 			-DLLVM_PARALLEL_COMPILE_JOBS=$(_nproc) \
 			-DLLVM_PARALLEL_LINK_JOBS=$(_nproc) \
 			-G Ninja \

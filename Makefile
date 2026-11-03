@@ -29,7 +29,7 @@ SUB_PROJECTS := $(dir $(wildcard */Makefile))
 DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs screen lm-sensors dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3 mold
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
-DEPENDENCIES_LONGRUN := clang cmake
+DEPENDENCIES_LONGRUN := clang cmake clangd clang-format
 
 # NG this 'imports' many of the Make functions used below
 include ./helpers.mk
