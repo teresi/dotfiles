@@ -58,15 +58,10 @@ fi
 # RUST  ########################################################################
 
 # sccache caches build artifacts
-#   with incremental=true, we still get fast builds during development
-#   but sccache will mainly be useful when we cache:
-#     third party dependencies, dependencies between projects,
-#     artifacts after switching branches
-# split-debuginfo enables faster builds & smaller bins
 if command -v sccache &>/dev/null; then
     export RUSTC_WRAPPER="sccache"
-    export CARGO_INCREMENTAL=0
     export CARGO_PROFILE_DEV_SPLIT_DEBUGINFO="unpacked"
+    export SCCACHE_CACHE_SIZE=32G
 fi
 
 # mold is an alternate linker
