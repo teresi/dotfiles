@@ -3,24 +3,21 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
-		"hrsh7th/nvim-cmp",
 		"nvim-telescope/telescope.nvim",
 	},
 	config = function()
-		-- personal token
-		local active_adapter = "gemini"
-		--local active_adapter = "openrouter"
-		-- If the STARK_API_KEY environment variable exists and isn't empty, use it
-		if os.getenv("STARK_API_KEY") ~= nil and os.getenv("STARK_API_KEY") ~= "" then
+		local active_adapter
+
+		if vim.env.STARK_API_KEY and vim.env.STARK_API_KEY ~= "" then
 			active_adapter = "stark"
+		elseif vim.env.GEMINI_API_KEY and vim.env.GEMINI_API_KEY ~= "" then
+			active_adapter = "gemini"
 		else
-			local gemini_key = os.getenv("GEMINI_API_KEY")
-			if gemini_key == nil or gemini_key == "" then
-				vim.notify(
-					"CodeCompanion: GEMINI_API_KEY environment variable is not set!",
-					vim.log.levels.WARN
-				)
-			end
+			vim.notify(
+				"CodeCompanion: Neither STARK_API_KEY nor GEMINI_API_KEY is set!",
+				vim.log.levels.WARN
+			)
+			return
 		end
 
 		require("codecompanion").setup({
@@ -28,9 +25,10 @@ return {
 				chat = {
 					show_header_separator = true, -- Adds a horizontal line beneath role headers
 					separator = "─", -- The character used for the separator
+					show_settings = true,
 				},
 			},
-			strategies = {
+			interactions = {
 				chat = {
 					adapter = active_adapter,
 					roles = {
@@ -39,41 +37,40 @@ return {
 					},
 				},
 				inline = {
-					adapter = {
-						name = active_adapter,
-					},
+					adapter = active_adapter,
 				},
 			},
 
 			adapters = {
-				stark = function()
-					return require("codecompanion.adapters").extend("openai_compatible", {
-						env = {
-							url = "https://api.genai.mil",
-							chat_url = "/v1/chat/completions",
-							api_key = "STARK_API_KEY",
-						},
-						schema = {
-							model = {
-								default = "gemini-4-argon-withtools",
+				http = {
+					stark = function()
+						return require("codecompanion.adapters").extend("openai_compatible", {
+							name = "stark",
+							env = {
+								url = "https://api.genai.mil",
+								chat_url = "/v1/chat/completions",
+								api_key = "STARK_API_KEY",
 							},
-						},
-					})
-				end,
-				gemini = function()
-					return require("codecompanion.adapters").extend("openai_compatible", {
-						env = {
-							url = "https://googleapis.com",
-							chat_url = "/chat/completions",
-							api_key = "GEMINI_API_KEY",
-						},
-						schema = {
-							model = {
-								default = "gemini-3.6-flash",
+							schema = {
+								model = {
+									default = "gemini-4-argon-withtools",
+								},
 							},
-						},
-					})
-				end,
+						})
+					end,
+					gemini = function()
+						return require("codecompanion.adapters").extend("gemini", {
+							schema = {
+								model = {
+									default = "gemini-3.8-flash",
+									choices = {
+										"gemini-3.8-flash",
+									},
+								},
+							},
+						})
+					end,
+				},
 			},
 			opts = {
 				log_level = "DEBUG",

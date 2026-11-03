@@ -195,6 +195,9 @@ return {
 						runtime = {
 							-- Neovim uses LuaJIT.
 							version = "LuaJIT", -- neovim uses LuaJIT
+							builtin = {
+								package = "enable",
+							},
 							path = { -- Tell lua_ls how Neovim resolves Lua modules
 								"lua/?.lua",
 								"lua/?/init.lua",
@@ -217,8 +220,9 @@ return {
 							},
 						},
 						diagnostics = {
-							-- `vim` is supplied by the Neovim runtime above,
-							-- so it doesn't need to be manually declared here.
+							globals = {
+								"vim",
+							},
 						},
 						telemetry = {
 							enable = false,
