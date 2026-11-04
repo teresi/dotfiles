@@ -233,12 +233,12 @@ return {
 
 			basedpyright = {
 				settings = {
-					-- SEE: https://docs.basedpyright.com/v1.20.0/configuration/language-server-settings/
+					-- SEE: https://docs.basedpyright.com/dev/configuration/language-server-settings/
 					basedpyright = {
 						disableOrganizeImports = true,
 						analysis = {
 							diagnosticMode = "openFilesOnly", -- workspace / openFilesOnly
-							typeCheckingMode = "recommended", -- off / basic / standard / strict / recommended / all
+							typeCheckingMode = "standard", -- off / basic / standard / strict / recommended / all
 							useLibraryCodeForTypes = true,
 							inlayHints = {
 								callArgumentNames = true, --- show inlays on function args
@@ -250,19 +250,19 @@ return {
 							diagnosticSeverityOverrides = { -- error, warning, information, true, false, none
 								autoSearchPaths = true,
 								enableTypeIgnoreComments = true,
-								reportGeneralTypeIssues = true,
-								reportArgumentType = true,
-								reportUnknownMemberType = true,
-								reportAssignmentType = true,
-								reportUnusedImport = "information",
 								reportAny = "warning",
-								reportMissingTypeArgument = true,
+								reportArgumentType = true,
+								reportAssignmentType = true,
+								reportGeneralTypeIssues = true,
 								reportMissingParameterType = true,
+								reportMissingTypeArgument = true,
 								reportMissingTypeStubs = true,
 								reportUnknownArgumentType = true,
+								reportUnknownMemberType = true,
 								reportUnknownParameterType = true,
 								reportUnknownVariableType = "warning",
 								reportUnusedCallResult = "information",
+								reportUnusedImport = "information",
 							},
 						},
 					},
