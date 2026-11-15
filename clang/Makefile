@@ -5,6 +5,8 @@
 # LLVM provides tools for compilers / toolchains
 # LLVM provides `Clang` for example
 
+# requires make >= 4.3 (for the grouped targets)
+
 
 include ../helpers.mk
 SHELL := /bin/bash
@@ -17,8 +19,8 @@ _url := https://github.com/llvm/llvm-project.git
 _branch ?= release/18.x
 _src := llvm-project
 _build := $(_src)/build
-_bin := $(_build)/bin/clang
-_install := $(PREFIX)/bin/clang
+_bin := $(_build)/bin/clang $(_build)/bin/clangd
+_install := $(PREFIX)/bin/clang $(PREFIX)/bin/clangd
 
 # use fewer cores b/c compiling/linkng llvm uses a lot of cpu/ram
 _nproc := $(shell echo $$(( `nproc` / 2 + 1)))
@@ -58,7 +60,7 @@ git-hash: download
 $(_build):
 	mkdir -p ./$(_build)
 
-$(_bin): git-hash | $(_build)
+$(_bin) &: git-hash | $(_build)
 	$(call log_info,compiling $@...)
 	$(call log_warn,this may take a few minutes...)
 	$(call log_info,please wait...)
@@ -88,7 +90,7 @@ $(_bin): git-hash | $(_build)
 		&& ninja -C build
 
 
-$(_install): $(_bin)
+$(_install) &: $(_bin)
 	$(call log_info,updating $@...)
 	@# touch the output to prevent repeated installs
 	cd $(_src) \

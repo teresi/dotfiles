@@ -130,10 +130,10 @@ all:                  ## install programs and configs
 	$(MAKE) rust-analyzer
 	$(MAKE) rust-tools
 	$(MAKE) alacritty
-	$(MAKE) gnome
-	$(MAKE) cinnamon
 	$(MAKE) docker  # checks group membership, needs sudo
 	$(MAKE) pbzip2
+	$(MAKE) gnome
+	$(MAKE) cinnamon
 	$(MAKE) check_packages
 
 
@@ -310,7 +310,6 @@ tmux:  gettext m4 autoconf automake autoconf pkgconf libtool bison cmake libeven
 	$(call log_info,updating $@...)
 	$(call check_pkgs,screen)
 	$(MAKE) -ik -C ./tmux
-
 	$(call log_info,updating tmux plugins...)
 	$(MAKE) -ik tpm
 	$(MAKE) -ik tmux.conf
