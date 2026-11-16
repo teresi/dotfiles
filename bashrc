@@ -36,12 +36,12 @@ fi
 #    export LD_LIBRARY_PATH+=:"$HOME"/.local/lib64
 #fi
 
-if [ -d "$HOME/.local/lib" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib:"* ]]; then
-    export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
-fi
-if [ -w "$HOME/.local/include" ] && [[ ":$CFLAGS:" != *" -I$HOME/.local/include:"* ]]; then
-    export CFLAGS+=" -I$HOME/.local/include"
-fi
+#if [ -d "$HOME/.local/lib" ] && [[ ":$LD_LIBRARY_PATH:" != *":$HOME/.local/lib:"* ]]; then
+#    export LD_LIBRARY_PATH+=:"$HOME"/.local/lib
+#fi
+#if [ -w "$HOME/.local/include" ] && [[ ":$CFLAGS:" != *" -I$HOME/.local/include:"* ]]; then
+#    export CFLAGS+=" -I$HOME/.local/include"
+#fi
 
 #if [ -w "$HOME/.local/include" ] && [[ ":$CPATH:" != *":$HOME/.local/include:"* ]]; then
 #    export CPATH+=:"$HOME/.local/include"

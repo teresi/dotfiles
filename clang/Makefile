@@ -16,7 +16,7 @@ _url := https://github.com/llvm/llvm-project.git
 # ODIN uses 18 (release/18.x)
 # ZIG uses 19 (release/19.x)
 # it's ok to compile and install both
-_branch ?= release/18.x
+_branch ?= release/23.x
 _src := llvm-project
 _build := $(_src)/build
 _bin := $(_build)/bin/clang $(_build)/bin/clangd
@@ -65,14 +65,20 @@ $(_bin) &: git-hash | $(_build)
 	$(call log_warn,this may take a few minutes...)
 	$(call log_info,please wait...)
 	$(call check_pkgs,gcc-multilib)
-	@# see `LLVM_ALL_PROJECTS`, see llvm.org
-	@# test with `ninja -C build check-llvm`
-	@# DLLVM_INSTALL_UTILS=ON needed to build FileCheck
-	@# LLVM projects:
+	@# LLVM projects (see LLVM_ALL_PROJECTS):
 	@#   clang             - C/C++ compiler and clang-format
 	@#   clang-tools-extra - clangd, clang-tidy, etc.
 	@#   lld               - LLVM linker
 	@#   lldb              - LLVM debugger
+	@#
+	@# LLVM runtimes:
+	@#   compiler-rt - compiler support libraries and sanitizers
+	@#   openmp      - OpenMP runtime
+	@#
+	@# LLVM_INSTALL_UTILS=ON builds utility tools such as FileCheck
+	@# LLVM_INCLUDE_TESTS=OFF disables LLVM test suites
+	@# COMPILER_RT_INCLUDE_TESTS=OFF disables compiler-rt tests
+	@#   (compiler-rt tests otherwise reference libc++ targets we don't build)
 	cd $(_src) \
 		&& cmake \
 			-B build \
@@ -81,11 +87,12 @@ $(_bin) &: git-hash | $(_build)
 			-DLLVM_INSTALL_UTILS=ON \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DCLANG_ENABLE_STATIC_ANALYZER=1 \
-			-DLLVM_ENABLE_LIBCXX=1 \
-			-DLLVM_ENABLE_RUNTIMES=all \
+			-DLLVM_INCLUDE_TESTS=OFF \
+			-DLLVM_ENABLE_RUNTIMES="compiler-rt;openmp" \
 			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;" \
 			-DLLVM_PARALLEL_COMPILE_JOBS=$(_nproc) \
-			-DLLVM_PARALLEL_LINK_JOBS=$(_nproc) \
+			-DLLVM_PARALLEL_LINK_JOBS=2 \
+			-DRUNTIMES_CMAKE_ARGS="-DCOMPILER_RT_INCLUDE_TESTS=OFF" \
 			-G Ninja \
 		&& ninja -C build
 
