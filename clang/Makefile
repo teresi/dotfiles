@@ -25,6 +25,23 @@ _install := $(PREFIX)/bin/clang $(PREFIX)/bin/clangd
 # use fewer cores b/c compiling/linkng llvm uses a lot of cpu/ram
 _nproc := $(shell echo $$(( `nproc` / 2 + 1)))
 
+# Prefer system libedit/ncurses when both are available.
+# Otherwise, use the local installation.
+# Local libedit is built against local ncurses, so keep them paired.
+SYSTEM_LIBEDIT := $(shell \
+    env -u PKG_CONFIG_PATH -u PKG_CONFIG_LIBDIR \
+    pkg-config --exists libedit ncurses && echo yes)
+
+ifeq ($(SYSTEM_LIBEDIT),yes)
+    LLVM_PKG_CONFIG_ENV =
+    LLVM_LIBEDIT_CMAKE_FLAGS = \
+        -DLibEdit_INCLUDE_DIRS=$$(pkg-config --variable=includedir libedit) \
+        -DLibEdit_LIBRARIES=$$(pkg-config --variable=libdir libedit)/libedit.so
+else
+    LLVM_PKG_CONFIG_ENV = PKG_CONFIG_PATH=$(PREFIX)/lib/pkgconfig
+    LLVM_LIBEDIT_CMAKE_FLAGS =
+endif
+
 
 .PHONY: all
 all: $(_bin)
@@ -79,19 +96,24 @@ $(_bin) &: git-hash | $(_build)
 	@# LLVM_INCLUDE_TESTS=OFF disables LLVM test suites
 	@# COMPILER_RT_INCLUDE_TESTS=OFF disables compiler-rt tests
 	@#   (compiler-rt tests otherwise reference libc++ targets we don't build)
+	@# PKG_CONFIG_USE_CMAKE_PREFIX_PATH=FALSE disables cmake from automatically adding the CMAKE_INSTALL_PREFIX to pkg-config's search path
 	cd $(_src) \
-		&& cmake \
+		&& $(LLVM_PKG_CONFIG_ENV)  \
+		cmake \
 			-B build \
 			-S llvm \
 			-DCMAKE_INSTALL_PREFIX=$(PREFIX) \
+			-DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=FALSE \
 			-DLLVM_INSTALL_UTILS=ON \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DCLANG_ENABLE_STATIC_ANALYZER=1 \
 			-DLLVM_INCLUDE_TESTS=OFF \
+			-DLLVM_ENABLE_LIBEDIT=ON \
 			-DLLVM_ENABLE_RUNTIMES="compiler-rt;openmp" \
 			-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;" \
 			-DLLVM_PARALLEL_COMPILE_JOBS=$(_nproc) \
 			-DLLVM_PARALLEL_LINK_JOBS=2 \
+			$(LLVM_LIBEDIT_CMAKE_FLAGS) \
 			-DRUNTIMES_CMAKE_ARGS="-DCOMPILER_RT_INCLUDE_TESTS=OFF" \
 			-G Ninja \
 		&& ninja -C build
