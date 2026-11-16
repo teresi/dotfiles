@@ -41,7 +41,7 @@ update_repo_to_master() {
     notify "    repo url:        $_url"
     notify "    repo branch:     $_branch"
 
-    if [ ! -d "$_dest" ]; then notify "cloning $url to $_dest"; fi
+    if [ ! -d "$_dest" ]; then notify "cloning $_url to $_dest"; fi
     if [ ! -d "$_dest" ]; then # NB not using depth, or cloning the branch directly, b/c it doesn't work well w/ tags
         # it gets into a weird situation where you can't fetch tags, (couldn't find remote ref refs/heads/...)
         # and then you can't checkout that tag b/c it doesn't exist

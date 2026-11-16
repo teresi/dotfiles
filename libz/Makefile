@@ -36,7 +36,7 @@ _bin := $(_src)/libz.so
 _install := $(PREFIX)/lib/libz.so
 
 
-# libz version 1.3.2 as of Feb 2026
+# libz version 1.4 as of Nov 2026
 _tarball     := $(_src).tar.gz
 _tarball_sig := $(_src).tar.gz.asc
 # empty target for whether we pulled the key

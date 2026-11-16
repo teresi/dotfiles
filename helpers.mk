@@ -31,21 +31,21 @@ endef
 #
 # %.tar.gz.url is file (by our convention) with the url stored in it
 %.tar.gz: %.tar.gz.url
-	curl -C - -o $@ $(shell cat $<)
+	curl -fL -C - -o $@ $(shell cat $<)
 
 
 # download a signature file given it's url
 #
 # %.tar.gz.sig.url is file (by our convention) with the url stored in it
 %.tar.gz.sig: %.tar.gz.sig.url
-	curl -C - -o $@ $(shell cat $<)
+	curl -fL -C - -o $@ $(shell cat $<)
 
 
 # download a signature file given it's url
 #
 # %.tar.gz.sig.url is file (by our convention) with the url stored in it
 %.tar.gz.asc: %.tar.gz.asc.url
-	curl -C - -o $@ $(shell cat $<)
+	curl -fL -C - -o $@ $(shell cat $<)
 
 
 # verify and unpack a tarball, exit if unsuccessful

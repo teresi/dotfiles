@@ -23,6 +23,19 @@ _src := zstd
 _bin := $(_src)/programs/zstd
 _install := $(PREFIX)/bin/zstd
 
+# Prefer system zlib when available; otherwise use local installation.
+SYSTEM_ZLIB := $(shell \
+    env -u PKG_CONFIG_PATH -u PKG_CONFIG_LIBDIR \
+    pkg-config --exists zlib && echo yes)
+
+ifeq ($(SYSTEM_ZLIB),yes)
+    ZSTD_ZLIB_FLAGS =
+    ZSTD_ZLIB_LDFLAGS =
+else
+    ZSTD_ZLIB_FLAGS = -I$(PREFIX)/include
+    ZSTD_ZLIB_LDFLAGS = -L$(PREFIX)/lib -Wl,-rpath,$(PREFIX)/lib
+endif
+
 
 .PHONY: all
 all: $(_bin)
@@ -59,9 +72,9 @@ $(_bin): git-hash
 	@# MOREFLAGS is a zstd custom variable to pass flags down to it's command line program
 	make -C ${_src} zstd lib-release \
 		HAVE_ZLIB=1 \
-		ZSTDLIB_FLAGS="-I$(PREFIX)/include" \
-		ZSTDLIB_LDFLAGS="-L$(PREFIX)/lib -Wl,-rpath,/root/.local/lib" \
-		MOREFLAGS="-I$(PREFIX)/include -L$(PREFIX)/lib -Wl,-rpath,$(PEFIX)/lib -lz" \
+		ZSTDLIB_FLAGS="$(ZSTD_ZLIB_FLAGS)" \
+		ZSTDLIB_LDFLAGS="$(ZSTD_ZLIB_LDFLAGS)" \
+		MOREFLAGS="$(ZSTD_ZLIB_FLAGS) $(ZSTD_ZLIB_LDFLAGS) -lz" \
 		prefix=${PREFIX} \
 		-j $(shell echo $$(( `nproc` <= 1 ? 1 : `nproc` -1 )))
 	@# disabling the tests as it requires docker, but we might not have docker access

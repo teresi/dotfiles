@@ -26,7 +26,7 @@ SUB_PROJECTS := $(dir $(wildcard */Makefile))
 # curl: for downloading releases
 # gpg: for verifying releases
 # make: invoking the rules
-DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs screen lm-sensors dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3 mold libedit-dev libncurses-dev
+DEPENDENCIES := ca-certificates gcc g++ gpg curl wget perl make git git-lfs screen lm-sensors dconf-editor dconf-cli gir1.2-gtop-2.0 libx11-dev libxmu-dev python3 mold libedit-dev
 DEPENDENCIES_ZEPHYR := git ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1
 # these packages will build but take a while
 DEPENDENCIES_LONGRUN := clang cmake clangd clang-format
@@ -203,31 +203,31 @@ pkg-config: libtool autoconf automake  ## handle include/lib paths for configure
 .PHONY: libevent
 libevent: cmake       ## callback library
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libncursesw
 libncursesw: pkgconf   ## ncurses6 with wide character support
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libncurses
 libncurses: pkgconf   ## ncurses5 *without* wide character support
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libunistring
 libunistring:         ##  unicode strings in C (for psl)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libidn2
 libidn2: makeinfo      ##  internationalized strings in C (for psl)
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libpsl
@@ -250,32 +250,32 @@ curl: autoconf automake libtool libpsl zstd  ## install curl
 .PHONY: ctags
 ctags: pkg-config     ## indexes source files
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: fio
 fio: libaio           ## flexible I/O benchmark utility
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libaio
 libaio:               ## linux async I/O library
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: sysbench
 sysbench: make automake pkg-config libaio ## benchmarking utility
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: vim
 vim:                  ## vim config and plugins
 	$(call check_pkgs,"vim git")
-	$(MAKE) -ik vimrc
-	$(MAKE) -ik vim_plugins
+	$(MAKE) -k vimrc
+	$(MAKE) -k vim_plugins
 
 
 .PHONY: vimrc
@@ -392,8 +392,8 @@ alacritty.yml:        ## configuration for alacritty terminal
 .PHONY: alacritty
 alacritty: rust fonts      ## compile alacritty terminal
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C alacritty all install
-	$(MAKE) -ik alacritty.yml
+	$(MAKE) -k -C alacritty all install
+	$(MAKE) -k alacritty.yml
 	$(call check_pkgs,wmctrl xdotool)
 
 
@@ -404,7 +404,7 @@ conda:                ## miniconda python distribution & package manager
 
 .PHONY: go
 go:                   ## go language
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: lf
@@ -455,7 +455,7 @@ aliases:              ## bash aliases
 .PHONY: fzf
 fzf:                  ## command-line fuzzy finder
 	$(call log_info,updating $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: cinnamon
@@ -581,7 +581,7 @@ nvim: luajit luarocks cmake ninja  ## neovim binary
 	$(call log_info,checking for ninja...)
 	@which cmake || $(MAKE) cmake
 
-	$(MAKE) -ik -C neovim all install
+	$(MAKE) -k -C neovim all install
 
 
 # TODO: need to add tree-sitter-cli into the neovim compilation,
@@ -639,8 +639,8 @@ neovim: nvim tree-sitter-cli   ## neovim binary, config, and plugins
 	@# lsp's require node
 	@# telescope require ripgrep
 	$(call log_info,compiling neovim...)
-	$(MAKE) -ik -C neovim all install
-	$(MAKE) -ik nvimrc
+	$(MAKE) -k -C neovim all install
+	$(MAKE) -k nvimrc
 
 
 .PHONY: nvimrc
@@ -825,13 +825,13 @@ container:               ## run docker image for testing interactively
 .PHONY: cmake
 cmake: pkg-config openssl libz  ## compile CMake
 	$(call log_info,installing $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: libz
 libz:                 ## zlib de/compression
 	$(call log_info,installing $@...)
-	$(MAKE) -ik -C $@ all install
+	$(MAKE) -k -C $@ all install
 
 
 .PHONY: ninja
@@ -956,7 +956,7 @@ cmatrix: autoconf libncursesw  ## displays the matrix
 diffutils: m4       ## diffutils (diff, diff3, sdiff, cmp)
 	$(call log_info,installing $@...)
 	@if [[ "" == "$(shell which diff)" || "$(PREFIX)/bin/diff" == "$(shell which diff)" ]]; then\
-		$(MAKE) -ik -C diffutils all install;\
+		$(MAKE) -k -C diffutils all install;\
 	else \
 		echo -e "\e[32m"\
 				"\tdiffutils is already installed to $(shell which diff)\n"\
