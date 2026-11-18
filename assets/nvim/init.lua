@@ -82,6 +82,7 @@ require("lazy").setup({
 	require("plugins.nvim-lint"),
 	--require("plugins.oxocarbon"),
 	--require("plugins.rosepine"),
+	require("plugins.render-markdown"),
 	require("plugins.rustacean"),
 	require("plugins.telescope"),
 	--require("plugins.themery"),
